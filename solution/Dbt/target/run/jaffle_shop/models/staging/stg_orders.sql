@@ -1,7 +1,7 @@
-USE [staging];
+USE [Staging];
     execute('create view "dbo"."stg_orders__dbt_tmp" as
     with source as (
-    select * from "staging"."dbo"."raw_orders"
+    select * from "Staging"."dbo"."raw_orders"
 
 ),
 

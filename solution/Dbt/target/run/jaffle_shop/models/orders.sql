@@ -1,6 +1,6 @@
 
    
-  USE [staging];
+  USE [Staging];
   if object_id ('"dbo"."orders__dbt_tmp_temp_view"','V') is not null
       begin
       drop view "dbo"."orders__dbt_tmp_temp_view"
@@ -9,26 +9,26 @@
 
    
    
-  USE [staging];
+  USE [Staging];
   if object_id ('"dbo"."orders__dbt_tmp"','U') is not null
       begin
       drop table "dbo"."orders__dbt_tmp"
       end
 
 
-   USE [staging];
+   USE [Staging];
    EXEC('create view "dbo"."orders__dbt_tmp_temp_view" as
     
 
 with orders as (
 
-    select * from "staging"."dbo"."stg_orders"
+    select * from "Staging"."dbo"."stg_orders"
 
 ),
 
 payments as (
 
-    select * from "staging"."dbo"."stg_payments"
+    select * from "Staging"."dbo"."stg_payments"
 
 ),
 
@@ -78,12 +78,12 @@ final as (
 select * from final
     ');
 
-   SELECT * INTO "staging"."dbo"."orders__dbt_tmp" FROM
-    "staging"."dbo"."orders__dbt_tmp_temp_view"
+   SELECT * INTO "Staging"."dbo"."orders__dbt_tmp" FROM
+    "Staging"."dbo"."orders__dbt_tmp_temp_view"
 
    
    
-  USE [staging];
+  USE [Staging];
   if object_id ('"dbo"."orders__dbt_tmp_temp_view"','V') is not null
       begin
       drop view "dbo"."orders__dbt_tmp_temp_view"

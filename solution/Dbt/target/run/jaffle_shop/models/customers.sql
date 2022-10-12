@@ -1,6 +1,6 @@
 
    
-  USE [staging];
+  USE [Staging];
   if object_id ('"dbo"."customers__dbt_tmp_temp_view"','V') is not null
       begin
       drop view "dbo"."customers__dbt_tmp_temp_view"
@@ -9,30 +9,30 @@
 
    
    
-  USE [staging];
+  USE [Staging];
   if object_id ('"dbo"."customers__dbt_tmp"','U') is not null
       begin
       drop table "dbo"."customers__dbt_tmp"
       end
 
 
-   USE [staging];
+   USE [Staging];
    EXEC('create view "dbo"."customers__dbt_tmp_temp_view" as
     with customers as (
 
-    select * from "staging"."dbo"."stg_customers"
+    select * from "Staging"."dbo"."stg_customers"
 
 ),
 
 orders as (
 
-    select * from "staging"."dbo"."stg_orders"
+    select * from "Staging"."dbo"."stg_orders"
 
 ),
 
 payments as (
 
-    select * from "staging"."dbo"."stg_payments"
+    select * from "Staging"."dbo"."stg_payments"
 
 ),
 
@@ -89,12 +89,12 @@ final as (
 select * from final
     ');
 
-   SELECT * INTO "staging"."dbo"."customers__dbt_tmp" FROM
-    "staging"."dbo"."customers__dbt_tmp_temp_view"
+   SELECT * INTO "Staging"."dbo"."customers__dbt_tmp" FROM
+    "Staging"."dbo"."customers__dbt_tmp_temp_view"
 
    
    
-  USE [staging];
+  USE [Staging];
   if object_id ('"dbo"."customers__dbt_tmp_temp_view"','V') is not null
       begin
       drop view "dbo"."customers__dbt_tmp_temp_view"

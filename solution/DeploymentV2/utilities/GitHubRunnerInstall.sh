@@ -8,7 +8,7 @@ rm ./powershell-lts_7.2.5-1.deb_amd64.deb  && \
 sudo apt install -y dotnet-sdk-6.0  && \
 
 #May need to do below on ubuntu 20.04
-#sudo apt install -y aspnetcore-runtime-6.0=6.0.8-1 dotnet-apphost-pack-6.0=6.0.8-1 dotnet-host=6.0.8-1 dotnet-hostfxr-6.0=6.0.8-1 dotnet-runtime-6.0=6.0.8-1 dotnet-sdk-6.0=6.0.400-1 dotnet-targeting-pack-6.0=6.0.8-1
+sudo apt install -y aspnetcore-runtime-6.0=6.0.8-1 dotnet-apphost-pack-6.0=6.0.8-1 dotnet-host=6.0.8-1 dotnet-hostfxr-6.0=6.0.8-1 dotnet-runtime-6.0=6.0.8-1 dotnet-sdk-6.0=6.0.400-1 dotnet-targeting-pack-6.0=6.0.8-1 --allow-downgrades
 
 wget https://github.com/google/go-jsonnet/releases/download/v0.17.0/jsonnet-go_0.17.0_linux_amd64.deb  && \
 sudo dpkg -i jsonnet-go_0.17.0_linux_amd64.deb && \
@@ -27,7 +27,7 @@ sudo apt-get install figlet lolcat boxes
 
 #DBT (Optional)
 sudo apt install python3-pip -y
-sudo apt install python3.10-venv -y
+sudo apt install python3.8-venv -y
 
 #MSQL ODBC 18
 if ! [[ "18.04 20.04 22.04" == *"$(lsb_release -rs)"* ]];

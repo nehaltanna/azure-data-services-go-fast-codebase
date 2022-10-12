@@ -2,13 +2,13 @@
 
 with orders as (
 
-    select * from "staging"."dbo"."stg_orders"
+    select * from "Staging"."dbo"."stg_orders"
 
 ),
 
 payments as (
 
-    select * from "staging"."dbo"."stg_payments"
+    select * from "Staging"."dbo"."stg_payments"
 
 ),
 
