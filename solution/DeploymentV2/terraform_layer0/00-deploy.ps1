@@ -44,7 +44,7 @@ PrepareDeployment -gitDeploy $gitDeploy -deploymentFolderPath $deploymentFolderP
 #------------------------------------------------------------------------------------------------------------
 # Main Terraform - Layer1
 #------------------------------------------------------------------------------------------------------------
-"Starting Terraform Deployment: Layer 1" | boxes -d ada-box | lolcat
+"Starting Terraform Deployment: Layer 0" | boxes -d ada-box | lolcat
 Write-Host "Note that the first time this runs it will take around 10 minutes to complete."
 if([string]::IsNullOrEmpty($env:TF_VAR_jumphost_password) -and ($gitDeploy -eq $false -or $null -eq $gitdeploy))
 {

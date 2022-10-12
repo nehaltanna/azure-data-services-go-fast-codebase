@@ -8,10 +8,14 @@
     {"Name":"deploy_sentinel","Value":true},
     {"Name":"deploy_purview","Value":true},
     {"Name":"deploy_synapse","Value":true},
+    {"Name":"deploy_databricks","Value":true},    
     {"Name":"deploy_metadata_database","Value":true},
     {"Name":"is_vnet_isolated","Value":true},
     {"Name":"deploy_selfhostedsql","Value":false},
     
+    //Third Party Toggles
+    {"Name":"deploy_ixup_encryption_gw","Value":true},
+
     //Sample Toggles 
     {"Name":"publish_sif_database","Value":true},
 

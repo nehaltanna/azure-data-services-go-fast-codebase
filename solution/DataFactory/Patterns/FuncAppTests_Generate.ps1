@@ -14,7 +14,7 @@ foreach ($pattern in $patterns) {
 
     if (!(Test-Path "./tests"))
     {
-        New-Item -itemType Directory -Name -Force "tests"
+        New-Item -itemType Directory -Name "tests"
     }
     else
     {

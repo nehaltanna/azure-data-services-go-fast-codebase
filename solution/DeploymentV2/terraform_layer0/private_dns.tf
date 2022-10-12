@@ -24,7 +24,7 @@ locals {
   private_dns_zone_synapse_gateway_id = (var.is_vnet_isolated && var.existing_private_dns_zone_synapse_gateway_id ==  "" ? azurerm_private_dns_zone.synapse_gateway[0].id : var.existing_private_dns_zone_synapse_gateway_id)
   private_dns_zone_synapse_studio_id = (var.is_vnet_isolated && var.existing_private_dns_zone_synapse_studio_id ==  "" ? azurerm_private_dns_zone.synapse_studio[0].id : var.existing_private_dns_zone_synapse_studio_id)
   private_dns_zone_synapse_sql_id = (var.is_vnet_isolated && var.existing_private_dns_zone_synapse_sql_id ==  "" ? azurerm_private_dns_zone.synapse_sql[0].id : var.existing_private_dns_zone_synapse_sql_id)
-
+  private_dns_zone_databricks_workspace_id = (var.is_vnet_isolated && var.deploy_databricks ? azurerm_private_dns_zone.databricks_workspace[0].id : "")
 }
 
 
@@ -172,5 +172,21 @@ resource "azurerm_private_dns_zone_virtual_network_link" "synapse_studio" {
   name                  = "${local.vnet_name}-synapsestudio"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.synapse_studio[0].name
+  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+}
+
+#Databricks DNS Zones
+
+resource "azurerm_private_dns_zone" "databricks_workspace" {
+  count               = (var.is_vnet_isolated && var.deploy_databricks ? 1 : 0)
+  name                = "privatelink.azuredatabricks.net"
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "databricks_workspace" {
+  count               = (var.is_vnet_isolated && var.deploy_databricks ? 1 : 0)
+  name                  = "${local.vnet_name}-databricksworkspace"
+  resource_group_name   = var.resource_group_name
+  private_dns_zone_name = azurerm_private_dns_zone.databricks_workspace[0].name
   virtual_network_id    = azurerm_virtual_network.vnet[0].id
 }

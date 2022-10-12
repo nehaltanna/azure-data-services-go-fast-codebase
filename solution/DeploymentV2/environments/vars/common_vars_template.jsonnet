@@ -12,6 +12,7 @@ local featuretemplates = {
 /*DONOTREMOVETHISCOMMENT:SOFTS*/
      'basic_deployment' : import './../featuretemplates/basic_deployment.jsonc',
      'full_deployment_no_purview' : import './../featuretemplates/full_deployment_no_purview.jsonc',
+     'full_deployment_with_ixup' : import './../featuretemplates/full_deployment_with_ixup.jsonc',
      'full_deployment' : import './../featuretemplates/full_deployment.jsonc',
      'functional_tests' : import './../featuretemplates/functional_tests.jsonc',
 /*DONOTREMOVETHISCOMMENT:SOFTS*/

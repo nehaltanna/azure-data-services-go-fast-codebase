@@ -28,7 +28,7 @@ function CoreReplacements ($string, $GFPIR, $SourceType, $SourceFormat, $TargetT
 
 if (!(Test-Path "./output"))
 {
-    $fld = New-Item -itemType Directory -Name "output"
+    $fld = New-Item -itemType Directory -Name "output" 
 }
 else
 {

@@ -14,11 +14,14 @@ locals {
   plink_subnet_name            = (var.plink_subnet_name != "" ? var.plink_subnet_name : "${module.naming.subnet.name}-plink")
   app_service_subnet_name      = (var.app_service_subnet_name != "" ? var.plink_subnet_name : "${module.naming.subnet.name}-appservice")
   vm_subnet_name               = (var.vm_subnet_name != "" ? var.vm_subnet_name : "${module.naming.subnet.name}-vm")
+  databricks_container_subnet_name  = (var.databricks_container_subnet_name != "" ? var.databricks_container_subnet_name : "${module.naming.subnet.name}-db-container")
+  databricks_host_subnet_name  = (var.databricks_host_subnet_name != "" ? var.databricks_host_subnet_name : "${module.naming.subnet.name}-db-host")
   logs_storage_account_name    = (var.logs_storage_account_name != "" ? var.logs_storage_account_name : "${module.naming.storage_account.name_unique}log")
   app_service_nsg_name         = (var.app_service_nsg_name != "" ? var.app_service_nsg_name : "${module.naming.network_security_group.name}-appservice")
   plink_nsg_name               = (var.plink_nsg_name != "" ? var.plink_nsg_name : "${module.naming.network_security_group.name_unique}-plink")
   bastion_nsg_name             = (var.bastion_nsg_name != "" ? var.bastion_nsg_name : "${module.naming.network_security_group.name_unique}-bastion")
   vm_nsg_name                  = (var.vm_nsg_name != "" ? var.vm_nsg_name : "${module.naming.network_security_group.name_unique}-vm")
+  databricks_nsg_name          = (var.databricks_nsg_name != "" ? var.databricks_nsg_name : "${module.naming.network_security_group.name_unique}-databricks")
   log_analytics_workspace_name = (var.log_analytics_workspace_name != "" ? var.log_analytics_workspace_name : module.naming.log_analytics_workspace.name_unique)
   metadata_database_name       = "MetadataDb"
   sample_database_name         = "Samples"

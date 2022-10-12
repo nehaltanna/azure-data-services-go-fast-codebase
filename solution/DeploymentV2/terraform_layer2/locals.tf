@@ -14,6 +14,8 @@ locals {
   plink_subnet_name            = (var.plink_subnet_name != "" ? var.plink_subnet_name : "${module.naming.subnet.name}-plink")
   app_service_subnet_name      = (var.app_service_subnet_name != "" ? var.plink_subnet_name : "${module.naming.subnet.name}-appservice")
   vm_subnet_name               = (var.vm_subnet_name != "" ? var.vm_subnet_name : "${module.naming.subnet.name}-vm")
+  databricks_container_subnet_name  = (var.databricks_container_subnet_name != "" ? var.databricks_container_subnet_name : "${module.naming.subnet.name}-db-container")
+  databricks_host_subnet_name  = (var.databricks_host_subnet_name != "" ? var.databricks_host_subnet_name : "${module.naming.subnet.name}-db-host")
   logs_storage_account_name    = (var.logs_storage_account_name != "" ? var.logs_storage_account_name : "${module.naming.storage_account.name_unique}log")
   app_service_nsg_name         = (var.app_service_nsg_name != "" ? var.app_service_nsg_name : "${module.naming.network_security_group.name}-appservice")
   plink_nsg_name               = (var.plink_nsg_name != "" ? var.plink_nsg_name : "${module.naming.network_security_group.name_unique}-plink")
@@ -44,7 +46,9 @@ locals {
   selfhostedsqlvm_name         = replace(module.naming.virtual_machine.name,"-vm-ads","-vm-sql")
   h2o-ai_name                  = replace(module.naming.virtual_machine.name,"-vm-ads","-vm-h2o")
   custom_vm_name               = replace(module.naming.virtual_machine.name,"-vm-ads","-vm-custom")
+  databricks_workspace_name    = (var.databricks_workspace_name != "" ? var.databricks_workspace_name : "${var.prefix}${var.environment_tag}db${var.app_name}${element(split("-", module.naming.data_factory.name_unique), length(split("-", module.naming.data_factory.name_unique)) - 1)}")
   
+  vnet_id                      = data.terraform_remote_state.layer0.outputs.azurerm_virtual_network_vnet_id
   plink_subnet_id              = data.terraform_remote_state.layer0.outputs.plink_subnet_id 
   private_dns_zone_dfs_id      = data.terraform_remote_state.layer0.outputs.private_dns_zone_dfs_id 
   private_dns_zone_blob_id      = data.terraform_remote_state.layer0.outputs.private_dns_zone_blob_id 
@@ -54,9 +58,13 @@ locals {
   private_dns_zone_db_id       = data.terraform_remote_state.layer0.outputs.private_dns_zone_db_id
   private_dns_zone_kv_id       = data.terraform_remote_state.layer0.outputs.private_dns_zone_kv_id
 
+  databricks_host_nsg_association = data.terraform_remote_state.layer0.outputs.databricks_host_subnet_nsg_association_id
+  databricks_container_nsg_association = data.terraform_remote_state.layer0.outputs.databricks_container_subnet_nsg_association_id
+
   private_dns_zone_synapse_sql_id = data.terraform_remote_state.layer0.outputs.private_dns_zone_synapse_sql_id
   private_dns_zone_synapse_studio_id = data.terraform_remote_state.layer0.outputs.private_dns_zone_synapse_studio_id
   private_dns_zone_synapse_gateway_id = data.terraform_remote_state.layer0.outputs.private_dns_zone_synapse_gateway_id
+  private_dns_zone_databricks_workspace_id = data.terraform_remote_state.layer0.outputs.private_dns_zone_databricks_workspace_id
 
   tags = {
     Environment = var.environment_tag

@@ -7,6 +7,7 @@
     {"Name":"deploy_sentinel","Value":true},
     {"Name":"deploy_purview","Value":true},
     {"Name":"deploy_synapse","Value":true},
+    {"Name":"deploy_databricks","Value":true},    
     {"Name":"deploy_metadata_database","Value":true},
     {"Name":"is_vnet_isolated","Value":true},
     {"Name":"publish_web_app","Value":true},

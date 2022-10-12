@@ -35,7 +35,7 @@ resource "azurerm_windows_virtual_machine" "jumphost" {
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
     offer     = "Windows-10"
-    sku       = "21h1-evd-g2"
+    sku       = "win10-21h2-ent-ltsc-g2"
     version   = "latest"
   }
   lifecycle {

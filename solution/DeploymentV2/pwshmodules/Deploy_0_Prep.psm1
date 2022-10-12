@@ -1,3 +1,6 @@
+
+
+
 function PrepareDeployment (
     [Parameter(Mandatory = $true)]
     [System.Boolean]$gitDeploy = $false,
@@ -40,13 +43,7 @@ function PrepareDeployment (
     }
     else {
     
-        #Prompt if Environment Variable has not been set
-        if ($null -eq [System.Environment]::GetEnvironmentVariable('environmentName')) {        
-            $envlist = (Get-ChildItem -Directory -Path ./environments/vars | Select-Object -Property Name).Name
-            Import-Module ./pwshmodules/GetSelectionFromUser.psm1 -Force   
-            $environmentName = Get-SelectionFromUser -Options ($envlist) -Prompt "Select deployment environment"
-            [System.Environment]::SetEnvironmentVariable('environmentName', $environmentName)
-        }
+        $environmentName = GetEnvVar_environmentName
 
         $env:TF_VAR_ip_address2 = (Invoke-WebRequest ifconfig.me/ip).Content     
 
@@ -164,4 +161,21 @@ function PrepareDeployment (
         Write-Debug "Path to return to is null"
     }
 
+}
+
+function GetEnvVar_environmentName(
+)
+{
+    #Prompt if Environment Variable has not been set
+    if ($null -eq [System.Environment]::GetEnvironmentVariable('environmentName')) {        
+        $envlist = (Get-ChildItem -Directory -Path ./environments/vars | Select-Object -Property Name).Name
+        Import-Module ./pwshmodules/GetSelectionFromUser.psm1 -Force   
+        $environmentName = Get-SelectionFromUser -Options ($envlist) -Prompt "Select deployment environment"
+        [System.Environment]::SetEnvironmentVariable('environmentName', $environmentName)
+        return $environmentName
+    }
+    else 
+    {
+        return [System.Environment]::GetEnvironmentVariable('environmentName')
+    }
 }

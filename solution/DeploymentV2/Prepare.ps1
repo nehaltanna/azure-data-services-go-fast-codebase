@@ -68,7 +68,8 @@ if ($gitDeploy)
     'Microsoft.OperationsManagement',
     'Microsoft.Synapse',
     'Microsoft.DataFactory',
-    'Microsoft.Sql')
+    'Microsoft.Sql',
+    'Microsoft.Databricks')
     
     ForEach ($provider in $providers) {
         az provider register --namespace $provider --only-show-errors
@@ -123,7 +124,8 @@ else
         'Microsoft.OperationsManagement',
         'Microsoft.Synapse',
         'Microsoft.DataFactory',
-        'Microsoft.Sql')
+        'Microsoft.Sql',
+        'Microsoft.Databricks')
 
         $progress = 0
         Write-Progress -Activity "Registering Azure Resource Providers" -Status "${progress}% Complete:" -PercentComplete $progress
@@ -176,7 +178,7 @@ else
                 $storageId = az storage account create --resource-group $env:TF_VAR_resource_group_name --name $env:TF_VAR_state_storage_account_name --sku Standard_LRS --allow-blob-public-access false --public-network-access Enabled --default-action Deny --https-only true --min-tls-version TLS1_2 --query id -o tsv --only-show-errors
                 $hiddenoutput =az storage account network-rule add --resource-group $env:TF_VAR_resource_group_name --account-name $env:TF_VAR_state_storage_account_name --ip-address $env:TF_VAR_ip_address --only-show-errors
                 #wait for network rule 
-                [System.Threading.Thread]::Sleep(5000)
+                [System.Threading.Thread]::Sleep(10000)
             }
             if($uinput -eq "Private")
             {
