@@ -299,7 +299,7 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
         {
             string sqlStatement = "";
 
-            string incrementalType = (string)Extraction["IncrementalType"];
+            string incrementalType = ((string)Extraction["IncrementalType"]).ToLower();
             Int32 chunkSize = (Int32)Extraction["ChunkSize"];
             JToken incrementalField = JsonHelpers.GetStringValueFromJson(_logging, "IncrementalField", _taskInstanceJson, "", false);
             JToken incrementalColumnType = JsonHelpers.GetStringValueFromJson(_logging, "IncrementalColumnType", _taskInstanceJson, "", false);
@@ -316,51 +316,34 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
             }
 
             //Chunk branch
-            if (chunkSize > 0)
+            if (incrementalType == "full_chunk" || incrementalType == "watermark_chunk")
             {
-                if (incrementalType == "Full")
+                if (incrementalType == "full_chunk")
                 {
-                    sqlStatement = $"SELECT * FROM {tableSchema}.{tableName}";
+                    sqlStatement = $"SELECT * FROM {tableSchema}.{tableName} WHERE CAST({chunkField} AS BIGINT) %  <batchcount> = (<item> -1)";
                 }
-                else if (incrementalType == "Full")
-                {
-                    sqlStatement = $"SELECT * FROM {tableSchema}.{tableName} WHERE CAST({chunkField} AS BIGINT) %  <batchcount> = <item> -1. ";
-                }
-                else if (incrementalType == "Watermark")
+                else if (incrementalType == "watermark_chunk")
                 {
                     if (incrementalColumnType.ToString() == "DateTime")
                     {
                         DateTime incrementalValueDateTime = (DateTime)_taskInstanceJson["IncrementalValue"];
-                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as datetime) AND {2} <= Cast('<newWatermark>' as datetime)", tableSchema, tableName, incrementalField, incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as datetime) AND {2} <= Cast('<newWatermark>' as datetime) AND CAST({4} AS BIGINT) %  <batchcount> = (<item> -1)", tableSchema, tableName, incrementalField, incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"), chunkField);
                     }
                     else if (incrementalColumnType.ToString() == "BigInt")
                     {
                         int incrementalValueBigInt = (int)_taskInstanceJson["IncrementalValue"];
-                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as bigint) AND {2} <= cast('<newWatermark>' as bigint)", tableSchema, tableName, incrementalField, incrementalValueBigInt);
-                    }
-                }
-                else if (incrementalType == "Watermark" && !string.IsNullOrWhiteSpace(_taskMasterJsonSource["Source"]["ChunkSize"].ToString()))
-                {
-                    if (incrementalColumnType.ToString() == "DateTime")
-                    {
-                        DateTime incrementalValueDateTime = (DateTime)_taskInstanceJson["IncrementalValue"];
-                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as datetime) AND {2} <= Cast('<newWatermark>' as datetime) AND CAST({4} AS BIGINT) %  <batchcount> = <item> -1.", tableSchema, tableName, incrementalField, incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"), chunkField);
-                    }
-                    else if (incrementalColumnType.ToString() == "BigInt")
-                    {
-                        int incrementalValueBigInt = (int)_taskInstanceJson["IncrementalValue"];
-                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as bigint) AND {2} <= Cast('<newWatermark>' as bigint) AND CAST({4} AS BIGINT) %  <batchcount> = <item> -1.", tableSchema, tableName, incrementalField, incrementalValueBigInt, chunkField);
+                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as bigint) AND {2} <= Cast('<newWatermark>' as bigint) AND CAST({4} AS BIGINT) %  <batchcount> = (<item> -1)", tableSchema, tableName, incrementalField, incrementalValueBigInt, chunkField);
                     }
                 }
             }
             else
             //Non Chunk
             {
-                if (incrementalType == "Full")
+                if (incrementalType == "full")
                 {
                     sqlStatement = string.Format("SELECT * FROM {0}.{1}", tableSchema, tableName);
                 }
-                else if (incrementalType == "Watermark")
+                else if (incrementalType == "watermark")
                 {
                     if (incrementalColumnType.ToString() == "DateTime")
                     {
@@ -373,13 +356,17 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
                         sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as bigint) AND {2} <= cast('<newWatermark>' as bigint)", tableSchema, tableName, incrementalField, incrementalValueBigInt);
                     }
                 }
-            }
+            }            
 
         EndOfSQLStatementSet:
+            if (string.IsNullOrWhiteSpace(sqlStatement))
+            {
+                Exception e = new Exception("SqlStatement for Extraction has not been set. IncrementalType = " + incrementalType);
+                _logging.LogErrors(e);
+                throw e;
+            }
             return sqlStatement;
         }
-
-
 
         public void ProcessTaskMaster_Mapping_AZ_SQL_StoredProcedure()
         {
