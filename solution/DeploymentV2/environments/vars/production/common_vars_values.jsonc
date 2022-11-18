@@ -1,6 +1,6 @@
 {
   "$schema": "./../common_vars_schema.json",
-  "owner_tag": "Contoso",
+  "owner_tag": "microsoft",
   "resource_location": "australiaeast",
   "environment_tag": "stg",
   "domain": "arkahna.io",

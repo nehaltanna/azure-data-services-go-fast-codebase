@@ -15,7 +15,13 @@ $body = '{"principalId": "@principalid","resourceId":"@resourceId","appRoleId": 
 $body.resourceId = $authappobjectid
 $body.appRoleId = ($authapp.appRoles | Where-Object {$_.value -eq "Administrator" }).id
 $body.principalId = [System.Environment]::GetEnvironmentVariable('WEB_APP_ADMIN_USER')
-$body = ($body | ConvertTo-Json -compress | Out-String).Replace('"','\"')
+
+#$body = ($body | ConvertTo-Json -compress | Out-String).Replace('"','\"')
+#$headers = '{\"Content-Type\":\"application/json\"}'
+
+#Note we used to have to escape the quotes but as of latest cli we don't need to (if you get errors use two lines above instead)
+$body = ($body | ConvertTo-Json -compress | Out-String)
+$headers = '{"Content-Type":"application/json"}'
 
 $result = az rest --method post --uri "https://graph.microsoft.com/v1.0/servicePrincipals/$authappobjectid/appRoleAssignedTo" --headers '{\"Content-Type\":\"application/json\"}' --body $body
 
