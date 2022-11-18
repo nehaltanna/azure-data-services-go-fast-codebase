@@ -1,5 +1,5 @@
 with source as (
-    select * from "staging"."dbo"."raw_payments"
+    select * from "Staging"."dbo"."raw_payments"
 
 ),
 

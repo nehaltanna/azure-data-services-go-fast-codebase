@@ -190,7 +190,7 @@ else
                 $delay_private_access = $false
                 $layer0_state = "local"
                 $deploy_state_storage_account = $true
-                $deploy_cicd_vm =$ true
+                $deploy_cicd_vm = $true
                 #$storageId = az storage account create --resource-group $env:TF_VAR_resource_group_name --name $env:TF_VAR_state_storage_account_name --sku Standard_LRS --pr  --allow-blob-public-access false --public-network-access Disabled --https-only true --min-tls-version TLS1_2 --query id -o tsv --only-show-errors
                 #$DeploymentVnet =  Read-Host "Please input the name of the spoke vnet for the deployment. If you leave it blank it will default to 'ads-stg-vnet-ads'"
                 #if([string]::IsNullOrEmpty($DeploymentVnet))

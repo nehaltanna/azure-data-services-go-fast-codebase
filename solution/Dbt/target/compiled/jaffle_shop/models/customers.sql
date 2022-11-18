@@ -1,18 +1,18 @@
 with customers as (
 
-    select * from "staging"."dbo"."stg_customers"
+    select * from "Staging"."dbo"."stg_customers"
 
 ),
 
 orders as (
 
-    select * from "staging"."dbo"."stg_orders"
+    select * from "Staging"."dbo"."stg_orders"
 
 ),
 
 payments as (
 
-    select * from "staging"."dbo"."stg_payments"
+    select * from "Staging"."dbo"."stg_payments"
 
 ),
 

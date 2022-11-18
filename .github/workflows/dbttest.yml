@@ -56,7 +56,7 @@ jobs:
         working-directory: ./solution/Dbt    
         run: |         
           chmod +x dbt_init.sh
-          python3 -m venv .dbtenv
+          python3.8 -m venv .dbtenv
           source .dbtenv/bin/activate
 
           pip install dbt-core --quiet 

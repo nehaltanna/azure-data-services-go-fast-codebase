@@ -358,7 +358,7 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
         {
             string sqlStatement = "";
 
-            string incrementalType = (string)Extraction["IncrementalType"];
+            string incrementalType = ((string)Extraction["IncrementalType"]).ToLower();
             Int32 chunkSize = (Int32)Extraction["ChunkSize"];
             JToken incrementalField = JsonHelpers.GetStringValueFromJson(_logging, "IncrementalField", _taskInstanceJson, "", false);
             JToken incrementalColumnType = JsonHelpers.GetStringValueFromJson(_logging, "IncrementalColumnType", _taskInstanceJson, "", false);
@@ -396,9 +396,9 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
             }
 
             //Chunk branch
-            if (chunkSize > 0)
+            if (incrementalType == "full_chunk" || incrementalType == "watermark_chunk")
             {
-                if (incrementalType == "Full")
+                if (incrementalType == "full_chunk")
                 {
                     templateFile = "Full";
                     //sqlStatement = $"SELECT * FROM {tableSchema}.{tableName}";
@@ -467,13 +467,13 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
             else
             //Non Chunk
             {
-                if (incrementalType == "Full")
+                if (incrementalType == "full")
                 {
                     templateFile = "Full";
 
                     //sqlStatement = string.Format("SELECT * FROM {0}.{1}", tableSchema, tableName);
                 }
-                else if (incrementalType == "Watermark")
+                else if (incrementalType == "watermark")
                 {
                     if (incrementalColumnType.ToString() == "DateTime")
                     {
@@ -506,8 +506,6 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
         EndOfSQLStatementSet:
         return sqlStatement;
         }
-
-
 
         public void ProcessTaskMaster_Mapping_AZ_SQL_StoredProcedure()
         {
