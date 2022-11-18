@@ -59,7 +59,12 @@ function UploadADFItem ($items) {
             Write-Verbose ($lsName) #-ForegroundColor Yellow -BackgroundColor DarkGreen
                         
             Write-Verbose $uri
-            $rest = az rest --method put --uri $uri --headers '{\"Content-Type\":\"application/json\"}' --body "@ffu$guid.json" --uri-parameters 'api-version=2020-12-01' --resource 'https://dev.azuresynapse.net'         }
+
+            #$headers = '{\"Content-Type\":\"application/json\"}'
+            #Note we used to have to escape the quotes but as of latest cli we don't need to (if you get errors use two lines above instead)
+            $headers = '{"Content-Type":"application/json"}'  
+
+            $rest = az rest --method put --uri $uri --headers $headers --body "@ffu$guid.json" --uri-parameters 'api-version=2020-12-01' --resource 'https://dev.azuresynapse.net'         }
         Get-ChildItem -path "ffu*.json" | Remove-Item
     }
 }
