@@ -1,0 +1,10 @@
+jaffle_shop:
+    target: dev
+    outputs:
+        dev:
+            type: sqlserver
+            driver: "ODBC Driver 18 for SQL Server"
+            schema: dbo
+            host: "{{ env_var('DBT_DatabaseServer') }}"
+            database: "{{ env_var('DBT_DatabaseName') }}"
+            authentication: CLI

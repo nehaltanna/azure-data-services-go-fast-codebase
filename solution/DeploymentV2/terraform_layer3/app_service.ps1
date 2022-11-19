@@ -23,6 +23,6 @@ $body.principalId = [System.Environment]::GetEnvironmentVariable('WEB_APP_ADMIN_
 $body = ($body | ConvertTo-Json -compress | Out-String)
 $headers = '{"Content-Type":"application/json"}'
 
-$result = az rest --method post --uri "https://graph.microsoft.com/v1.0/servicePrincipals/$authappobjectid/appRoleAssignedTo" --headers '{\"Content-Type\":\"application/json\"}' --body $body
+$result = az rest --method post --uri "https://graph.microsoft.com/v1.0/servicePrincipals/$authappobjectid/appRoleAssignedTo" --headers $headers --body $body
 
 

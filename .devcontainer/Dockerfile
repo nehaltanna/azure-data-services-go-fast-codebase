@@ -21,7 +21,7 @@ RUN bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "$
     && wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb  \
     && sudo dpkg -i packages-microsoft-prod.deb  \
     && sudo apt-get update  \
-    && sudo apt-get install -y powershell  \
+    && sudo apt-get install -y powershell=7.3.0-1.deb -V --allow-downgrades  \
     && rm ./packages-microsoft-prod.deb  \
     && sudo apt install -y aspnetcore-runtime-6.0=6.0.8-1 dotnet-apphost-pack-6.0=6.0.8-1 dotnet-host=6.0.8-1 dotnet-hostfxr-6.0=6.0.8-1 dotnet-runtime-6.0=6.0.8-1 dotnet-sdk-6.0=6.0.400-1 dotnet-targeting-pack-6.0=6.0.8-1 --allow-downgrades \
     && wget https://github.com/google/go-jsonnet/releases/download/v0.17.0/jsonnet-go_0.17.0_linux_amd64.deb  \

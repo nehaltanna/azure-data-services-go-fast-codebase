@@ -1,0 +1,4 @@
+.dbtenv/
+target/
+dbt_modules/
+logs/
