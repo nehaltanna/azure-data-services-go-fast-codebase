@@ -38,8 +38,12 @@ RUN bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "$
     && sudo apt-get install -y lolcat \
     && sudo gem install lolcat \
     && sudo apt-get install -y boxes 
-
-
+    # DBT
+    # https://learn.microsoft.com/nl-be/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16#ubuntu18
+    #&& sudo apt install python3.10-venv \
+    #&& sudo apt-get install -y pip \
+    #&& pip install dbt-core   \
+    #&& pip install dbt-sqlserver 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>

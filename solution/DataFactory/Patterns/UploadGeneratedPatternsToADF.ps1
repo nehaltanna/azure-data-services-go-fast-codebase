@@ -75,7 +75,7 @@ function UploadADFItem ($items) {
 }
 
 
-$UploadGDS = $false
+$UploadGDS = $true
 $UploadGLS = $false
 
 if($UploadGLS -eq $true)

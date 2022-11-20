@@ -73,7 +73,7 @@ function(
     },
     "TaskGroupId": TaskGroupId,       
     "TaskInstanceJson":std.manifestJson(TaskInstanceJson),
-    "TaskTypeId":-6,
+    "TaskTypeId":-11,
     "TaskType":Pattern,
     "EngineName":vars.datafactory_name,
     "EngineResourceGroup":vars.resource_group_name,

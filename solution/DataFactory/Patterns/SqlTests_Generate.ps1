@@ -1,7 +1,7 @@
 
 
 $sql = @"
-delete from [dbo].[TaskGroup] where taskgroupid <=0;            
+delete from [dbo].[TaskGroup] where taskgroupid <=0 and taskgroupid  > -8;            
             
 SET IDENTITY_INSERT [dbo].[TaskGroup] ON
 INSERT INTO [dbo].[TaskGroup] ([TaskGroupId],[TaskGroupName],[SubjectAreaId], [TaskGroupPriority],[TaskGroupConcurrency],[TaskGroupJSON],[ActiveYN])
@@ -24,6 +24,7 @@ Values (-6,'DependencyChainL2',1, 0,10,null,1)
 
 INSERT INTO [dbo].[TaskGroup] ([TaskGroupId],[TaskGroupName],[SubjectAreaId], [TaskGroupPriority],[TaskGroupConcurrency],[TaskGroupJSON],[ActiveYN])
 Values (-7,'DependencyChainL3',1, 0,10,null,1)
+
 
 SET IDENTITY_INSERT [dbo].[TaskGroup] OFF
 

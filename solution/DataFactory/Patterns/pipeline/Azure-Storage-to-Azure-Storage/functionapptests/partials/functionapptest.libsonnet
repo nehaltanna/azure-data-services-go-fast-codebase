@@ -46,7 +46,7 @@ function(
             then {"SkipLineCount": SourceSkipLineCount, "FirstRowAsHeader":SourceFirstRowAsHeader,  "SheetName":SourceSheetName}
             else {}
             + if (SourceFormat == "Csv" || SourceFormat == "DelimitedText") 
-            then {"SkipLineCount": SourceSkipLineCount, "FirstRowAsHeader":SourceFirstRowAsHeader}
+            then {"SkipLineCount": SourceSkipLineCount, "FirstRowAsHeader":SourceFirstRowAsHeader, "Delimiter":","}
             else {},
 
         "Target":{
@@ -62,7 +62,7 @@ function(
             then {"SkipLineCount": 0, "FirstRowAsHeader":TargetFirstRowAsHeader,  "SheetName":TargetSheetName}
             else {}
             + if (TargetFormat == "Csv" || TargetFormat == "DelimitedText") 
-            then {"SkipLineCount": 0, "FirstRowAsHeader":TargetFirstRowAsHeader}
+            then {"SkipLineCount": 0, "FirstRowAsHeader":TargetFirstRowAsHeader, "Delimiter":","}
             else {},
     },
 

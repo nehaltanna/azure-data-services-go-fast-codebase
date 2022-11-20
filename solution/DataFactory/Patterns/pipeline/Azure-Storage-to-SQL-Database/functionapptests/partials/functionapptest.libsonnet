@@ -49,7 +49,7 @@ function(
             then {"FirstRowAsHeader":FirstRowAsHeader,"SkipLineCount": SkipLineCount,  "SheetName":SheetName}
             else {}
             + if (SourceFormat == "Csv" || SourceFormat == "DelimitedText") 
-            then {"SkipLineCount": SkipLineCount, "FirstRowAsHeader":FirstRowAsHeader}
+            then {"SkipLineCount": SkipLineCount, "FirstRowAsHeader":FirstRowAsHeader, "Delimiter":","}
             else {},
         "Target":{
             "Type":TargetFormat,            
