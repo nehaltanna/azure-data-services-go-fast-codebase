@@ -11,7 +11,7 @@ resource "azurerm_key_vault" "app_vault" {
   network_acls {
     default_action = "Deny"
     bypass         = "AzureServices"
-    ip_rules       = [var.ip_address] // This is required to allow us to set the secret values 
+    ip_rules       = [var.ip_address, var.ip_address2] // This is required to allow us to set the secret values 
   }
 
   tags = local.tags

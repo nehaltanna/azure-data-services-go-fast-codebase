@@ -722,6 +722,18 @@ variable "existing_log_analytics_resource_id" {
   default     = ""
   type        = string
 }
+
+variable "existing_vnet_id" {
+  description = "An existing vnet id for reuse"
+  default     = ""
+  type        = string
+}
+
+variable "existing_vnet_name" {
+  description = "An existing vnet name for reuse"
+  default     = ""
+  type        = string
+}
 variable "existing_plink_subnet_id" {
   description = "An existing subnet id for reuse for the Private link resources"
   default     = ""

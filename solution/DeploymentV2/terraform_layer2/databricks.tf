@@ -63,3 +63,10 @@ resource "azurerm_private_endpoint" "databricks_auth_pe" {
     subresource_names              = ["browser_authentication"]
   }
 }
+
+resource "azurerm_role_assignment" "databricks_data_factory" {
+  count                = var.deploy_databricks && var.deploy_data_factory ? 1 : 0
+  scope                = azurerm_databricks_workspace.workspace[0].id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_data_factory.data_factory[0].identity[0].principal_id
+}

@@ -30,9 +30,13 @@ namespace FunctionApp.Services
         {
             bool ret = false;
             string token = GetAccessToken(req);
+            //log.LogWarning("Token: " + token);
             var principal = await ValidateAccessToken(token, log);
+            //log.LogWarning("principal: " + principal);
+            //log.LogWarning("coreFunctions: " + _appOptions.ServiceConnections.CoreFunctionsAllowedRoles[0]);
             foreach (var r in _appOptions.ServiceConnections.CoreFunctionsAllowedRoles)
             {
+                //log.LogWarning("role:  " + r);
                 if (principal.IsInRole(r))
                 {
                     ret = true;
@@ -42,6 +46,7 @@ namespace FunctionApp.Services
             if (ret == false)
             {
                 log.LogWarning("Authorisation Failed for Principal");
+                log.LogWarning("Note: Check iat/exp (issue / expiry of token) - error may be due to recent update of app registration and stale token still existing.");
                 foreach (var claim in principal.Claims)
                 {
                     log.LogWarning(claim.Type + ":" + claim.Value);

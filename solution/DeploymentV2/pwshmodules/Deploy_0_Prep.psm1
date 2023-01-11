@@ -34,6 +34,18 @@ function PrepareDeployment (
     #az vm image terms accept --urn h2o-ai:h2o-driverles-ai:h2o-dai-lts:latest
 
 
+    #purge TF_VAR environment variables so we don't get issues from jumping between environments
+    #this can be an issue if you have different features enabled between environments
+    #as old features may persist otherwise
+    $envVariables = gci env:
+
+    foreach($var in $envVariables)
+    {
+        if($var.Name -clike 'TF_VAR*')
+        {
+            [System.Environment]::SetEnvironmentVariable($var.Name, '')
+        }
+    }
 
     if ($gitDeploy) {
         Write-Host "GitDeploy is true"
@@ -85,7 +97,7 @@ function PrepareDeployment (
     Set-Location $deploymentFolderPath
 
     [System.Environment]::SetEnvironmentVariable('TFenvironmentName', $environmentName)
-    if ($env:TF_VAR_ip_address -ne "")
+    if (($env:TF_VAR_ip_address -ne "") -and ($env:TF_VAR_ip_address -ne $env:TF_VAR_ip_address2))
     {
         try {
             #state

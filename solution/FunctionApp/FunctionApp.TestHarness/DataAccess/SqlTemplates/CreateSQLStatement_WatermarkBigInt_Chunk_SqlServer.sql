@@ -1,0 +1,1 @@
+﻿SELECT * FROM {tableSchema}.{tableName} WHERE {incrementalField} > Cast('{incrementalValueBigInt}' as bigint) AND {incrementalField} <= Cast('<newWatermark>' as bigint) AND CAST({chunkField} AS BIGINT) %  <batchcount> = <item> -1.

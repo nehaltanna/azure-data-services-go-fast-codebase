@@ -1,0 +1,1 @@
+﻿SELECT * FROM {tableSchema}.{tableName} WHERE {incrementalField} > Cast('{incrementalValueBigInt}' as bigint) AND {incrementalField} <= cast('<newWatermark>' as bigint)

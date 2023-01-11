@@ -6,15 +6,25 @@
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FunctionApp.Helpers;
 using FunctionApp.Services;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Options;
+using FunctionApp.Models.Options;
 
 namespace FunctionApp.Models.GetTaskInstanceJSON
 {
     public partial class AdfJsonBaseTask
     {
+        private readonly ApplicationOptions _appOptions;
+
+        public AdfJsonBaseTask(IOptions<ApplicationOptions> appOptions)
+        {
+            _appOptions = appOptions.Value; 
+        }
+
         public async Task ProcessTaskMaster(TaskTypeMappingProvider ttm)
         {
             //Validate TaskmasterJson based on JSON Schema
@@ -229,6 +239,24 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
             }
             var _instance = Extraction["Instance"];
 
+            string sourceType = Extraction["System"]["Type"].ToString();
+            string templateFile = "";
+
+            Dictionary<string, string> sqlParams = new Dictionary<string, string>
+            {
+                { "tableName", Extraction["TableName"].ToString() },
+                { "tableSchema", Extraction["TableSchema"].ToString() },
+            };
+
+            string SqlTemplateLanguage = "SqlServer";
+            if (sourceType == "Oracle Server")
+            {
+                SqlTemplateLanguage = sourceType.Replace(" ", "");
+                sqlParams["tableName"] = sqlParams["tableName"].ToUpper();
+                sqlParams["tableSchema"] = sqlParams["tableSchema"].ToUpper();
+
+            }
+
 
             if (Extraction["IncrementalType"] != null)
             {
@@ -240,56 +268,87 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
 
                 if (Extraction["IncrementalType"].ToString().ToLower() == "full_chunk")
                 {
-                    sqlStatement = @$"
+                    templateFile = "Full_Chunk";
+                    sqlParams.Add("chunkSize", Extraction["ChunkSize"].ToString());
+
+                    /*sqlStatement = @$"
                        SELECT 
 		                    CAST(CEILING(count(*)/{Extraction["ChunkSize"]} + 0.00001) as int) as  batchcount
 	                    FROM [{Extraction["TableSchema"]}].[{Extraction["TableName"]}] 
-                    ";
+                    ";*/
                 }
 
                 if (Extraction["IncrementalType"].ToString().ToLower() == "watermark" && _instance["IncrementalColumnType"].ToString().ToLower() == "datetime")
                 {
-                    sqlStatement = @$"
+                    templateFile = "WatermarkDateTime";
+                    sqlParams.Add("incrementalField", _instance["IncrementalField"].ToString());
+                    sqlParams.Add("incrementalValue", _instance["IncrementalValue"].ToString());
+
+
+                    /*sqlStatement = @$"
                         SELECT 
 	                        MAX([{_instance["IncrementalField"]}]) AS newWatermark
                         FROM 
 	                        [{Extraction["TableSchema"]}].[{Extraction["TableName"]}] 
                         WHERE [{_instance["IncrementalField"]}] >= CAST('{_instance["IncrementalValue"]}' as datetime)
                     ";
+                    */
                 }
 
                 if (Extraction["IncrementalType"].ToString().ToLower() == "watermark" && _instance["IncrementalColumnType"].ToString().ToLower() != "datetime")
                 {
-                    sqlStatement = @$"
+
+                    templateFile = "Watermark";
+                    sqlParams.Add("incrementalField", _instance["IncrementalField"].ToString());
+                    sqlParams.Add("incrementalValue", _instance["IncrementalValue"].ToString());
+
+                    /*sqlStatement = @$"
                         SELECT 
 	                        MAX([{_instance["IncrementalField"]}]) AS newWatermark
                         FROM 
 	                        [{Extraction["TableSchema"]}].[{Extraction["TableName"]}] 
                         WHERE [{_instance["IncrementalField"]}] >= {_instance["IncrementalValue"]}
-                    ";
+                    ";*/
                 }
 
                 if (Extraction["IncrementalType"].ToString().ToLower() == "watermark_chunk" && _instance["IncrementalColumnType"].ToString().ToLower() == "datetime")
                 {
-                    sqlStatement = @$"
+
+                    templateFile = "WatermarkDateTime_Chunk";
+                    sqlParams.Add("incrementalField", _instance["IncrementalField"].ToString());
+                    sqlParams.Add("incrementalValue", _instance["IncrementalValue"].ToString());
+                    sqlParams.Add("chunkSize", Extraction["ChunkSize"].ToString());
+
+                    /*sqlStatement = @$"
                         SELECT MAX([{_instance["IncrementalField"]}]) AS newWatermark, 
 		                       CAST(CASE when count(*) = 0 then 0 else CEILING(count(*)/{Extraction["ChunkSize"]} + 0.00001) end as int) as  batchcount
 	                    FROM  [{Extraction["TableSchema"]}].[{Extraction["TableName"]}] 
 	                    WHERE [{_instance["IncrementalField"]}] >= CAST('{_instance["IncrementalValue"]}' as datetime)
-                    ";
+                    "; */
                 }
 
                 if (Extraction["IncrementalType"].ToString().ToLower() == "watermark_chunk" && _instance["IncrementalColumnType"].ToString().ToLower() != "datetime")
                 {
-                    sqlStatement = @$"
+
+                    templateFile = "Watermark_Chunk";
+                    sqlParams.Add("incrementalField", _instance["IncrementalField"].ToString());
+                    sqlParams.Add("incrementalValue", _instance["IncrementalValue"].ToString());
+                    sqlParams.Add("chunkSize", Extraction["ChunkSize"].ToString());
+
+                    /*sqlStatement = @$"
                         SELECT MAX([{_instance["IncrementalField"]}]) AS newWatermark, 
 		                       CAST(CASE when count(*) = 0 then 0 else CEILING(count(*)/{Extraction["ChunkSize"]} + 0.00001) end as int) as  batchcount
 	                    FROM  [{Extraction["TableSchema"]}].[{Extraction["TableName"]}] 
 	                    WHERE [{_instance["IncrementalField"]}] >= {_instance["IncrementalValue"]}
-                    ";
+                    ";*/
                 }
 
 
+            }
+
+            if (!string.IsNullOrEmpty(templateFile))
+            {
+                sqlStatement = GenerateSqlStatementTemplates.GetSql(System.IO.Path.Combine(EnvironmentHelper.GetWorkingFolder(), _appOptions.LocalPaths.SQLTemplateLocation), "CreateIncrementalSQLStatement_" + templateFile + "_" + SqlTemplateLanguage, sqlParams);
             }
 
             return sqlStatement;
@@ -306,34 +365,124 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
             JToken chunkField = (string)Extraction["ChunkField"];
             JToken tableSchema = Extraction["TableSchema"];
             JToken tableName = Extraction["TableName"];
+            string sourceType = Extraction["System"]["Type"].ToString();
+
             string extractionSql = JsonHelpers.GetStringValueFromJson(_logging, "ExtractionSQL", Extraction, "", false);
+            string templateFile = "";
+            Dictionary<string, string> sqlParams = new Dictionary<string, string>
+            {
+                { "tableName", tableName.ToString() },
+                { "tableSchema", tableSchema.ToString() },
+                { "incrementalField", incrementalField.ToString() }
+            };
+
+
+
+            string SqlTemplateLanguage = "SqlServer";
+            if (sourceType == "Oracle Server")
+            {
+                SqlTemplateLanguage = sourceType.Replace(" ", "");
+                sqlParams["tableName"] = sqlParams["tableName"].ToUpper();
+                sqlParams["tableSchema"] = sqlParams["tableSchema"].ToUpper();
+            }
 
             //If Extraction SQL Explicitly set then overide _SQLStatement with that explicit value
             if (!string.IsNullOrWhiteSpace(extractionSql))
             {
-                sqlStatement = extractionSql;
+                sqlStatement = extractionSql;                
+
+                if (incrementalType == "full_chunk" || incrementalType == "watermark_chunk")
+                {
+                    if (incrementalType == "full_chunk")
+                    {   
+                        sqlStatement = sqlStatement.Replace("{chunkField}", chunkField.ToString());
+                    }
+
+                    if (incrementalType == "watermark_chunk")
+                    {   
+                        sqlStatement = sqlStatement.Replace("{chunkField}", chunkField.ToString());
+                        sqlStatement = sqlStatement.Replace("{incrementalField}", incrementalField.ToString());                        
+                        
+                        if (incrementalColumnType.ToString() == "DateTime")
+                        {
+                            DateTime incrementalValueDateTime = (DateTime)_taskInstanceJson["IncrementalValue"];                            
+                            if (sourceType == "Oracle Server")
+                            {
+                                sqlStatement = sqlStatement.Replace("{incrementalValueDateTime}",incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.ff"));
+                            }
+                            else
+                            {
+                                sqlStatement = sqlStatement.Replace("{incrementalValueDateTime}",incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));                                
+                            }                
+                        }
+                        else if (incrementalColumnType.ToString() == "BigInt")
+                        {
+                            int incrementalValueBigInt = (int)_taskInstanceJson["IncrementalValue"];
+                            sqlStatement = sqlStatement.Replace("{incrementalValueBigInt}",incrementalValueBigInt.ToString());      
+                        }
+                    }
+                }  
+                else //Non Chunk 
+                {
+                    if (incrementalType == "watermark")
+                    {
+                        sqlStatement = sqlStatement.Replace("{incrementalField}", incrementalField.ToString());                        
+                        
+                        if (incrementalColumnType.ToString() == "DateTime")
+                        {
+                            DateTime incrementalValueDateTime = (DateTime)_taskInstanceJson["IncrementalValue"];                            
+                            if (sourceType == "Oracle Server")
+                            {
+                                sqlStatement = sqlStatement.Replace("{incrementalValueDateTime}",incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.ff"));
+                            }
+                            else
+                            {
+                                sqlStatement = sqlStatement.Replace("{incrementalValueDateTime}",incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));                                
+                            }                
+                        }
+                        else if (incrementalColumnType.ToString() == "BigInt")
+                        {
+                            int incrementalValueBigInt = (int)_taskInstanceJson["IncrementalValue"];
+                            sqlStatement = sqlStatement.Replace("{incrementalValueBigInt}",incrementalValueBigInt.ToString());      
+                        }
+                    }
+
+                }                    
+                
                 goto EndOfSQLStatementSet;
+
             }
 
             //Chunk branch
             if (incrementalType == "full_chunk" || incrementalType == "watermark_chunk")
-            {
+            {               
                 if (incrementalType == "full_chunk")
                 {
-                    sqlStatement = $"SELECT * FROM {tableSchema}.{tableName} WHERE CAST({chunkField} AS BIGINT) %  <batchcount> = (<item> -1)";
-                }
-                else if (incrementalType == "watermark_chunk")
+                    templateFile = "Full_Chunk";
+                    sqlParams.Add("chunkField", chunkField.ToString());
+                }                
+                else if (incrementalType == "watermark_chunk" && !string.IsNullOrWhiteSpace(_taskMasterJsonSource["Source"]["ChunkSize"].ToString()))
                 {
                     if (incrementalColumnType.ToString() == "DateTime")
                     {
                         DateTime incrementalValueDateTime = (DateTime)_taskInstanceJson["IncrementalValue"];
-                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as datetime) AND {2} <= Cast('<newWatermark>' as datetime) AND CAST({4} AS BIGINT) %  <batchcount> = (<item> -1)", tableSchema, tableName, incrementalField, incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"), chunkField);
+                        templateFile = "WatermarkDateTime_Chunk";
+                        if (sourceType == "Oracle Server")
+                        {
+                            sqlParams.Add("incrementalValueDateTime", incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.ff"));
+                        }
+                        else
+                        {
+                            sqlParams.Add("incrementalValueDateTime", incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        }                
                     }
                     else if (incrementalColumnType.ToString() == "BigInt")
                     {
                         int incrementalValueBigInt = (int)_taskInstanceJson["IncrementalValue"];
-                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as bigint) AND {2} <= Cast('<newWatermark>' as bigint) AND CAST({4} AS BIGINT) %  <batchcount> = (<item> -1)", tableSchema, tableName, incrementalField, incrementalValueBigInt, chunkField);
-                    }
+                        templateFile = "WatermarkBigInt_Chunk";
+                        sqlParams.Add("incrementalValueBigInt", incrementalValueBigInt.ToString()); }
+                    sqlParams.Add("chunkField", chunkField.ToString());
+
                 }
             }
             else
@@ -341,23 +490,34 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
             {
                 if (incrementalType == "full")
                 {
-                    sqlStatement = string.Format("SELECT * FROM {0}.{1}", tableSchema, tableName);
-                }
+                    templateFile = "Full";                    
+                }                                
                 else if (incrementalType == "watermark")
                 {
                     if (incrementalColumnType.ToString() == "DateTime")
                     {
                         DateTime incrementalValueDateTime = (DateTime)_taskInstanceJson["IncrementalValue"];
-                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as datetime) AND {2} <= Cast('<newWatermark>' as datetime)", tableSchema, tableName, incrementalField, incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        templateFile = "WatermarkDateTime";
+                        if (sourceType == "Oracle Server")
+                        {
+                            sqlParams.Add("incrementalValueDateTime", incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.ff"));
+                        }
+                        else
+                        {
+                            sqlParams.Add("incrementalValueDateTime", incrementalValueDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                        }
                     }
                     else if (incrementalColumnType.ToString() == "BigInt")
                     {
                         int incrementalValueBigInt = (int)_taskInstanceJson["IncrementalValue"];
-                        sqlStatement = string.Format("SELECT * FROM {0}.{1} WHERE {2} > Cast('{3}' as bigint) AND {2} <= cast('<newWatermark>' as bigint)", tableSchema, tableName, incrementalField, incrementalValueBigInt);
+                        templateFile = "WatermarkBigInt";
+                        sqlParams.Add("incrementalValueBigInt", incrementalValueBigInt.ToString());
                     }
                 }
-            }            
-
+            }
+        
+        sqlStatement = GenerateSqlStatementTemplates.GetSql(System.IO.Path.Combine(EnvironmentHelper.GetWorkingFolder(), _appOptions.LocalPaths.SQLTemplateLocation), "CreateSQLStatement_" + templateFile + "_" + SqlTemplateLanguage, sqlParams);
+        
         EndOfSQLStatementSet:
             if (string.IsNullOrWhiteSpace(sqlStatement))
             {
@@ -365,7 +525,8 @@ namespace FunctionApp.Models.GetTaskInstanceJSON
                 _logging.LogErrors(e);
                 throw e;
             }
-            return sqlStatement;
+        
+        return sqlStatement;
         }
 
         public void ProcessTaskMaster_Mapping_AZ_SQL_StoredProcedure()

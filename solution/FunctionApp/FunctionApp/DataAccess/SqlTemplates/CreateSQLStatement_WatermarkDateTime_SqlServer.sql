@@ -1,0 +1,1 @@
+﻿SELECT * FROM {tableSchema}.{tableName} WHERE {incrementalField} > Cast('{incrementalValueDateTime}' as datetime) AND {incrementalField} <= Cast('<newWatermark>' as datetime)

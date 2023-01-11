@@ -51,7 +51,11 @@
 						"type": "String"
 					},
 					"FirstRowAsHeader": {
-						"type": "bool"
+						"type": "Bool"
+					},				
+					"Delimiter": {
+						"type": "String",
+						"defaultValue": ","
 					}
 				},
 				"folder": {
@@ -75,7 +79,10 @@
 							"type": "Expression"
 						}
 					},
-					"columnDelimiter": ",",
+					"columnDelimiter": {
+						"value": "@dataset().Delimiter",
+						"type": "Expression"
+					},
 					"escapeChar": "\\",
 					"firstRowAsHeader": {
 						"value": "@dataset().FirstRowAsHeader",

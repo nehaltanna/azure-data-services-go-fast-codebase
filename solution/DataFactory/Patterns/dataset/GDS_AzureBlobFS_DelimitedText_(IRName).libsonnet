@@ -27,7 +27,11 @@ function(shortIRName = "", fullIRName = "")
 			},
 			"FirstRowAsHeader": {
 				"type": "bool"
-			}
+			},
+			"Delimiter": {
+                "type": "string",
+                "defaultValue": ","
+            }
 		},
 		"folder": {
 			"name": "ADS Go Fast/Generic/" + fullIRName
@@ -50,7 +54,10 @@ function(shortIRName = "", fullIRName = "")
 					"type": "Expression"
 				}
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": {
+					"value": "@dataset().Delimiter",
+					"type": "Expression"
+			},
 			"escapeChar": "\\",
 			"firstRowAsHeader": {
 				"value": "@dataset().FirstRowAsHeader",

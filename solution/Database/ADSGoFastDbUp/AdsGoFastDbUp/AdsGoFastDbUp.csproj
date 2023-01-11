@@ -32,7 +32,8 @@
     <None Remove="1-0-3\A-Journaled\001-UpdateOracleSource.sql" />  
     <None Remove="1-0-3\A-Journaled\002-InsertSIFSamples.sql" />  
     <None Remove="1-0-3\A-Journaled\003-InsertStopIdleSparkSessions.sql" />  
-    
+    <None Remove="1-0-4\A-Journaled\001-AddPowerBIDataflowRefresh.sql" />               
+
 
 
             
@@ -61,6 +62,7 @@
     <EmbeddedResource Include="1-0-3\A-Journaled\001-UpdateOracleSource.sql" />
     <EmbeddedResource Include="1-0-3\A-Journaled\002-InsertSIFSamples.sql" />
     <EmbeddedResource Include="1-0-3\A-Journaled\003-InsertStopIdleSparkSessions.sql" />
+    <EmbeddedResource Include="1-0-4\A-Journaled\001-AddPowerBIDataflowRefresh.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,6 +77,7 @@
     <Folder Include="1-0-1\" />
     <Folder Include="1-0-2\" />
     <Folder Include="1-0-3\" />
+    <Folder Include="1-0-4\" />
 
   </ItemGroup>
 

@@ -3,8 +3,8 @@ locals {
   webapp_url                   = "https://${local.webapp_name}.azurewebsites.net"
   functionapp_name             = (var.functionapp_name != "" ? var.functionapp_name : module.naming.function_app.name_unique)
   functionapp_url              = "https://${local.functionapp_name}.azurewebsites.net"
-  aad_webapp_name              = (var.aad_webapp_name != "" ? var.aad_webapp_name : "ADS GoFast Web Portal (${var.environment_tag})")
-  aad_functionapp_name         = (var.aad_functionapp_name != "" ? var.aad_functionapp_name : "ADS GoFast Orchestration App (${var.environment_tag})")
+  aad_webapp_name              = data.terraform_remote_state.layer2.outputs.aad_webapp_name
+  aad_functionapp_name         = data.terraform_remote_state.layer2.outputs.aad_functionapp_name
   purview_name                 = data.terraform_remote_state.layer2.outputs.purview_name
   purview_account_plink        = "${var.prefix}-${var.environment_tag}-pura-${lower(var.app_name)}-plink-${element(split("-", module.naming.data_factory.name_unique),length(split("-", module.naming.data_factory.name_unique))-1)}"
   purview_portal_plink         = "${var.prefix}-${var.environment_tag}-purp-${lower(var.app_name)}-plink-${element(split("-", module.naming.data_factory.name_unique),length(split("-", module.naming.data_factory.name_unique))-1)}"

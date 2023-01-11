@@ -1,6 +1,6 @@
 {
   "$schema": "./../common_vars_schema.json",
-  "owner_tag": "Contoso",
+  "owner_tag": "microsoft",
   "resource_location": "australiaeast",
   "environment_tag": "stg",
   "domain": "microsoft.com",
@@ -25,19 +25,19 @@
     "jorampon@microsoft.com": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
   },
   "azure_purview_data_curators": {
-    "john": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
+    "john": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2"
   },
   "synapse_publishers": {},
   "synapse_contributors": {},
-  "WEB_APP_ADMIN_USER": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578",
+  "WEB_APP_ADMIN_USER": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
   "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadsxom0",
   "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-xom0",
   "ARM_DATALAKE_NAME": "adsstgdlsadsxom0adsl",
   "ARM_PAL_PARTNER_ID": "0",
-  "GIT_REPOSITORY_NAME": "testLockbox",
-  "GIT_SYNAPSE_REPOSITORY_BRANCH_NAME": "featuretest",
-  "GIT_USER_NAME": "h-sha",
+  "GIT_REPOSITORY_NAME": "#####",
+  "GIT_SYNAPSE_REPOSITORY_BRANCH_NAME": "#####",
+  "GIT_USER_NAME": "#####",
   "GIT_EMAIL_ADDRESS": "#####",
   "GIT_ADF_REPOSITORY_NAME": "#####",
   "GIT_ADF_REPOSITORY_BRANCH_NAME": "#####",

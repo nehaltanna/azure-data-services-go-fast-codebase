@@ -24,7 +24,7 @@ namespace FunctionApp.Functions
 
         public AdfGetInformationSchemaSql(IOptions<ApplicationOptions> appOptions)
         {
-            _appOptions = appOptions.Value; ;
+            _appOptions = appOptions.Value; 
         }
 
         /// <summary>

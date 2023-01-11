@@ -92,13 +92,15 @@ namespace FunctionApp
             services.AddSingleton<TaskTypeMappingProvider>();
             services.AddSingleton<TaskMetaDataDatabase>();
             services.AddSingleton<DataFactoryClientFactory>();
-            services.AddSingleton<MicrosoftAzureManagementAuthenticationProvider>();
             services.AddSingleton<SourceAndTargetSystemJsonSchemasProvider>();
             services.AddSingleton<AzureSynapseService>();
             services.AddSingleton<IntegrationRuntimeMappingProvider>();
-
+            services.AddSingleton<KeyVaultService>();
+            services.AddSingleton<PowerBIService>();
             services.AddSingleton<DataFactoryPipelineProvider>();
+            services.AddSingleton<MicrosoftAzureServicesAppAuthenticationProvider>(downstreamViaAppRegAuthenticationProvider);
             services.AddSingleton<IAzureAuthenticationProvider>(downstreamAuthenticationProvider);
+            //services.AddSingleton<IAzureAuthenticationProvider>(downstreamViaAppRegAuthenticationProvider);
             services.AddSingleton<ISecurityAccessProvider>((provider) => new SecurityAccessProvider(downstreamAuthOptionsViaAppReg, appOptions));
 
             //Inject Http Client for chained calling of core functions

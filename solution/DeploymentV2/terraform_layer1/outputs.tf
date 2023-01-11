@@ -45,6 +45,14 @@ output "functionapp_name" {
   value = local.functionapp_name
 }
 
+output "aad_webapp_name" {
+  value = local.aad_webapp_name
+}
+
+output "aad_functionapp_name" {
+  value = local.aad_functionapp_name
+}
+
 output "purview_name" {
   value = local.purview_name
 }

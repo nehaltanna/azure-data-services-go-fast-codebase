@@ -64,6 +64,19 @@ local Template_Synapse_Stop_Idle_Spark_Sessions = function(SourceType, SourceFor
 };
 
 
+local Template_PowerBI_Dataflow_Refresh = function(SourceType, SourceFormat, TargetType, TargetFormat)
+{
+        "Folder": "PowerBI-Dataflow-Refresh",
+        "GFPIR": "Azure",
+        "SourceType": SourceType,
+        "SourceFormat": SourceFormat,
+        "TargetType": TargetType,
+        "TargetFormat": TargetFormat,
+        "TaskTypeId":-11,
+        "Pipeline":"GPL_ExecuteAndCheckFunctions"
+};
+
+
 #Azure_Storage_to_Azure_Storage 
 [   
     #Parquet to Delta
@@ -205,5 +218,11 @@ local Template_Synapse_Stop_Idle_Spark_Sessions = function(SourceType, SourceFor
 [
     Template_Rest_API_to_Azure_Storage("Rest","Rest","AzureBlobStorage","Json"),
     Template_Rest_API_to_Azure_Storage("Rest","Rest","AzureBlobFS","Json")
+
+]
++
+#PowerBI-Dataflow-Refresh
+[
+    Template_PowerBI_Dataflow_Refresh("PowerBI SP","Not-Applicable","N/A","Not-Applicable")
 
 ]

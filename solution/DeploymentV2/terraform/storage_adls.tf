@@ -51,6 +51,11 @@ resource "azurerm_role_assignment" "adls_purview_sp" {
   principal_id         = azuread_service_principal.purview_ir[0].object_id
 }
 
+resource "azurerm_role_assignment" "adls_user" {
+  scope                = azurerm_storage_account.adls[0].id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
 
 resource "azurerm_private_endpoint" "adls_storage_private_endpoint_with_dns" {
   count               = var.deploy_adls && var.is_vnet_isolated ? 1 : 0

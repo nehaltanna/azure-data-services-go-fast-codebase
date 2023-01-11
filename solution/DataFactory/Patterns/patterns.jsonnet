@@ -84,7 +84,7 @@ local Template_REST_API_to_Azure_Storage = function(SourceType, SourceFormat, Ta
     #Template_SQL_Database_to_Azure_Storage("AzureSqlDWTable","Sql","AzureBlobFS","Parquet"),
     Template_SQL_Database_to_Azure_Storage("AzureSqlTable","Table","AzureBlobFS","Parquet"),
     Template_SQL_Database_to_Azure_Storage("SqlServerTable","Table","AzureBlobFS","Parquet"),
-    Template_SQL_Database_to_Azure_Storage("OracleServerTable","Table","AzureBlobFS","Parquet"),
+    Template_SQL_Database_to_Azure_Storage("OracleServerTable","Table","AzureBlobFS","Parquet")
     #Template_SQL_Database_to_Azure_Storage("AzureSqlDWTable","Table","AzureBlobFS","Parquet")   
     #Template_SQL_Database_to_Azure_Storage("AzureSqlTable","Table","FileServer","Parquet"),
     #Template_SQL_Database_to_Azure_Storage("SqlServerTable","Table","FileServer","Parquet"),
@@ -235,17 +235,21 @@ local Template_REST_API_to_Azure_Storage = function(SourceType, SourceFormat, Ta
     Template_Execute_SQL_Statement("AzureSqlTable","NA","AzureSqlTable","NA"),    
     Template_Execute_SQL_Statement("AzureSqlDWTable","NA","AzureSqlDWTable","NA")        
 ]
+
 /*
 + 
 #REST API to Azure Storage 
-[ 
-    Template_REST_API_to_Azure_Storage("Rest","Anonymous","AzureBlobStorage","Json"),
-    Template_REST_API_to_Azure_Storage("Rest","Anonymous","AzureBlobFS","Json"),
-    Template_REST_API_to_Azure_Storage("Rest","Basic","AzureBlobStorage","Json"),
-    Template_REST_API_to_Azure_Storage("Rest","Basic","AzureBlobFS","Json"),
-    Template_REST_API_to_Azure_Storage("Rest","OAuth2","AzureBlobStorage","Json"),
-    Template_REST_API_to_Azure_Storage("Rest","OAuth2","AzureBlobFS","Json"),
-    Template_REST_API_to_Azure_Storage("Rest","ServicePrincipal","AzureBlobStorage","Json"),
-    Template_REST_API_to_Azure_Storage("Rest","ServicePrincipal","AzureBlobFS","Json")
-]
+#[ 
+#    Template_REST_API_to_Azure_Storage("Rest","Anonymous","AzureBlobStorage","Json"),
+#    Template_REST_API_to_Azure_Storage("Rest","Anonymous","AzureBlobFS","Json"),
+#    Template_REST_API_to_Azure_Storage("Rest","Basic","AzureBlobStorage","Json"),
+#    Template_REST_API_to_Azure_Storage("Rest","Basic","AzureBlobFS","Json"),
+#    Template_REST_API_to_Azure_Storage("Rest","OAuth2","AzureBlobStorage","Json"),
+#    Template_REST_API_to_Azure_Storage("Rest","OAuth2","AzureBlobFS","Json"),
+#    Template_REST_API_to_Azure_Storage("Rest","ServicePrincipal","AzureBlobStorage","Json"),
+#    Template_REST_API_to_Azure_Storage("Rest","ServicePrincipal","AzureBlobFS","Json")
+#]
+
++
+
 */

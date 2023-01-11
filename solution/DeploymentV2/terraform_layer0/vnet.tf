@@ -1,4 +1,8 @@
 
+locals {
+  vnet_id = (var.existing_vnet_id == "" && (var.is_vnet_isolated) ? azurerm_virtual_network.vnet[0].id : var.existing_vnet_id)
+}
+
 resource "azurerm_virtual_network" "vnet" {
   count               = ((var.is_vnet_isolated || var.deploy_selfhostedsql || var.deploy_h2o-ai) && var.existing_vnet_id == "" ? 1 : 0)
   name                = local.vnet_name

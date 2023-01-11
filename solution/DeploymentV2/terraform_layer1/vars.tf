@@ -25,6 +25,14 @@ variable "resource_location" {
 variable "resource_group_name" {
   type = string
 }
+
+variable "naming_unique_suffix" {
+  description = "The naming suffix used to make the resources deployed always unique."
+  type        = string
+  default     = ""
+
+}
+
 #---------------------------------------------------------------
 # Tags
 #---------------------------------------------------------------

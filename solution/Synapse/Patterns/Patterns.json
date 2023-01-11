@@ -518,5 +518,15 @@
       "TargetFormat": "Json",
       "TargetType": "AzureBlobFS",
       "TaskTypeId": -9
+   },
+   {
+      "Folder": "PowerBI-Dataflow-Refresh",
+      "GFPIR": "Azure",
+      "Pipeline": "GPL_ExecuteAndCheckFunctions",
+      "SourceFormat": "Not-Applicable",
+      "SourceType": "PowerBI SP",
+      "TargetFormat": "Not-Applicable",
+      "TargetType": "N/A",
+      "TaskTypeId": -11
    }
 ]

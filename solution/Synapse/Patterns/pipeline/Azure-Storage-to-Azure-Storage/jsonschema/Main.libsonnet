@@ -82,7 +82,27 @@ function(SourceType = "Parquet", SourceFormat = "Delta",TargetType = "AzureSqlTa
             "options": {
                 "infoText": "(required) This flag is used to control the method used to call the Synapse Notebook that carries out the processing. When Enabled the default notebook activity type within Synapse pipelines will be used. Note that this will force a new spark session for each job execution. By leaving this flag disabled an Azure Function is used to call the notebook and Spark Sessions will be reused if available."
             }
-        },    
+        },
+        "ModifiedDate": {
+            "type": "string",
+            "default": "Disabled",
+            "enum": [
+                "Enabled",
+                "Disabled"
+            ],
+            "options": {
+                "infoText": "(required) This flag is used to control whether an additional column ModifiedDate is added to the output delta table. This column will only update on the output if the corresponding row has been modified or just inserted. Note: This is only used when the source is a parquet type and is not CDC."
+            }
+        },
+        "PrimaryKeyOverride": {
+            "type": "string",
+            "options": {
+                "inputAttributes": {
+                    "placeholder": ""
+                },
+                "infoText": "(optional) This will allow you to override the primary key selected and used for the delta table notebook. Note: Leave this blank if you do not wish to use this functionality."
+            }
+        },      
         "Source": partials[SourceFormat](),
         "Target": partials[TargetFormat]()
     },
@@ -92,6 +112,7 @@ function(SourceType = "Parquet", SourceFormat = "Delta",TargetType = "AzureSqlTa
         "Source",
         "Target",
         "Purview",
-        "UseNotebookActivity"
+        "UseNotebookActivity",
+        "ModifiedDate"
     ]
 }

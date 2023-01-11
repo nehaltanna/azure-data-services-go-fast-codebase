@@ -7,5 +7,6 @@ namespace FunctionApp.Authentication
     {
         Task<string> GetAzureRestApiToken(string resourceName);
         TokenCredential GetAzureRestApiTokenCredential(string resourceName);
+
     }
 }

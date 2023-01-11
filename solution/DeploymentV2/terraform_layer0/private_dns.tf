@@ -9,7 +9,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "database" {
   name                  = "${local.vnet_name}-database"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone_db[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 locals {
@@ -39,7 +39,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vaultcore" {
   name                  = "${local.vnet_name}-vaultcore"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone_kv[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
   tags                  = local.tags
   lifecycle {
     ignore_changes = [
@@ -59,7 +59,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "blob" {
   name                  = "${local.vnet_name}-blob"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone_blob[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 resource "azurerm_private_dns_zone" "private_dns_zone_queue" {
@@ -73,7 +73,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "queue" {
   name                  = "${local.vnet_name}-queue"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone_queue[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 resource "azurerm_private_dns_zone" "private_dns_zone_dfs" {
@@ -87,7 +87,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dfs" {
   name                  = "${local.vnet_name}-dfs"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone_dfs[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 resource "azurerm_private_dns_zone" "private_dns_zone_purview" {
@@ -101,7 +101,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "purview" {
   name                  = "${local.vnet_name}-purview"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone_purview[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 resource "azurerm_private_dns_zone" "private_dns_zone_purview_studio" {
@@ -115,7 +115,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "purview_studio" {
   name                  = "${local.vnet_name}-purviewstudio"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone_purview_studio[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 resource "azurerm_private_dns_zone" "private_dns_zone_servicebus" {
@@ -129,7 +129,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "servicebus" {
   name                  = "${local.vnet_name}-servicebus"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.private_dns_zone_servicebus[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 # Synapse Private DNS Zones
@@ -144,7 +144,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "synapse_gateway" {
   name                  = "${local.vnet_name}-synapsegateway"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.synapse_gateway[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 resource "azurerm_private_dns_zone" "synapse_sql" {
@@ -158,7 +158,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "synapse_sql" {
   name                  = "${local.vnet_name}-synapsesql"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.synapse_sql[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 resource "azurerm_private_dns_zone" "synapse_studio" {
@@ -172,7 +172,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "synapse_studio" {
   name                  = "${local.vnet_name}-synapsestudio"
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.synapse_studio[0].name
-  virtual_network_id    = azurerm_virtual_network.vnet[0].id
+  virtual_network_id    = local.vnet_id
 }
 
 #Databricks DNS Zones

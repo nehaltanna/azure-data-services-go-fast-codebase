@@ -46,6 +46,12 @@ resource "azurerm_role_assignment" "blob_purview_sp" {
   principal_id         = azuread_service_principal.purview_ir[0].object_id
 }
 
+resource "azurerm_role_assignment" "blob_user" {
+  scope                = azurerm_storage_account.blob[0].id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
 
 resource "azurerm_private_endpoint" "blob_storage_private_endpoint_with_dns" {
   count               = var.deploy_storage_account && var.is_vnet_isolated ? 1 : 0

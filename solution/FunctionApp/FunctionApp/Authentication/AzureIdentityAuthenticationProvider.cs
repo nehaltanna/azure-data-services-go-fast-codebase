@@ -50,7 +50,7 @@ namespace FunctionApp.Authentication
                 credential = new DefaultAzureCredential(defaultAzureCredentialOptions);
             }
             resourceName = resourceName + "/.default";
-            var requestContext = new TokenRequestContext(new [] {resourceName});
+            var requestContext = new TokenRequestContext(new[] { resourceName });
             var result = await credential.GetTokenAsync(requestContext, new CancellationToken()).ConfigureAwait(false);
 
             return result.Token;
@@ -67,10 +67,10 @@ namespace FunctionApp.Authentication
             {
                 var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions();
                 credential = new DefaultAzureCredential(defaultAzureCredentialOptions);
-            }            
+            }
 
             return credential;
         }
-    }
 
+    }
 }

@@ -2,9 +2,9 @@
 
 sudo apt-get update  && \
 sudo apt-get install -y wget apt-transport-https software-properties-common && \
-wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.2.5/powershell-lts_7.2.5-1.deb_amd64.deb  && \
-sudo dpkg -i powershell-lts_7.2.5-1.deb_amd64.deb  && \
-rm ./powershell-lts_7.2.5-1.deb_amd64.deb  && \
+wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.3.0/powershell_7.3.0-1.deb_amd64.deb && \
+sudo dpkg -i powershell_7.3.0-1.deb_amd64.deb  && \
+rm ./powershell_7.3.0-1.deb_amd64.deb  && \
 
 sudo apt install -y aspnetcore-runtime-6.0=6.0.8-1 dotnet-apphost-pack-6.0=6.0.8-1 dotnet-host=6.0.8-1 dotnet-hostfxr-6.0=6.0.8-1 dotnet-runtime-6.0=6.0.8-1 dotnet-sdk-6.0=6.0.400-1 dotnet-targeting-pack-6.0=6.0.8-1 --allow-downgrades && \
 

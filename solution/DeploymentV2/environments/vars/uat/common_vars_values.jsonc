@@ -1,6 +1,6 @@
 {
   "$schema": "./../common_vars_schema.json",
-  "owner_tag": "Contoso",
+  "owner_tag": "microsoft",
   "resource_location": "australiaeast",
   "environment_tag": "stg",
   "domain": "microsoft.com",
@@ -17,16 +17,17 @@
   ],
   "synapse_administrators": {},
   "azure_sql_aad_administrators": {
-    "sql_aad_admin": "6f467924-4d92-40e3-b348-b3154d5cd437",
-    "AdsGoFastDeployerjkcgkaibkungm": "4c732d19-4076-4a76-87f3-6fbfd77f007d",
-    "jorampon@microsoft.com": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
+    "sql_aad_admin": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2"
+  },
+  "azure_purview_data_curators": {
+    "hugo": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2"
   },
   "azure_purview_data_curators": {
     "john": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
   },
   "synapse_publishers": {},
   "synapse_contributors": {},
-  "WEB_APP_ADMIN_USER": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578",
+  "WEB_APP_ADMIN_USER": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
   "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadsr6p7",
   "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-r6p7",

@@ -255,10 +255,17 @@ foreach ($patternFolder in $patternFolders)
         {
             $TargetFormat = "Table"
         }
-
+        if ($TaskTypeId -eq -10) 
+        {
+            $MappingType = 'DLL'
+        }
+        else 
+        {
+            $MappingType = 'ADF'
+        }
         $content = Get-Content $schemafile -raw
         $sql += "("
-        $sql += "$TaskTypeId, N'ADF', N'$pipeline', N'$SourceType', N'$SourceFormat', N'$TargetType', N'$TargetFormat', NULL, 1,N'$content',N'{}'"
+        $sql += "$TaskTypeId, N'$MappingType', N'$pipeline', N'$SourceType', N'$SourceFormat', N'$TargetType', N'$TargetFormat', NULL, 1,N'$content',N'{}'"
         $sql += "),"
     }
     if ($sql.endswith(","))
