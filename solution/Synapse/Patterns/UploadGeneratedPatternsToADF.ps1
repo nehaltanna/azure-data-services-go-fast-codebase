@@ -59,7 +59,7 @@ function UploadADFItem ($items) {
             Write-Verbose ($lsName) #-ForegroundColor Yellow -BackgroundColor DarkGreen
                         
             Write-Verbose $uri
-            $rest = az rest --method put --uri $uri --headers '{\"Content-Type\":\"application/json\"}' --body "@ffu$guid.json" --uri-parameters 'api-version=2020-12-01' --resource 'https://dev.azuresynapse.net'         }
+            $rest = az rest --method put --uri $uri --headers '{"Content-Type":"application/json"}' --body "@ffu$guid.json" --uri-parameters 'api-version=2020-12-01' --resource 'https://dev.azuresynapse.net'         }
         Get-ChildItem -path "ffu*.json" | Remove-Item
     }
 }
