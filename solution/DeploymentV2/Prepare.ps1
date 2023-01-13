@@ -338,7 +338,16 @@ else
             $userPrincipalName = "sql_aad_admin"                  
             $common_vars_values.azure_sql_aad_administrators.$userPrincipalName = $sqlAdmin          
         }
-        
+        else 
+        {
+            $common_vars_values.azure_sql_aad_administrators = @{}     
+            $userPrincipalName = "sql_aad_admin"                  
+            $common_vars_values.azure_sql_aad_administrators.$userPrincipalName = (az ad signed-in-user show | ConvertFrom-Json).id  
+        }
+
+        $common_vars_values.azure_purview_data_curators = @{}     
+        $userPrincipalName = "admin"                  
+        $common_vars_values.azure_purview_data_curators.$userPrincipalName = (az ad signed-in-user show | ConvertFrom-Json).id         
 
         $ResetFlags = Get-SelectionFromUser -Options ('Yes','No') -Prompt "Reset flags for is_onprem_datafactory_ir_registered and deployment_layer3_complete. For brand new deployment select 'Yes'."
         if ($ResetFlags -eq "Yes")

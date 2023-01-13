@@ -2,36 +2,33 @@
   "$schema": "./../common_vars_schema.json",
   "owner_tag": "microsoft",
   "resource_location": "australiaeast",
-  "environment_tag": "stg",
+  "environment_tag": "uat",
   "domain": "microsoft.com",
-  "subscription_id": "035a1364-f00d-48e2-b582-4fe125905ee3",
+  "subscription_id": "92db59a3-a03b-4309-bf03-1883bd2a5422",
   "prefix": "ads",
-  "resource_group_name": "gfuat2",
-  "state_storage_account_name": "gfuat2state",
+  "resource_group_name": "gfa",
+  "state_storage_account_name": "gfastate",
   "ip_address": "144.138.148.220",
   "ip_address2": "144.138.148.220",
-  "tenant_id": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+  "tenant_id": "447034da-3a67-4b22-893d-a749d42c3b63",
   "deployment_principal_layers1and3": "",
   "resource_owners": [
-    "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
+    "6bfd6503-997f-4202-bd9c-ce8bfb476366"
   ],
   "synapse_administrators": {},
   "azure_sql_aad_administrators": {
-    "sql_aad_admin": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2"
+    "sql_aad_admin": "6bfd6503-997f-4202-bd9c-ce8bfb476366"
   },
   "azure_purview_data_curators": {
-    "hugo": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2"
-  },
-  "azure_purview_data_curators": {
-    "john": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
+    "admin": "6bfd6503-997f-4202-bd9c-ce8bfb476366"
   },
   "synapse_publishers": {},
   "synapse_contributors": {},
-  "WEB_APP_ADMIN_USER": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2",
+  "WEB_APP_ADMIN_USER": "6bfd6503-997f-4202-bd9c-ce8bfb476366",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
-  "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadsr6p7",
-  "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-r6p7",
-  "ARM_DATALAKE_NAME": "adsstgdlsadsr6p7adsl",
+  "ARM_SYNAPSE_WORKSPACE_NAME": "adsuatsynwadsp7tf",
+  "ARM_KEYVAULT_NAME": "ads-uat-kv-ads-p7tf",
+  "ARM_DATALAKE_NAME": "adsuatdlsadsp7tfadsl",
   "ARM_PAL_PARTNER_ID": "0",
   "GIT_REPOSITORY_NAME": "#####",
   "GIT_SYNAPSE_REPOSITORY_BRANCH_NAME": "#####",
