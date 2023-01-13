@@ -6,6 +6,7 @@ locals {
   linkedservice_generic_blob_prefix     = "GLS_AzureBlobStorage_"
   linkedservice_generic_azuresql_prefix = "GLS_AzureSqlDatabase_"
   linkedservice_generic_synapse_prefix  = "GLS_AzureSqlDW_"
+  linkedservice_generic_databricks_prefix  = "GLS_AzureDatabricks_"
   linkedservice_generic_mssql_prefix    = "GLS_SqlServerDatabase_"
   linkedservice_generic_file_prefix     = "GLS_FileServer_"
   linkedservice_generic_rest_prefix     = "GLS_RestService_Auth"
@@ -329,6 +330,42 @@ JSON
   ]
 }
 
+resource "azurerm_data_factory_linked_custom_service" "databricks" {
+  for_each = {
+    for ir in local.integration_runtimes :
+    ir.short_name => ir
+    if(var.deploy_data_factory == true) && ((ir.is_azure == true) || (ir.is_azure == false && var.is_onprem_datafactory_ir_registered == true))
+  }
+  name            = "${local.linkedservice_generic_databricks_prefix}${each.value.short_name}"
+  data_factory_id = azurerm_data_factory.data_factory[0].id
+  type            = "AzureDatabricks"
+  description     = "Generic Azure Databricks Connection"
+  integration_runtime {
+    name = each.value.name
+  }
+  type_properties_json = <<JSON
+    {
+      "domain": "@linkedService().DatabricksWorkspaceURL",
+      "workspaceResourceId": "@linkedService().WorkspaceResourceID",
+      "newClusterNodeType": "@linkedService().ClusterNodeType",
+      "newClusterNumOfWorker": "@linkedService().Workers",
+      "newClusterVersion": "@linkedService().ClusterVersion",
+      "authentication": "MSI"
+    }
+JSON
+  parameters = {
+    DatabricksWorkspaceURL = "https://${azurerm_databricks_workspace.workspace[0].workspace_url}"
+    WorkspaceResourceID = azurerm_databricks_workspace.workspace[0].id
+    ClusterVersion = "11.3.x-scala2.12"
+    Workers = 3
+    ClusterNodeType = "Standard_DS3_v2"
+  }
+  depends_on = [
+    azurerm_data_factory_linked_custom_service.generic_kv,
+    azurerm_data_factory_integration_runtime_azure.azure_ir,
+    azurerm_data_factory_integration_runtime_self_hosted.self_hosted_ir
+  ]
+}
 
 resource "azurerm_data_factory_linked_custom_service" "rest_anonymous" {
   for_each = {

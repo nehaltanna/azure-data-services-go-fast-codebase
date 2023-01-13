@@ -63,6 +63,19 @@ resource "azurerm_data_factory_managed_private_endpoint" "synapse" {
   }
 }
 
+resource "azurerm_data_factory_managed_private_endpoint" "databricks" {
+  count              = var.deploy_databricks && var.is_vnet_isolated && var.deploy_data_factory ? 1 : 0
+  name               = "Databricks_PrivateEndpoint"
+  data_factory_id    = azurerm_data_factory.data_factory[0].id
+  target_resource_id = azurerm_databricks_workspace.workspace[0].id
+  subresource_name   = "databricks_ui_api"
+  lifecycle {
+    ignore_changes = [
+      fqdns
+    ]
+  }
+}
+
 
 // Synapse
 # resource "azurerm_data_factory_managed_private_endpoint" "synapse" {

@@ -29,6 +29,15 @@ function DeployPrivateLinks (
             }
         }
     
+        $links = az network private-endpoint-connection list -g $tout.resource_group_name -n $tout.databricks_workspace_name --type 'Microsoft.Databricks/workspaces' --only-show-errors |  ConvertFrom-Json
+        foreach ($link in $links) {
+            if ($link.properties.privateLinkServiceConnectionState.status -eq "Pending") {
+                $id_parts = $link.id.Split("/");
+                Write-Host "- " + $id_parts[$id_parts.length - 1]
+                $result = az network private-endpoint-connection approve -g $tout.resource_group_name -n $id_parts[$id_parts.length - 1] --resource-name $tout.databricks_workspace_name --type Microsoft.Databricks/workspaces --description "Approved by Deploy.ps1" --only-show-errors
+            }
+        }
+
         $links = az network private-endpoint-connection list -g $tout.resource_group_name -n $tout.synapse_workspace_name --type 'Microsoft.Synapse/workspaces' --only-show-errors |  ConvertFrom-Json
         foreach ($link in $links) {
             if ($link.properties.privateLinkServiceConnectionState.status -eq "Pending") {
