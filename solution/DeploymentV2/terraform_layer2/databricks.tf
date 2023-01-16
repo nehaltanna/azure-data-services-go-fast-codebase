@@ -71,11 +71,13 @@ resource "azurerm_role_assignment" "databricks_data_factory" {
   principal_id         = azurerm_data_factory.data_factory[0].identity[0].principal_id
 }
 
-resource "databricks_repo" "ads_repo" {
+/*
+ resource "databricks_repo" "ads_repo" {
   provider  = databricks.created_workspace
   url       = "https://github.com/microsoft/azure-data-services-go-fast-codebase.git"
   path      = "/Repos/shared/azure-data-services-go-fast-codebase"
-}
+} 
+*/
 
 resource "databricks_workspace_conf" "this" {
   provider = databricks.created_workspace

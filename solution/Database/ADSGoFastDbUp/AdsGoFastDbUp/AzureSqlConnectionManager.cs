@@ -13,15 +13,23 @@ namespace DbUp.SqlServer
         public AzureSqlConnectionManager(string connectionString)
             : base(new DelegateConnectionFactory((log, dbManager) =>
             {
-
+                log.WriteInformation("Getting Default Creds");
                 var tokenRequestContext = new TokenRequestContext(new[] { "https://database.windows.net//.default" });
-                var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions();
-                // Excluded to support running on github actions linux runner
-                defaultAzureCredentialOptions.ExcludeSharedTokenCacheCredential = true;
-                var credential = new DefaultAzureCredential(defaultAzureCredentialOptions);
+                //var defaultAzureCredentialOptions = new DefaultAzureCredentialOptions();
                 
-                var token = credential.GetTokenAsync(tokenRequestContext).Result.Token;
+                //Updated to use the Azure Cli Credential rather than the defaultCred.
+                var credential = new AzureCliCredential(); 
+                
+                
+                // Excluded to support running on github actions linux runner
+                //defaultAzureCredentialOptions.ExcludeSharedTokenCacheCredential = true;
+                //var credential = new DefaultAzureCredential(defaultAzureCredentialOptions);
 
+                
+                log.WriteInformation("Getting Token");
+                var token = credential.GetTokenAsync(tokenRequestContext).Result.Token;
+                //log.WriteInformation(token);
+                log.WriteInformation($"Connecting to " + connectionString);
                 var conn = new SqlConnection(connectionString)
                 {
                     AccessToken = token

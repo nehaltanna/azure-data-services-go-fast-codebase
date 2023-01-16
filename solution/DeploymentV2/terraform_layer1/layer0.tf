@@ -7,7 +7,7 @@
       config = {
         container_name       = "tstate"
         key                  = "terraform_layer0.tfstate"
-        resource_group_name  = "gfa"
-        storage_account_name = "gfastate"
+        resource_group_name  = "gfn"
+        storage_account_name = "gfnstate"
       }
     }

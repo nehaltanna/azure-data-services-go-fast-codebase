@@ -76,6 +76,7 @@ namespace AdsGoFastDbUp
 
 #if DEBUG
             //Set args from local.settings
+            Console.WriteLine($"Reading Local Settings");
             using FileStream openStream = File.OpenRead("local.settings.json");
             var o = JsonSerializer.DeserializeAsync<Options>(openStream).Result;
             RetVal = MethodBody(o);
