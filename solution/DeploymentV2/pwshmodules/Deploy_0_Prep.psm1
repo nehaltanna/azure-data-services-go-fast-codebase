@@ -9,7 +9,8 @@ function PrepareDeployment (
     [Parameter(Mandatory = $false)]
     [String]$FeatureTemplate="",
     [Parameter(Mandatory = $false)]
-    [String]$PathToReturnTo = ""
+    [String]$PathToReturnTo = ""    
+    
 ) {
     Set-Location $deploymentFolderPath
 
@@ -37,13 +38,16 @@ function PrepareDeployment (
     #purge TF_VAR environment variables so we don't get issues from jumping between environments
     #this can be an issue if you have different features enabled between environments
     #as old features may persist otherwise
-    $envVariables = gci env:
-
-    foreach($var in $envVariables)
+    $PurgeTFVARS = $false #Disabled for now as causes passwords not to persist. Will add to prepare script or separate as separate script
+    if($PurgeTFVARS)
     {
-        if($var.Name -clike 'TF_VAR*')
+        $envVariables = gci env:
+        foreach($var in $envVariables)
         {
-            [System.Environment]::SetEnvironmentVariable($var.Name, '')
+            if($var.Name -clike 'TF_VAR*')
+            {
+                [System.Environment]::SetEnvironmentVariable($var.Name, '')
+            }
         }
     }
 

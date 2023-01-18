@@ -48,12 +48,14 @@ PrepareDeployment -gitDeploy $gitDeploy -deploymentFolderPath $deploymentFolderP
 Write-Host "Expect this to take twenty to thirty minutes to complete the first time it is run. Subsequent, incremental builds should only take a few minutes."
 if([string]::IsNullOrEmpty($env:TF_VAR_jumphost_password) -and ($gitDeploy -eq $false -or $null -eq $gitdeploy))
 {
-    $env:TF_VAR_jumphost_password = Read-Host "Enter the Jumphost Password"
+    $TF_VAR_jumphost_password = Read-Host "Enter the Jumphost Password"
+    $env:TF_VAR_jumphost_password= $TF_VAR_jumphost_password
 }
 
 if([string]::IsNullOrEmpty($env:TF_VAR_synapse_sql_password) -and ($gitDeploy -eq $false -or $null -eq $gitdeploy))
 {
-    $env:TF_VAR_synapse_sql_password = Read-Host "Enter the Synapse SQL Admin Password"
+    $TF_VAR_synapse_sql_password = Read-Host "Enter the Synapse SQL Admin Password"
+    $env:TF_VAR_synapse_sql_password= $TF_VAR_synapse_sql_password
 }
 
 #Uncomment below if you upgrade modules

@@ -25,6 +25,20 @@
 #Cool Branding :-)
 figlet Azure Data Services -t | lolcat &&  figlet Go Fast -t | lolcat
 
+#First purge any existing TFVARS
+$PurgeTFVARS = $true
+if($PurgeTFVARS)
+{
+    $envVariables = gci env:
+    foreach($var in $envVariables)
+    {
+        if($var.Name -clike 'TF_VAR*')
+        {
+            [System.Environment]::SetEnvironmentVariable($var.Name, '')
+        }
+    }
+}
+
 #by default $gitDeploy will not be true, only being set by the git environment - meaning if not using a runner it will default to a standard execution.
 $gitDeploy = ([System.Environment]::GetEnvironmentVariable('gitDeploy')  -eq 'true')
 $deploymentFolderPath = (Get-Location).Path 
