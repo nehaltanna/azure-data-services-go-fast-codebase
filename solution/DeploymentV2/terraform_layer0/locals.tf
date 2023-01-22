@@ -14,6 +14,7 @@ locals {
   plink_subnet_name            = (var.plink_subnet_name != "" ? var.plink_subnet_name : "${module.naming.subnet.name}-plink")
   app_service_subnet_name      = (var.app_service_subnet_name != "" ? var.plink_subnet_name : "${module.naming.subnet.name}-appservice")
   vm_subnet_name               = (var.vm_subnet_name != "" ? var.vm_subnet_name : "${module.naming.subnet.name}-vm")
+  bastion_subnet_name               = (var.vm_subnet_name != "" ? var.vm_subnet_name : "${module.naming.subnet.name}-bastion")
   databricks_container_subnet_name  = (var.databricks_container_subnet_name != "" ? var.databricks_container_subnet_name : "${module.naming.subnet.name}-db-container")
   databricks_host_subnet_name  = (var.databricks_host_subnet_name != "" ? var.databricks_host_subnet_name : "${module.naming.subnet.name}-db-host")
   logs_storage_account_name    = (var.logs_storage_account_name != "" ? var.logs_storage_account_name : "${module.naming.storage_account.name_unique}log")

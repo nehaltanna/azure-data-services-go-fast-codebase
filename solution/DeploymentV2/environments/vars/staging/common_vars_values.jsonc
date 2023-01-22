@@ -3,30 +3,28 @@
   "owner_tag": "microsoft",
   "resource_location": "australiaeast",
   "environment_tag": "stg",
-  "domain": "microsoft.com",
+  "domain": "MngEnvMCAP065201.onmicrosoft.com",
   "subscription_id": "92db59a3-a03b-4309-bf03-1883bd2a5422",
   "prefix": "ads",
-  "resource_group_name": "gfx2",
-  "state_storage_account_name": "gfx2state",
+  "resource_group_name": "gfst",
+  "state_storage_account_name": "gfststate",
   "ip_address": "144.138.148.220",
   "ip_address2": "144.138.148.220",
   "tenant_id": "447034da-3a67-4b22-893d-a749d42c3b63",
   "deployment_principal_layers1and3": "",
   "resource_owners": [
-    "6bfd6503-997f-4202-bd9c-ce8bfb476366"
+    "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
   ],
   "synapse_administrators": {},
   "azure_sql_aad_administrators": {
-    "sql_aad_admin": "6f467924-4d92-40e3-b348-b3154d5cd437",
-    "AdsGoFastDeployerjkcgkaibkungm": "4c732d19-4076-4a76-87f3-6fbfd77f007d",
-    "jorampon@microsoft.com": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
+    "sql_aad_admin": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
   },
   "azure_purview_data_curators": {
-    "john": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2"
+    "admin": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
   },
   "synapse_publishers": {},
   "synapse_contributors": {},
-  "WEB_APP_ADMIN_USER": "6bfd6503-997f-4202-bd9c-ce8bfb476366",
+  "WEB_APP_ADMIN_USER": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
   "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadszp4w",
   "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-zp4w",
@@ -45,7 +43,7 @@
   "deploy_cicd_vm": false,
   "FeatureTemplateOverrides": {
     "is_onprem_datafactory_ir_registered": false,
-    "deployment_layer3_complete": true,
+    "deployment_layer3_complete": false,
     "layer0_state": "remote",
     "delay_private_access": true,
     "synapse_git_toggle": false,
