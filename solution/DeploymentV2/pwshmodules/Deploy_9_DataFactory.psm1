@@ -1,3 +1,16 @@
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+Function to deploy the Data Factory and Synapse artefacts to Azure Data Factory. 
+This is a PowerShell function that deploys Data Factory pipelines and Synapse artifacts. 
+The function takes three mandatory parameters: a "tout" object, a string for the deployment folder path, and a string for the path to return to after the deployment. 
+The function first checks if the deployment of Data Factory pipelines is to be skipped. If it is not to be skipped, the function adds an Azure extension for data factory, sets the location to the deployment folder path, and adds IP addresses to the SQL firewall. 
+The function then checks if the SqlServer module is installed and installs it if it is not. 
+The function then imports a module for generating and uploading ADF pipelines, calls the GenerateAndUploadDataFactoryAndSynapseArtefacts function, and returns to the original location if specified.
+#>
+
 function DeployDataFactoryAndSynapseArtefacts (    
     [Parameter(Mandatory = $true)]
     [pscustomobject]$tout = $false,

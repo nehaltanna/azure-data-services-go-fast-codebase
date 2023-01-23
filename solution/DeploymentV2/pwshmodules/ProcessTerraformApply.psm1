@@ -1,3 +1,21 @@
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This script is a PowerShell function named "ProcessTerraformApply". It takes two parameters: a boolean value for "gitDeploy" and an object for "output".
+
+The function starts by initializing an empty array named "output_validated". 
+It then loops through each element in the "output" object and checks if the element is a JSON object by checking if it starts with '{'. If it is a JSON object, it adds it to the "output_validated" array. If it is not a JSON object, it writes the element as a warning.
+
+After the loop, the function assigns the "output_validated" array to the "output" variable. 
+Then, it uses the ConvertFrom-Json cmdlet to convert the "output" variable to a JSON object and filters the object for warnings and errors.
+
+If there are any warnings, it writes each warning message with its address and detail as a warning. 
+If there are any errors, it writes each error message with its address and detail as an error.
+
+#>
+
 function ProcessTerraformApply (
     [Parameter(Mandatory = $true)]
     [System.Boolean]$gitDeploy = $false,

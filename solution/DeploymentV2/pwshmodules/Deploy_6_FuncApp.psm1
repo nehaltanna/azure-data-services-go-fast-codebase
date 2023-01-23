@@ -1,3 +1,28 @@
+
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This function is responsible for deploying a function app to Azure using the Azure CLI. It takes in three parameters:
+
+- tout (Mandatory): A pscustomobject that contains information about the deployment, such as the resource group name and function app name.
+- deploymentFolderPath (Mandatory): The path to the deployment folder.
+- PathToReturnTo (Mandatory): The path to return to after the deployment is complete.
+
+The function first checks if the deployment of the function app should be skipped by checking if the publish_function_app and deploy_function_app properties of the tout object are set to true.
+If the deployment should not be skipped, the function proceeds to build and deploy the function app by:
+
+- Changing the current working directory to the function app folder.
+- Running dotnet restore and dotnet publish commands to build the function app.
+- Zipping the function app files to prepare for deployment.
+- Deploying the function app using the az functionapp deployment source config-zip command and passing in the path to the zipped files and the resource group and function app name from the tout object.
+- Setting the .NET framework version to v6.0 and the extension version to ~4 using the az functionapp config commands.
+- Changing the current working directory back to the original path.
+
+#>
+
+
 function DeployFuncApp (
     [Parameter(Mandatory=$true)]
     [pscustomobject]$tout=$false,
