@@ -5,6 +5,7 @@ local AzureSqlTable_NA_CopyActivity_Inputs = import './Full_Load_CopyActivity_Az
 local OracleServerTable_NA_CopyActivity_Inputs = import './Full_Load_CopyActivity_OracleTable_NA_Inputs.libsonnet';
 local SqlServerTable_NA_CopyActivity_Inputs = import './Full_Load_CopyActivity_SqlServerTable_NA_Inputs.libsonnet';
 local FileServer_Parquet_CopyActivity_Output = import './Full_Load_CopyActivity_FileServer_Parquet_Outputs.libsonnet';
+local AzureBlobFS_DelimitedText_CopyActivity_Output = import './Full_Load_CopyActivity_AzureBlobFS_DelimitedText_Outputs.libsonnet';
 
 
 if(SourceType=="AzureSqlTable"&&TargetType=="AzureBlobFS"&&TargetFormat=="Parquet") then
@@ -35,6 +36,35 @@ if(SourceType=="AzureSqlTable"&&TargetType=="AzureBlobFS"&&TargetFormat=="Parque
     }
   },
 } + AzureBlobFS_Parquet_CopyActivity_Output(GenerateArm,GFPIR)
+  + AzureSqlTable_NA_CopyActivity_Inputs(GenerateArm,GFPIR)
+else if(SourceType=="AzureSqlTable"&&TargetType=="AzureBlobFS"&&TargetFormat=="DelimtedText") then
+{
+  "typeProperties": {
+    "source": {
+      "type": "AzureSqlSource",
+      "sqlReaderQuery": {
+        "value": "@variables('SQLStatement')",
+        "type": "Expression"
+      },
+      "queryTimeout": "02:00:00"
+    },
+    "sink": {
+      "type": "ParquetSink",
+      "storeSettings": {
+        "type": "AzureBlobStorageWriteSettings"
+      }
+    },
+    "enableStaging": false,
+    "parallelCopies": {
+      "value": "@pipeline().parameters.TaskObject.DegreeOfCopyParallelism",
+      "type": "Expression"
+    },
+    "translator": {
+      "value": "@pipeline().parameters.Mapping",
+      "type": "Expression"
+    }
+  },
+} + AzureBlobFS_DelimitedText_CopyActivity_Output(GenerateArm,GFPIR)
   + AzureSqlTable_NA_CopyActivity_Inputs(GenerateArm,GFPIR)
 else if(SourceType=="AzureSqlTable"&&TargetType=="AzureBlobStorage"&&TargetFormat=="Parquet") then
 {

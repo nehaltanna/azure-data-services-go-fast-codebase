@@ -96,3 +96,29 @@ resource "databricks_ip_access_list" "allowed-list" {
     var.ip_address2
   ]
 }
+
+
+
+provider "databricks" {
+  host = azurerm_databricks_workspace.workspace[0].workspace_url
+}
+
+resource "databricks_instance_pool" "smallest_nodes" {
+  instance_pool_name = "Job Pool One"
+  min_idle_instances = 0
+  max_capacity       = 6
+  node_type_id       = "Standard_E4ds_v5"
+  azure_attributes {
+    availability           = "ON_DEMAND_AZURE"
+  }
+  idle_instance_autotermination_minutes = 15
+  disk_spec {
+    disk_type {
+      azure_disk_volume_type  = "STANDARD_LRS"
+    }
+    disk_size  = 10
+    disk_count = 1
+  }
+  depends_on = [azurerm_databricks_workspace.workspace]
+}
+

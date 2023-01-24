@@ -33,6 +33,8 @@ locals {
   bastion_name                 = (var.bastion_name != "" ? var.bastion_name : module.naming.bastion_host.name_unique)
   vpn_gateway_name             = (var.vpn_gateway_name != "" ? var.vpn_gateway_name : module.naming.point_to_site_vpn_gateway.name_unique)
   vpn_gateway_ip_name          = (var.vpn_gateway_name != "" ? "${var.vpn_gateway_name}-ip" : "${module.naming.point_to_site_vpn_gateway.name_unique}-ip")
+  vpn_issuer                   = "https://sts.windows.net/${var.tenant_id}/" 
+  vpn_tenant                   = "https://login.microsoftonline.com/${var.tenant_id}/"
   bastion_ip_name              = (var.bastion_ip_name != "" ? var.bastion_ip_name : module.naming.public_ip.name_unique)
   purview_name                 = (var.purview_name != "" ? var.purview_name : "${var.prefix}${var.environment_tag}pur${var.app_name}${element(split("-", module.naming.data_factory.name_unique),length(split("-", module.naming.data_factory.name_unique))-1)}")
   purview_account_plink        = (var.purview_name != "" ? var.purview_name : "${var.prefix}-${var.environment_tag}-pura-${lower(var.app_name)}-plink-${element(split("-", module.naming.data_factory.name_unique),length(split("-", module.naming.data_factory.name_unique))-1)}")

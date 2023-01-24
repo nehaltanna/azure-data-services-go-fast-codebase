@@ -16,7 +16,9 @@ resource "azurerm_virtual_network_gateway" "adsgf_vpn" {
 
   active_active = false
   enable_bgp    = false
-  sku           = "Basic"
+  sku           = "VpnGw1"
+  generation =  "Generation1"
+
 
   ip_configuration {
     name                          = "vnetGatewayConfig"
@@ -26,7 +28,11 @@ resource "azurerm_virtual_network_gateway" "adsgf_vpn" {
   }
 
   vpn_client_configuration {
-    address_space = [var.vpn_gateway_address_range]   
-    
+    address_space = [var.vpn_gateway_address_range]
+    aad_tenant = local.vpn_tenant
+    aad_audience = "41b23e61-6c1e-4545-b367-cd054e0ed4b4"
+    aad_issuer = local.vpn_issuer
+    vpn_client_protocols = [ "OpenVPN" ]
+    vpn_auth_types = ["AAD"]
   }
 }

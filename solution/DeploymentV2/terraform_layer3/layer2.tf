@@ -7,7 +7,7 @@
       config = {
         container_name       = "tstate"
         key                  = "terraform_layer2.tfstate"
-        resource_group_name  = "gfwsl"
-        storage_account_name = "gfwslstate"
+        resource_group_name  = "vpnt"
+        storage_account_name = "vpntstate"
       }
     }
