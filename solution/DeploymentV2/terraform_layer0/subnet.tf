@@ -26,7 +26,7 @@ resource "azurerm_subnet" "bastion_subnet" {
   ]
 }
 
-esource "azurerm_subnet" "vpn_subnet" {
+resource "azurerm_subnet" "vpn_subnet" {
   count                                          = (var.is_vnet_isolated && var.deploy_vpn && var.existing_vpn_subnet_id == "" ? 1 : 0)
   name                                           = local.vpn_subnet_name
   resource_group_name                            = var.resource_group_name
