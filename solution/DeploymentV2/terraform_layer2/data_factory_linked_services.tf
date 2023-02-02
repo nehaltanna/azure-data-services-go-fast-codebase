@@ -334,7 +334,7 @@ resource "azurerm_data_factory_linked_custom_service" "databricks" {
   for_each = {
     for ir in local.integration_runtimes :
     ir.short_name => ir
-    if(var.deploy_data_factory == true) && ((ir.is_azure == true) || (ir.is_azure == false && var.is_onprem_datafactory_ir_registered == true))
+    if(var.deploy_data_factory == true && var.deploy_databricks == true) && ((ir.is_azure == true) || (ir.is_azure == false && var.is_onprem_datafactory_ir_registered == true))
   }
   name            = "${local.linkedservice_generic_databricks_prefix}${each.value.short_name}"
   data_factory_id = azurerm_data_factory.data_factory[0].id

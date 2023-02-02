@@ -269,11 +269,11 @@ output "databricks_workspace_name" {
 }
 
 output "databricks_workspace_url" {
-  value = azurerm_databricks_workspace.workspace[0].workspace_url
+  value = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].workspace_url : ""
 }
 
 output "databricks_workspace_id" {
-  value = azurerm_databricks_workspace.workspace[0].id
+  value = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].id : ""
 }
 
 /*Variables from Previous Layer*/

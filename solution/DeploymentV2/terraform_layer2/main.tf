@@ -52,7 +52,7 @@ module "naming" {
 
 provider "databricks" {
   alias = "created_workspace"
-  host = azurerm_databricks_workspace.workspace[0].workspace_url
+  host = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].workspace_url : ""
 }
 
 resource "random_id" "rg_deployment_unique" {

@@ -72,12 +72,14 @@ resource "azurerm_role_assignment" "databricks_data_factory" {
 }
 
 resource "databricks_repo" "ads_repo" {
+  count      = var.deploy_databricks ? 1 : 0
   provider  = databricks.created_workspace
   url       = "https://github.com/microsoft/azure-data-services-go-fast-codebase.git"
   path      = "/Repos/shared/azure-data-services-go-fast-codebase"
 }
 
 resource "databricks_workspace_conf" "this" {
+  count    = var.deploy_databricks ? 1 : 0
   provider = databricks.created_workspace
   custom_config = {
     "enableIpAccessLists" : true
@@ -86,6 +88,7 @@ resource "databricks_workspace_conf" "this" {
 }
 
 resource "databricks_ip_access_list" "allowed-list" {
+  count     = var.deploy_databricks ? 1 : 0
   provider = databricks.created_workspace
   label     = "allow_in"
   list_type = "ALLOW"

@@ -9,7 +9,7 @@
   "resource_group_name": "TestGoFast",
   "state_storage_account_name": "testgofaststate",
   "ip_address": "159.196.32.59",
-  "ip_address2": "159.196.32.59",
+  "ip_address2": "13.54.173.90",
   "tenant_id": "a3b93842-8e64-4b66-97f0-f926ab0c02a8",
   "deployment_principal_layers1and3": "a701a08a-8732-4dc2-b551-617484bd3ada",
   "resource_owners": [],
@@ -27,6 +27,15 @@
   "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadsvavt",
   "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-vavt",
   "ARM_DATALAKE_NAME": "adsstgdlsadsvavtadsl",
+  "ARM_PAL_PARTNER_ID": "0",
+  "GIT_REPOSITORY_NAME": "#####",
+  "GIT_SYNAPSE_REPOSITORY_BRANCH_NAME": "#####",
+  "GIT_USER_NAME": "#####",
+  "GIT_EMAIL_ADDRESS": "#####",
+  "GIT_ADF_REPOSITORY_NAME": "#####",
+  "GIT_ADF_REPOSITORY_BRANCH_NAME": "#####",
+  "GIT_ADF_USER_NAME": "#####",
+  "GIT_ADF_EMAIL_ADDRESS": "#####",
   "is_private_network": true,
   "deploy_state_storage_account": false,
   "deploy_cicd_vm": false,
@@ -40,6 +49,7 @@
     "existing_aad_func_appreg_app_id": "505c9860-65ba-43bc-b33d-c13c13572567",
     "existing_aad_func_sp_obj_id": "099cc53a-64e5-4704-bc5f-f2c6f38a9382",
     "existing_aad_func_appreg_obj_id": "9bae33ae-fe8e-4003-9162-f7404349cdc3",
-    "existing_aad_web_appreg_app_id": "ae033867-c9d2-4b1e-bf5c-c2ee0a24ee1c"
+    "existing_aad_web_appreg_app_id": "ae033867-c9d2-4b1e-bf5c-c2ee0a24ee1c",
+    "deploy_databricks": true
   }
 }
