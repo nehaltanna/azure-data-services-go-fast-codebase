@@ -129,6 +129,13 @@ variable "deploy_purview" {
   type        = bool
 }
 
+variable "deploy_purview_sp" {
+  description = "Feature toggle for deploying Azure Purview SP IR"
+  default     = false
+  type        = bool
+}
+
+
 
 variable "is_vnet_isolated" {
   description = "Whether to deploy the resources as vnet attached / private linked"

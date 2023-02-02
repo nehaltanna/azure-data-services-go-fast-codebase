@@ -20,3 +20,4 @@ $body = ($body | ConvertTo-Json -compress | Out-String).Replace('"','\"')
 $result = az rest --method post --uri "https://graph.microsoft.com/v1.0/servicePrincipals/$authappobjectid/appRoleAssignedTo" --headers '{\"Content-Type\":\"application/json\"}' --body $body
 
 
+

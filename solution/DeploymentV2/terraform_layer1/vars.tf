@@ -116,6 +116,32 @@ variable "purview_ir_app_reg_name" {
   type        = string
 }
 
+variable "existing_aad_func_appreg_app_id" {
+  description = "This is the function app app registration app id. If an existing function app registration is created to be used - this is required."
+  default     = ""
+  type        = string
+}
+
+variable "existing_aad_func_sp_obj_id" {
+  description = "This is the service principal object ID attached to the function app app registration. If an existing function app registration is created to be used - this is required."
+  default     = ""
+  type        = string
+}
+
+
+variable "existing_aad_func_appreg_obj_id" {
+  description = "This is the function app app registration object id. If an existing function app registration is created to be used - this is required."
+  default     = ""
+  type        = string
+}
+
+variable "existing_aad_web_appreg_app_id" {
+  description = "This is the web app app registration app id. If an existing web app registration is created to be used - this is required."
+  default     = ""
+  type        = string
+}
+
+
 
 
 #---------------------------------------------------------------
@@ -156,8 +182,16 @@ variable "deploy_purview" {
   type        = bool
 }
 
+variable "deploy_purview_sp" {
+  description = "Feature toggle for deploying Azure Purview IR SP"
+  default     = false
+  type        = bool
+}
+
+
 variable "resource_owners" {
   description = "A web app Azure security group used for admin access."
   default     = []
   type        = list(string)
 }
+
