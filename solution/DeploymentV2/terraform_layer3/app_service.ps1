@@ -15,9 +15,10 @@ $body = '{"principalId": "@principalid","resourceId":"@resourceId","appRoleId": 
 $body.resourceId = $authappobjectid
 $body.appRoleId = ($authapp.appRoles | Where-Object {$_.value -eq "Administrator" }).id
 $body.principalId = [System.Environment]::GetEnvironmentVariable('WEB_APP_ADMIN_USER')
-$body = ($body | ConvertTo-Json -compress | Out-String).Replace('"','\"')
+#$body = ($body | ConvertTo-Json -compress | Out-String).Replace('"','\"')
+$body = ($body | ConvertTo-Json -compress | Out-String)
 
-$result = az rest --method post --uri "https://graph.microsoft.com/v1.0/servicePrincipals/$authappobjectid/appRoleAssignedTo" --headers '{\"Content-Type\":\"application/json\"}' --body $body
+$result = az rest --method post --uri "https://graph.microsoft.com/v1.0/servicePrincipals/$authappobjectid/appRoleAssignedTo" --headers '{"Content-Type":"application/json"}' --body $body
 
 
 

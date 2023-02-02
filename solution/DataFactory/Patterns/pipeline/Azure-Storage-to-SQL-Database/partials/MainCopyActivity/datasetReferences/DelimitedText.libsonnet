@@ -25,6 +25,10 @@ function (GenerateArm=false, Type = "AzureBlobStorage", GFPIR = "{IRA}", SourceO
         "FirstRowAsHeader": {
             "value": "@pipeline().parameters.TaskObject.%(SourceOrTarget)s.FirstRowAsHeader" % { SourceOrTarget : SourceOrTarget},
             "type": "Expression"
-        }
+        },
+        "Delimiter": {
+            "value": "@pipeline().parameters.TaskObject.%(SourceOrTarget)s.Delimiter" % { SourceOrTarget : SourceOrTarget},
+            "type": "Expression"
+        },
     }
 }

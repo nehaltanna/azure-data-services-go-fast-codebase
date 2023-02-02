@@ -1,3 +1,21 @@
+
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This script is for deploying a web application. It takes in three parameters:
+
+- $tout: A mandatory pscustomobject that contains properties used in the script.
+- $deploymentFolderPath: A mandatory string that specifies the path to the deployment folder.
+- $PathToReturnTo: A mandatory string that specifies the path to return to after the script finishes executing.
+
+It first checks if the publish_web_app and deploy_web_app properties of $tout are set to true. If that's the case, it proceeds to build and deploy the web application.
+It does this by first moving to the web application folder, running dotnet restore and dotnet publish commands to build the application. Then it moves to the deployment folder, creates a new directory and zips the built application.
+Finally, it uses the Azure CLI command az webapp deployment source config-zip to deploy the zipped application to the web app specified in $tout and returns to the path specified in $PathToReturnTo.
+
+#>
+
 function DeployWebApp (
     [Parameter(Mandatory=$true)]
     [pscustomobject]$tout=$false,

@@ -52,6 +52,7 @@ $tout = GatherOutputsFromTerraform -TerraformFolderPath $PathToReturnTo
 ./app_service.ps1 -aad_webreg_id $tout.aad_webreg_id
 
 #Flip Flag on deployment_layer3_complete
+"Layer 3 Complete - Setting Flag to True for 'deployment_layer3_complete'" | boxes -d ada-box | lolcat
 $envFolderPath = Convert-Path -Path ($deploymentFolderPath + "./environments/vars/$env:environmentName/")
 $varsfile = $envFolderPath + "/common_vars_values.jsonc"
 $common_vars_values = Get-Content $varsfile | ConvertFrom-Json -Depth 10

@@ -1,3 +1,17 @@
+
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This script appears to deploy an Azure SQL database and populate it with metadata. 
+It first checks if the publish_metadata_database flag is true, and if so, proceeds to build and publish the database using the dotnet command. 
+It then adds the IP addresses specified in the TF_VAR_ip_address and TF_VAR_ip_address2 environment variables to the SQL firewall, and enables public network access to the SQL server. 
+It then allows Azure services and resources to access the server. 
+Finally, it runs the AdsGoFastDbUp.dll command with various parameters to populate the metadata database. The script also has some error handling and debug logs.
+
+#>
+
 function DeployMataDataDB (
     [Parameter(Mandatory = $false)]
     [bool]$publish_metadata_database = $false, 

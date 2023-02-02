@@ -1,4 +1,4 @@
-function(GenerateArm=false,GFPIR="{IRA}",SourceType="AzureBlobStorage",SourceFormat="DelimitedText", TargetType="AzureBlobFS", TargetFormat="Excel")
+function(GenerateArm=false,GFPIR="{IRA}",SourceType="AzureBlobStorage",SourceFormat="DelimitedText", TargetType="AzureBlobFS", TargetFormat="DelimitedText")
 {
     local source = import './source/source.libsonnet',	
     local sink   = import './sink/sink.libsonnet',	
@@ -10,4 +10,15 @@ function(GenerateArm=false,GFPIR="{IRA}",SourceType="AzureBlobStorage",SourceFor
         "value": "@pipeline().parameters.TaskObject.DegreeOfCopyParallelism",
         "type": "Expression"
     }
+}
++
+if (TargetFormat=="Binary") then 
+{
+    "preserve":[
+        "Attributes"
+    ]
+}
+else 
+{
+
 }

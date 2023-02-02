@@ -21,7 +21,11 @@ require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 models:
   jaffle_shop:
-      materialized: table
-      staging:
-        materialized: view
-      as_columnstore: false
+    as_columnstore: false
+    materialized: table
+    staging:
+      materialized: view
+
+tests:
+  jaffle_shop:
+    as_columnstore: false

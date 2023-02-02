@@ -133,7 +133,24 @@ namespace FunctionApp.Functions
             short taskRunnerId = Convert.ToInt16(req.Query["TaskRunnerId"]);
             return await RunFrameworkTasksCore(taskRunnerId, logging);
         }
-
+        
+        /// <summary>
+        /// This is the core function for processing the list of tasks assigned to a particular TaskRunnerId. 
+        /// The function performs the following steps 
+        ///     - Deletes a "heartbeat" file for the current task runner, which is used to track successful execution of the task runner
+        ///     - Inserting a new execution record into the task metadata database
+        ///     - Fetching a list of tasks to be executed by the current task runner
+        ///     - Iterating through the list of tasks, and for each task:
+        ///         a. Updating the task instance status to "Untried" if the task failed to execute
+        ///         b. Logging that the ADF pipeline is being executed for the task instance
+        ///         c. If the "GenerateTaskObjectTestFiles" testing option is enabled, generating test files for the task
+        ///         d. Otherwise, executing the task based on the task execution type (ADF or AF) and the appropriate execution engine (Datafactory or Synapse).
+        ///  
+        ///     If the task execution type is AF then the TriggerAzureFunction method is called to trigger an Azure function based on the pipeline name, passing in the task as a parameter.
+        /// </summary>
+        /// <param name="taskRunnerId"></param>
+        /// <param name="logging"></param>
+        /// <returns></returns>
         public async Task<dynamic> RunFrameworkTasksCore(Int16 taskRunnerId, Logging.Logging logging)
         {            
             try

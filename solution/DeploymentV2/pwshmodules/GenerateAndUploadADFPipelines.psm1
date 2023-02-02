@@ -1,3 +1,19 @@
+
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This is a PowerShell function that generates and uploads Data Factory and Synapse artifacts. 
+The function takes three mandatory parameters: a "tout" object, a string for the deployment folder path, and a string for the path to return to after the deployment. 
+The function starts by setting the location to the deployment folder path and importing a module for gathering outputs from Terraform. 
+The function then generates ADF artifacts in the "DataFactory/Patterns" directory by calling a script named "Jsonnet_GenerateADFArtefacts.ps1". 
+If the "adf_git_toggle_integration" property of the "tout" object is set to true, the function then uploads the generated patterns to Git. Otherwise, it uploads them to the Azure Data Factory. 
+The function then uploads task type mappings. The function then repeats the same process for the "Synapse/Patterns" directory. 
+Finally, the function returns to the original location if specified.
+
+
+#>
 function GenerateAndUploadDataFactoryAndSynapseArtefacts (    
     [Parameter(Mandatory = $true)]
     [pscustomobject]$tout = $false,

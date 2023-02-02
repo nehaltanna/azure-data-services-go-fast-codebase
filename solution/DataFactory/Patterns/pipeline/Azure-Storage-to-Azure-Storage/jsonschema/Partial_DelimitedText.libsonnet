@@ -56,6 +56,13 @@ function()
                 "infoText": "(required) Set to true if you want the first row of data to be used as column names."
             }
         }, 
+        "Delimiter": {
+            "type": "string",            
+            "default": ",",
+            "options": {                        
+                "infoText": "The delimiter character or string."
+            }
+        }, 
         "MaxConcurrentConnections": {
             "type": "integer",
             "default": 100,

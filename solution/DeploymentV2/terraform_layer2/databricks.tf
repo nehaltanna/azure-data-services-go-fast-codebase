@@ -71,12 +71,14 @@ resource "azurerm_role_assignment" "databricks_data_factory" {
   principal_id         = azurerm_data_factory.data_factory[0].identity[0].principal_id
 }
 
-resource "databricks_repo" "ads_repo" {
+/*
+ resource "databricks_repo" "ads_repo" {
   count      = var.deploy_databricks ? 1 : 0
   provider  = databricks.created_workspace
   url       = "https://github.com/microsoft/azure-data-services-go-fast-codebase.git"
   path      = "/Repos/shared/azure-data-services-go-fast-codebase"
-}
+} 
+*/
 
 resource "databricks_workspace_conf" "this" {
   count    = var.deploy_databricks ? 1 : 0
@@ -97,3 +99,29 @@ resource "databricks_ip_access_list" "allowed-list" {
     var.ip_address2
   ]
 }
+
+
+
+provider "databricks" {
+  host = azurerm_databricks_workspace.workspace[0].workspace_url
+}
+
+resource "databricks_instance_pool" "smallest_nodes" {
+  instance_pool_name = "Job Pool One"
+  min_idle_instances = 0
+  max_capacity       = 6
+  node_type_id       = "Standard_E4ds_v5"
+  azure_attributes {
+    availability           = "ON_DEMAND_AZURE"
+  }
+  idle_instance_autotermination_minutes = 15
+  disk_spec {
+    disk_type {
+      azure_disk_volume_type  = "STANDARD_LRS"
+    }
+    disk_size  = 10
+    disk_count = 1
+  }
+  depends_on = [azurerm_databricks_workspace.workspace]
+}
+

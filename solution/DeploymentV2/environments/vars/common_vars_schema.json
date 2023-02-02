@@ -145,16 +145,13 @@
       }
     },
     "synapse_administrators": {
-      "type": "object",
-      "required": [],
-      "properties": {},
-      "default": {},
-      "description": "Object with a property for each user that is to be a Synapse Administrator. The property name is descriptive only and should be unique. The property value is the object_id of the user. Leave as empty object when not is use. NOTE - do not include the Synpase Workspace creator in this list as it will be added automatically.",
-      "examples": [
-          {
-              "user_1": "5c736d19-4076-4a76-87f3-6fbfd77f007d",
-              "user_2": "5c732d19-4076-4a76-87f3-6fbfd72f007d"
-          }],
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "List of object id's relating to identities that will be a Synapse Administrator. NOTE - do not include the Synpase Workspace creator in this list as it will be added automatically.",
+      "examples": ["5c736d19-4076-4a76-87f3-6fbfd77f007d"],
       "options": {
         "category": "Target Azure Environment"
       }

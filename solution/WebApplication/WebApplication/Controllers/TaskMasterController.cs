@@ -398,9 +398,9 @@ namespace WebApplication.Controllers
                 recordsTotal = await modelDataAll.CountAsync();
 
 
-                //Paging               
-                var data = await modelDataAll.Skip(skip).Take(pageSize).ToListAsync();
-
+                //Paging
+                
+                var data = await modelDataAll.Skip(skip).Take(pageSize).ToListAsync();                
 
 
 

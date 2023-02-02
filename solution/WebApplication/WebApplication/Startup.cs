@@ -59,6 +59,7 @@ namespace WebApplication
                         DataSource = appOptions.Value.AdsGoFastTaskMetaDataDatabaseServer,
                         InitialCatalog = appOptions.Value.AdsGoFastTaskMetaDataDatabaseName
                     };
+                    //options.UseSqlServer(scsb.ConnectionString).EnableSensitiveDataLogging();
                     options.UseSqlServer(scsb.ConnectionString);
                     options.AddInterceptors(provider.GetRequiredService<AadAuthenticationDbConnectionInterceptor>());
                 }

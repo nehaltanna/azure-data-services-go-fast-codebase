@@ -61,6 +61,16 @@ resource "azurerm_role_assignment" "adls_purview_sp" {
   principal_id         = data.terraform_remote_state.layer1.outputs.purview_sp_object_id 
 }
 
+resource "azurerm_storage_container" "containers_custom" {
+  count                 = var.deploy_adls && length(var.adls_containers) > 0 ? length(var.adls_containers) : 0
+  name                  = var.adls_containers[count.index]
+  storage_account_name  = local.adls_storage_account_name
+  container_access_type = "private"
+  depends_on = [
+      azurerm_role_assignment.adls_deployment_agents
+  ]
+}
+
 
 resource "azurerm_private_endpoint" "adls_storage_private_endpoint_with_dns" {
   count               = var.deploy_adls && var.is_vnet_isolated ? 1 : 0

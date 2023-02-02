@@ -5,6 +5,9 @@ resource "azurerm_subnet" "plink_subnet" {
   virtual_network_name                           = local.vnet_name
   address_prefixes                               = [var.plink_subnet_cidr]
   enforce_private_link_endpoint_network_policies = true
+  depends_on = [
+    azurerm_virtual_network.vnet
+  ]
 }
 
 locals {
@@ -13,12 +16,28 @@ locals {
 
 resource "azurerm_subnet" "bastion_subnet" {
   count                                          = (var.is_vnet_isolated && var.deploy_bastion && var.existing_bastion_subnet_id == "" ? 1 : 0)
-  name                                           = "AzureBastionSubnet"
+  name                                           = local.bastion_subnet_name
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = local.vnet_name
   address_prefixes                               = [var.bastion_subnet_cidr]
   enforce_private_link_endpoint_network_policies = true
+  depends_on = [
+    azurerm_virtual_network.vnet
+  ]
 }
+
+resource "azurerm_subnet" "vpn_subnet" {
+  count                                          = (var.is_vnet_isolated && var.deploy_vpn && var.existing_vpn_subnet_id == "" ? 1 : 0)
+  name                                           = local.vpn_subnet_name
+  resource_group_name                            = var.resource_group_name
+  virtual_network_name                           = local.vnet_name
+  address_prefixes                               = [var.vpn_subnet_cidr]
+  enforce_private_link_endpoint_network_policies = true
+  depends_on = [
+    azurerm_virtual_network.vnet
+  ]
+}
+
 
 locals {
   bastion_subnet_id = (var.existing_bastion_subnet_id == "" && (var.is_vnet_isolated) && var.deploy_bastion ? azurerm_subnet.bastion_subnet[0].id : var.existing_bastion_subnet_id)
@@ -31,6 +50,9 @@ resource "azurerm_subnet" "vm_subnet" {
   virtual_network_name                           = local.vnet_name
   address_prefixes                               = [var.vm_subnet_cidr]
   enforce_private_link_endpoint_network_policies = true
+  depends_on = [
+    azurerm_virtual_network.vnet
+  ]
 }
 
 locals {
@@ -45,6 +67,9 @@ resource "azurerm_subnet" "app_service_subnet" {
   virtual_network_name                           = local.vnet_name
   address_prefixes                               = [var.app_service_subnet_cidr]
   enforce_private_link_endpoint_network_policies = false
+  depends_on = [
+    azurerm_virtual_network.vnet
+  ]
 
 
   # required for VNet integration with app services (functions)
@@ -68,6 +93,9 @@ resource "azurerm_subnet" "databricks_container_subnet" {
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = azurerm_virtual_network.vnet[0].name
   address_prefixes                               = [var.databricks_container_subnet_cidr]
+  depends_on = [
+    azurerm_virtual_network.vnet
+  ]
 
   delegation {
     name = "databricks-delegation"
@@ -99,6 +127,9 @@ resource "azurerm_subnet" "databricks_host_subnet" {
   resource_group_name                            = var.resource_group_name
   virtual_network_name                           = azurerm_virtual_network.vnet[0].name
   address_prefixes                               = [var.databricks_host_subnet_cidr]
+  depends_on = [
+    azurerm_virtual_network.vnet
+  ]
 
   delegation {
     name = "databricks-delegation"

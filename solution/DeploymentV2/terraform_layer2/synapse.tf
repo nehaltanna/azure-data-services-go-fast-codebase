@@ -169,10 +169,10 @@ resource "azurerm_synapse_role_assignment" "synapse_function_app_assignment" {
 
 
 resource "azurerm_synapse_role_assignment" "synapse_admin_assignments" {  
-  for_each = ( var.synapse_administrators)  
+  for_each = var.deploy_synapse ? toset(var.synapse_administrators) : []
   synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
   role_name            = "Synapse Administrator"
-  principal_id         = each.value
+  principal_id         = each.key
   lifecycle {
     ignore_changes = all
   }

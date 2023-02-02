@@ -13,12 +13,12 @@
   "tenant_id": "a3b93842-8e64-4b66-97f0-f926ab0c02a8",
   "deployment_principal_layers1and3": "a701a08a-8732-4dc2-b551-617484bd3ada",
   "resource_owners": [],
-  "synapse_administrators": {},
+  "synapse_administrators": [],
   "azure_sql_aad_administrators": {
     "sql_aad_admin": "a701a08a-8732-4dc2-b551-617484bd3ada"
   },
   "azure_purview_data_curators": {
-    "john": "ed0568a1-1ee0-46ee-b7e8-0540c4660de2"
+    "admin": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
   },
   "synapse_publishers": {},
   "synapse_contributors": {},
@@ -41,7 +41,7 @@
   "deploy_cicd_vm": false,
   "FeatureTemplateOverrides": {
     "is_onprem_datafactory_ir_registered": false,
-    "deployment_layer3_complete": true,
+    "deployment_layer3_complete": false,
     "layer0_state": "remote",
     "delay_private_access": true,
     "deploy_azure_ad_web_app_registration": false,
