@@ -183,10 +183,10 @@ resource "azurerm_synapse_role_assignment" "synapse_admin_assignments" {
 }
 
 resource "azurerm_synapse_role_assignment" "synapse_contributor_assignments" {  
-  for_each = ( var.synapse_contributors)  
+  for_each = var.deploy_synapse ? toset(var.synapse_contributors) : []
   synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
   role_name            = "Synapse Contributor"
-  principal_id         = each.value
+  principal_id         = each.key
   depends_on = [
     azurerm_synapse_firewall_rule.public_access,
     time_sleep.azurerm_synapse_firewall_rule_wait_30_seconds_cicd
@@ -194,10 +194,10 @@ resource "azurerm_synapse_role_assignment" "synapse_contributor_assignments" {
 }
 
 resource "azurerm_synapse_role_assignment" "synapse_publisher_assignments" {  
-  for_each = ( var.synapse_publishers)  
+  for_each = var.deploy_synapse ? toset(var.synapse_publishers) : []
   synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
   role_name            = "Synapse Artifact Publisher"
-  principal_id         = each.value
+  principal_id         = each.key
   depends_on = [
     azurerm_synapse_firewall_rule.public_access,
     time_sleep.azurerm_synapse_firewall_rule_wait_30_seconds_cicd

@@ -15,17 +15,15 @@
   "resource_owners": [
     "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
   ],
-  "synapse_administrators": {},
+  "synapse_administrators": [],
   "azure_sql_aad_administrators": {
     "sql_aad_admin": "6f467924-4d92-40e3-b348-b3154d5cd437",
     "AdsGoFastDeployerjkcgkaibkungm": "4c732d19-4076-4a76-87f3-6fbfd77f007d",
     "jorampon@microsoft.com": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
   },
-  "azure_purview_data_curators": {
-    "john": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578"
-  },
-  "synapse_publishers": {},
-  "synapse_contributors": {},
+  "azure_purview_data_curators": [],
+  "synapse_publishers": [],
+  "synapse_contributors": [],
   "WEB_APP_ADMIN_USER": "ccbdbba4-669c-48d6-86b8-75c9ab2ee578",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
   "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadslbzz",

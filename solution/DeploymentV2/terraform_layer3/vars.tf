@@ -157,8 +157,8 @@ variable "azure_sql_aad_administrators" {
 
 variable "azure_purview_data_curators" {
    description = "List of Azure Purview Data Curators for default root"
-   type = map(string)
-   default = {}
+   type = list(string)
+   default = []
 }
 
 variable "resource_owners" {

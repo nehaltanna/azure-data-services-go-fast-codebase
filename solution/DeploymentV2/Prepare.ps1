@@ -326,7 +326,7 @@ else
              
         $foundUser = $false
         $common_vars_values.resource_owners =  @()  
-        $common_vars_values.synapse_administrators = @{}  
+        #$common_vars_values.synapse_administrators = @()  
 
         $common_vars_values.FeatureTemplateOverrides.layer0_state = $layer0_state
         $common_vars_values.deploy_state_storage_account = $deploy_state_storage_account
@@ -336,7 +336,7 @@ else
         {
             $common_vars_values.deployment_principal_layers1and3 = $assigneeobject             
             $userPrincipalName = (az ad signed-in-user show --only-show-errors | ConvertFrom-Json).userPrincipalName                  
-            $common_vars_values.synapse_administrators.$userPrincipalName = (az ad signed-in-user show --only-show-errors | ConvertFrom-Json).id            
+            $common_vars_values.synapse_administrators = @((az ad signed-in-user show --only-show-errors | ConvertFrom-Json).id)            
         }
         else 
         {
@@ -359,9 +359,9 @@ else
             $common_vars_values.azure_sql_aad_administrators.$userPrincipalName = (az ad signed-in-user show | ConvertFrom-Json).id  
         }
 
-        $common_vars_values.azure_purview_data_curators = @{}     
-        $userPrincipalName = "admin"                  
-        $common_vars_values.azure_purview_data_curators.$userPrincipalName = (az ad signed-in-user show | ConvertFrom-Json).id         
+        $common_vars_values.azure_purview_data_curators = @((az ad signed-in-user show | ConvertFrom-Json).id)     
+        #$userPrincipalName = "admin"                  
+        #$common_vars_values.azure_purview_data_curators.$userPrincipalName = (az ad signed-in-user show | ConvertFrom-Json).id         
 
         $ResetFlags = Get-SelectionFromUser -Options ('Yes','No') -Prompt "Reset flags for is_onprem_datafactory_ir_registered and deployment_layer3_complete. For brand new deployment select 'Yes'."
         if ($ResetFlags -eq "Yes")

@@ -212,6 +212,22 @@ local AllVariables = [
         },
         {            
             "CICDSecretName": "",            
+            "EnvVarName": "",            
+            "HCLName": "synapse_publishers",
+            "Value": locals[environment].synapse_publishers,
+            "Sensitive": false,
+            "DoNotReplaceDuringAgentDeployment":false
+        },
+        {            
+            "CICDSecretName": "",            
+            "EnvVarName": "",            
+            "HCLName": "synapse_contributors",
+            "Value": locals[environment].synapse_contributors,
+            "Sensitive": false,
+            "DoNotReplaceDuringAgentDeployment":false
+        },
+        {            
+            "CICDSecretName": "",            
             "EnvVarName": "TF_VAR_azure_sql_aad_administrators",            
             "HCLName": "azure_sql_aad_administrators",
             "Value": locals[environment].azure_sql_aad_administrators,
@@ -408,3 +424,4 @@ local SecretFileSensitiveVars =     {  // Object comprehension.
     "ForSecretFile": SecretFileVars,
     "ForSecretFileSensitive": SecretFileSensitiveVars
 }
+

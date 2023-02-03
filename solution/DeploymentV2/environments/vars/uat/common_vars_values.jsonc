@@ -15,15 +15,13 @@
   "resource_owners": [
     "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
   ],
-  "synapse_administrators": {},
+  "synapse_administrators": [],
   "azure_sql_aad_administrators": {
     "sql_aad_admin": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
   },
-  "azure_purview_data_curators": {
-    "admin": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
-  },
-  "synapse_publishers": {},
-  "synapse_contributors": {},
+  "azure_purview_data_curators": [],
+  "synapse_publishers": [],
+  "synapse_contributors": [],
   "WEB_APP_ADMIN_USER": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
   "ARM_SYNAPSE_WORKSPACE_NAME": "adsuatsynwadsqw1s",

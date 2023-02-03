@@ -503,7 +503,7 @@ variable "adls_storage_account_name" {
 variable "adls_containers" {
   description = "The container names the user wants to additionally define. Each object in the list will result in a adls container creation. Note: These are currently not added to the web app by default"
   type        = list
-  default     = ["bronze", "silver", "gold"]
+  default     = []
 
 }
 variable "blob_storage_account_name" {
@@ -893,8 +893,8 @@ variable "azure_sql_aad_administrators" {
 
 variable "azure_purview_data_curators" {
    description = "List of Azure Purview Data Curators for default root"
-   type = map(string)
-   default = {}
+   type = list(string)
+   default = []
 }
 
 variable "synapse_administrators" {
@@ -905,14 +905,14 @@ variable "synapse_administrators" {
 
 variable "synapse_contributors" {
    description = "List of Synapse Contributors"
-   type = map(string)
-   default = {}
+   type = list(string)
+   default = []
 }
 
 variable "synapse_publishers" {
    description = "List of Synapse Publishers"
-   type = map(string)
-   default = {}
+   type = list(string)
+   default = []
 }
 
 variable "publish_web_app_addcurrentuserasadmin" {

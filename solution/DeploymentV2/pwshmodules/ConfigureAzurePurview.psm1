@@ -232,7 +232,7 @@ function ConfigureAzurePurview (
   #datafactory / function app
   $objectIds = @($datafactory_principal_id, $function_app_principal_id)
   #add each data curator from the dictionary to the list of objectIds to grant the permission
-  foreach ($obj in $data_curators.values) 
+  foreach ($obj in $data_curators) 
   {
     $objectIds += $obj
   }

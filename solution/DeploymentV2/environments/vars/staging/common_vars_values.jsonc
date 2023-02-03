@@ -17,11 +17,11 @@
   "azure_sql_aad_administrators": {
     "sql_aad_admin": "a701a08a-8732-4dc2-b551-617484bd3ada"
   },
-  "azure_purview_data_curators": {
-    "admin": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
-  },
-  "synapse_publishers": {},
-  "synapse_contributors": {},
+  "azure_purview_data_curators": [],
+  "synapse_publishers": [
+    "a701a08a-8732-4dc2-b551-617484bd3ada"
+  ],
+  "synapse_contributors": [],
   "WEB_APP_ADMIN_USER": "a701a08a-8732-4dc2-b551-617484bd3ada",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
   "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadsvavt",
