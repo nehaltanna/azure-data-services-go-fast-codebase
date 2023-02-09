@@ -103,10 +103,11 @@ resource "databricks_ip_access_list" "allowed-list" {
 
 
 provider "databricks" {
-  host = azurerm_databricks_workspace.workspace[0].workspace_url
+  host = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].workspace_url : ""
 }
 
 resource "databricks_instance_pool" "smallest_nodes" {
+  count              = var.deploy_databricks ? 1 : 0
   instance_pool_name = "Job Pool One"
   min_idle_instances = 0
   max_capacity       = 6

@@ -7,7 +7,7 @@
       config = {
         container_name       = "tstate"
         key                  = "terraform_layer2.tfstate"
-        resource_group_name  = "TestGoFast"
-        storage_account_name = "testgofaststate"
+        resource_group_name  = "gofasttemprg"
+        storage_account_name = "gofasttempstate"
       }
     }

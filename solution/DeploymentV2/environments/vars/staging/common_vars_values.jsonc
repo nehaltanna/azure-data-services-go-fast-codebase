@@ -6,27 +6,31 @@
   "domain": "insight.com",
   "subscription_id": "d5910651-6eb4-4d9e-95db-53790631feb8",
   "prefix": "ads",
-  "resource_group_name": "TestGoFast",
-  "state_storage_account_name": "testgofaststate",
+  "resource_group_name": "gofasttemprg",
+  "state_storage_account_name": "gofasttempstate",
   "ip_address": "159.196.32.59",
-  "ip_address2": "13.54.173.90",
+  "ip_address2": "159.196.32.59",
   "tenant_id": "a3b93842-8e64-4b66-97f0-f926ab0c02a8",
   "deployment_principal_layers1and3": "a701a08a-8732-4dc2-b551-617484bd3ada",
   "resource_owners": [],
-  "synapse_administrators": [],
+  "synapse_administrators": [
+    "a701a08a-8732-4dc2-b551-617484bd3ada"
+  ],
   "azure_sql_aad_administrators": {
     "sql_aad_admin": "a701a08a-8732-4dc2-b551-617484bd3ada"
   },
-  "azure_purview_data_curators": [],
+  "azure_purview_data_curators": [
+    "a701a08a-8732-4dc2-b551-617484bd3ada"
+  ],
   "synapse_publishers": [
     "a701a08a-8732-4dc2-b551-617484bd3ada"
   ],
   "synapse_contributors": [],
   "WEB_APP_ADMIN_USER": "a701a08a-8732-4dc2-b551-617484bd3ada",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
-  "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadsvavt",
-  "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-vavt",
-  "ARM_DATALAKE_NAME": "adsstgdlsadsvavtadsl",
+  "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadss2et",
+  "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-s2et",
+  "ARM_DATALAKE_NAME": "adsstgdlsadss2etadsl",
   "ARM_PAL_PARTNER_ID": "0",
   "GIT_REPOSITORY_NAME": "#####",
   "GIT_SYNAPSE_REPOSITORY_BRANCH_NAME": "#####",
@@ -44,12 +48,8 @@
     "deployment_layer3_complete": false,
     "layer0_state": "remote",
     "delay_private_access": true,
-    "deploy_azure_ad_web_app_registration": false,
-    "deploy_azure_ad_function_app_registration": false,
-    "existing_aad_func_appreg_app_id": "505c9860-65ba-43bc-b33d-c13c13572567",
-    "existing_aad_func_sp_obj_id": "099cc53a-64e5-4704-bc5f-f2c6f38a9382",
-    "existing_aad_func_appreg_obj_id": "9bae33ae-fe8e-4003-9162-f7404349cdc3",
-    "existing_aad_web_appreg_app_id": "ae033867-c9d2-4b1e-bf5c-c2ee0a24ee1c",
-    "deploy_databricks": true
+    "deploy_databricks": false,
+    "deploy_vpn": false,
+    "deploy_bastion": false
   }
 }
