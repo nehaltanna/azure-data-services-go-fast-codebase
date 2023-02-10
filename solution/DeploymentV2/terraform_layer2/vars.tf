@@ -307,6 +307,13 @@ variable "deploy_custom_terraform" {
   default     = false
   type        = bool
 }
+
+variable "deploy_purview_sp" {
+  description = "Feature toggle for deploying Azure Purview IR SP"
+  default     = true
+  type        = bool
+}
+
 #---------------------------------------------------------------
 # Post IAC - Feature Toggles 
 #---------------------------------------------------------------

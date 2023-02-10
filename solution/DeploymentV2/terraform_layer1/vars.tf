@@ -184,7 +184,7 @@ variable "deploy_purview" {
 
 variable "deploy_purview_sp" {
   description = "Feature toggle for deploying Azure Purview IR SP"
-  default     = false
+  default     = true
   type        = bool
 }
 
