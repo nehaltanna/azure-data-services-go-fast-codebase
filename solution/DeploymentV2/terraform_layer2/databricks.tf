@@ -80,6 +80,7 @@ resource "azurerm_role_assignment" "databricks_data_factory" {
 } 
 */
 
+/*
 resource "databricks_workspace_conf" "this" {
   count    = var.deploy_databricks ? 1 : 0
   provider = databricks.created_workspace
@@ -88,7 +89,9 @@ resource "databricks_workspace_conf" "this" {
   }
   depends_on = [databricks_ip_access_list.allowed-list]
 }
+*/
 
+/*
 resource "databricks_ip_access_list" "allowed-list" {
   count     = var.deploy_databricks ? 1 : 0
   provider = databricks.created_workspace
@@ -99,6 +102,7 @@ resource "databricks_ip_access_list" "allowed-list" {
     var.ip_address2
   ]
 }
+*/
 
 
 
@@ -106,6 +110,7 @@ provider "databricks" {
   host = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].workspace_url : ""
 }
 
+/*
 resource "databricks_instance_pool" "smallest_nodes" {
   count              = var.deploy_databricks ? 1 : 0
   instance_pool_name = "Job Pool One"
@@ -125,4 +130,4 @@ resource "databricks_instance_pool" "smallest_nodes" {
   }
   depends_on = [azurerm_databricks_workspace.workspace]
 }
-
+*/
