@@ -9,10 +9,24 @@ resource "azurerm_subnet_network_security_group_association" "db_container" {
   count                     = (var.is_vnet_isolated ? 1 : 0)
   subnet_id                 = local.databricks_container_subnet_id
   network_security_group_id = azurerm_network_security_group.databricks_nsg[0].id
+
+  # The subnet will refuse to accept the NSG if it's not this exact
+  # list so we need to ensure the rules are deployed before the association
+  depends_on = [
+    azurerm_subnet.databricks_container_subnet[0],
+  ]
+  timeouts {}
 }
 
 resource "azurerm_subnet_network_security_group_association" "db_host" {
-  count                     = (var.is_vnet_isolated ? 1 : 0)    
+  count                     = (var.is_vnet_isolated ? 1 : 0)
   subnet_id                 = local.databricks_host_subnet_id
   network_security_group_id = azurerm_network_security_group.databricks_nsg[0].id
+
+  # The subnet will refuse to accept the NSG if it's not this exact
+  # list so we need to ensure the rules are deployed before the association
+  depends_on = [
+    azurerm_subnet.databricks_host_subnet[0],
+  ]
+  timeouts {}
 }
