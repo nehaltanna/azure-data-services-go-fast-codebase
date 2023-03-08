@@ -420,6 +420,72 @@
               "category": "Deployment Lifecycle Toggles"
             }
         },
+        "remove_lock": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set to true to remove the Terraform lock. Use in conjunction with lock_id to specify the ID of the lock.",
+          "examples": [
+            true, false                  
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
+        "lock_id": {
+          "type": "string",
+          "default": "#####",
+          "description": "ID of Terraform Lock should the lock need to be removed.",
+          "examples": [
+              "#####", "00000000-0000-0000-0000-000000000000"            
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
+        "layer0_plan": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set to true to run Terraform Plan, rather than Apply, for layer 0.",
+          "examples": [
+            true, false                  
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
+        "layer1_plan": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set to true to run Terraform Plan, rather than Apply, for layer 1.",
+          "examples": [
+            true, false                  
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
+        "layer2_plan": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set to true to run Terraform Plan, rather than Apply, for layer 2.",
+          "examples": [
+            true, false                  
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
+        "layer3_plan": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set to true to run Terraform Plan, rather than Apply, for layer 3.",
+          "examples": [
+            true, false                  
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
         "layer0_state": {
           "type": "string",
           "default": "remote",

@@ -39,6 +39,12 @@
   "is_private_network": true,
   "deploy_state_storage_account": false,
   "deploy_cicd_vm": false,
+  "remove_lock": false,
+  "lock_id": "#####",
+  "layer0_plan": false,
+  "layer1_plan": false,
+  "layer2_plan": false,
+  "layer3_plan": false,
   "FeatureTemplateOverrides": {
     "is_onprem_datafactory_ir_registered": false,
     "deployment_layer3_complete": true,

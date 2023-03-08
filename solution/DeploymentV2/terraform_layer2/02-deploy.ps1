@@ -62,16 +62,23 @@ if([string]::IsNullOrEmpty($env:TF_VAR_synapse_sql_password) -and ($gitDeploy -e
 #terraform init -upgrade
 
 $output = terragrunt init --terragrunt-config vars/$env:environmentName/terragrunt.hcl -reconfigure 
-if($env:TF_VAR_Summarise_Terraform_Apply -eq "true")
-{
 
-    $output = terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl -json 
-    ProcessTerraformApply -output $output -gitDeploy $gitDeploy
-}
-else 
+if($env:TF_VAR_layer2_plan -eq "true")
 {
-    terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl
-}  
+    terragrunt plan --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+}
+else {
+    if($env:TF_VAR_Summarise_Terraform_Apply -eq "true")
+    {
+
+        $output = terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl -json 
+        ProcessTerraformApply -output $output -gitDeploy $gitDeploy
+    }
+    else 
+    {
+        terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+    }  
+}
 
 
 #Update Values for variables in Environment
