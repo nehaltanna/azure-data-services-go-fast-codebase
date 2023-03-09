@@ -41,10 +41,7 @@
   "deploy_cicd_vm": false,
   "remove_lock": false,
   "lock_id": "#####",
-  "layer0_plan": false,
-  "layer1_plan": false,
-  "layer2_plan": false,
-  "layer3_plan": false,
+  "terraform_plan": "#####",
   "FeatureTemplateOverrides": {
     "is_onprem_datafactory_ir_registered": false,
     "deployment_layer3_complete": true,

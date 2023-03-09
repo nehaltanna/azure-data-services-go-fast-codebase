@@ -63,9 +63,11 @@ if([string]::IsNullOrEmpty($env:TF_VAR_synapse_sql_password) -and ($gitDeploy -e
 
 $output = terragrunt init --terragrunt-config vars/$env:environmentName/terragrunt.hcl -reconfigure 
 
-if($env:TF_VAR_layer2_plan -eq "true")
+if($env:TF_VAR_terraform_plan -eq "layer2")
 {
     terragrunt plan --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+
+    Exit
 }
 else {
     if($env:TF_VAR_Summarise_Terraform_Apply -eq "true")

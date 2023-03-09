@@ -50,9 +50,11 @@ $output = terragrunt init --terragrunt-config vars/$env:environmentName/terragru
 
 
 
-if($env:TF_VAR_layer1_plan -eq "true")
+if($env:TF_VAR_terraform_plan -eq "layer1")
 {
     terragrunt plan --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+
+    Exit
 }
 else {
     if($env:TF_VAR_Summarise_Terraform_Apply -eq "true")
