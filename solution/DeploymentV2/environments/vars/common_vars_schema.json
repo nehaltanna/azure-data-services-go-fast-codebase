@@ -442,45 +442,12 @@
               "category": "Deployment Lifecycle Toggles"
             }
         },
-        "layer0_plan": {
-          "type": "boolean",
-          "default": false,
-          "description": "Set to true to run Terraform Plan, rather than Apply, for layer 0.",
+        "terraform_plan": {
+          "type": "string",
+          "default": "#####",
+          "description": "Specify the layer to run a Terraform plan.",
           "examples": [
-            true, false                  
-            ],
-            "options": {
-              "category": "Deployment Lifecycle Toggles"
-            }
-        },
-        "layer1_plan": {
-          "type": "boolean",
-          "default": false,
-          "description": "Set to true to run Terraform Plan, rather than Apply, for layer 1.",
-          "examples": [
-            true, false                  
-            ],
-            "options": {
-              "category": "Deployment Lifecycle Toggles"
-            }
-        },
-        "layer2_plan": {
-          "type": "boolean",
-          "default": false,
-          "description": "Set to true to run Terraform Plan, rather than Apply, for layer 2.",
-          "examples": [
-            true, false                  
-            ],
-            "options": {
-              "category": "Deployment Lifecycle Toggles"
-            }
-        },
-        "layer3_plan": {
-          "type": "boolean",
-          "default": false,
-          "description": "Set to true to run Terraform Plan, rather than Apply, for layer 3.",
-          "examples": [
-            true, false                  
+            "#####", "layer0", "layer1", "layer2", "layer3"        
             ],
             "options": {
               "category": "Deployment Lifecycle Toggles"
