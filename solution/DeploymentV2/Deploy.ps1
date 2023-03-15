@@ -37,6 +37,14 @@ PrepareDeployment -gitDeploy $gitDeploy -deploymentFolderPath $deploymentFolderP
 Set-Location $deploymentFolderPath 
 Set-Location ./terraform_layer0
 terragrunt init -reconfigure --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+if(($env:TF_VAR_remove_lock -eq $true) -and ($env:TF_VAR_lock_id -ne "#####"))
+{
+    terraform force-unlock $env:TF_VAR_lock_id -force
+}
+
+Set-Location $deploymentFolderPath 
+Set-Location ./terraform_layer0
+terragrunt init -reconfigure --terragrunt-config vars/$env:environmentName/terragrunt.hcl
 ./00-deploy.ps1
 
 Set-Location $deploymentFolderPath 

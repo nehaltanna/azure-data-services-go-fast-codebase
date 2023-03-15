@@ -997,3 +997,30 @@ variable "deploy_state_storage_account" {
   type        = bool
 }
 
+
+#---------------------------------------------------------------
+# Terraform Toggles
+#---------------------------------------------------------------
+
+variable "remove_lock" {
+  description = "Set to true to remove the Terraform Lock."
+  default     = false
+  type        = bool
+}
+
+variable "lock_id" {
+  description = "ID of Terraform Lock should the lock need to be removed."
+  type        = string
+  default     = "#####"
+}
+
+variable "terraform_plan" {
+  description = "Specify the layer to run a Terraform plan."
+  type        = string
+  default     = "#####"
+
+  validation {
+    condition     = contains(["#####", "layer0", "layer1", "layer2", "layer3"], var.terraform_plan)
+    error_message = "Valid values for var: hub_type are (#####, layer0, layer1, layer2, layer3)."
+  }
+}
