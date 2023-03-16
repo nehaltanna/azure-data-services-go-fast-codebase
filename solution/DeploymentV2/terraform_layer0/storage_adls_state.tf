@@ -37,7 +37,9 @@ resource "azurerm_storage_container" "tstate" {
 
 resource "azurerm_role_assignment" "adls_state_deployment_agents" {
   for_each = {
-    for ro in local.adls_state_deployment_agents_ros : ro => ro
+    for ro in local.adls_state_deployment_agents_ros :
+    ro => ro
+    if(var.deploy_rbac_roles == true)
   }    
   scope                = azapi_resource.adls_state[0].id
   role_definition_name = "Storage Blob Data Contributor"

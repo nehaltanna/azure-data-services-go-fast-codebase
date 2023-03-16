@@ -147,6 +147,12 @@ variable "delay_private_access" {
 #---------------------------------------------------------------
 # Feature Toggles
 #---------------------------------------------------------------
+variable "deploy_rbac_roles" {
+  description = "Feature toggle for deploying the RBAC roles that are deployed alongside resources"
+  default     = true
+  type        = bool
+}
+
 variable "deploy_data_factory" {
   description = "Feature toggle for deploying the Azure Data Factory"
   default     = true
@@ -253,6 +259,12 @@ variable "deploy_databricks" {
   type        = bool
 }
 
+variable "deploy_databricks_resources" {
+  description = "Feature toggle for deploying Databricks resources. This should be done first when disabling databricks. This is due to the provider relying on the databricks workspace."
+  default     = true
+  type        = bool
+}
+
 variable "deploy_selfhostedsql" {
   description = "Feature toggle for deploying Self Hosted Sql VM"
   default     = false
@@ -311,6 +323,12 @@ variable "deploy_custom_terraform" {
 variable "deploy_purview_sp" {
   description = "Feature toggle for deploying Azure Purview IR SP"
   default     = true
+  type        = bool
+}
+
+variable "update_execution_engine_jsons" {
+  description = "Feature toggle for force updating the execution engine jsons for adf/synapse."
+  default     = false
   type        = bool
 }
 
@@ -379,6 +397,12 @@ variable "sif_database_name" {
   description = "SIF DataMart Name"
   default     = "sif"
   type        = string
+}
+
+variable "databricks_whitelist" {
+  description = "Feature toggle for enabling whitelisting for access control on the deployed Databricks Workspace"
+  default     = true
+  type        = bool
 }
 
 #---------------------------------------------------------------
@@ -720,7 +744,23 @@ variable "synapse_spark_max_node_count" {
   type        = number
 }
 
+variable "vm_size" {
+  description = "The size of the VM being deployed"
+  default     = "Standard_B1s"
+  type        = string
+}
 
+variable "db_size" {
+  description = "The size of the DB's being deployed"
+  default     = "Basic"
+  type        = string
+}
+
+variable "databricks_instance_pool_size" {
+  description = "The node type of the Databricks instance pool being deployed"
+  default     = "Standard_DS3_v2"
+  type        = string
+}
 
 
 #---------------------------------------------------------------
@@ -937,8 +977,25 @@ variable "web_app_admin_security_group" {
 
 
 variable "resource_owners" {
-  description = "A web app Azure security group used for admin access."
+  description = "A list containing the resource owners for the deployment. Will grant relevant access permissions for deployed resources."
   default     = []
   type        = list(string)
 }
 
+variable "databricks_admins" {
+  description = "A list containing the emails of default administrators for the databricks workspace. Will create them as users and put them in a relevant administrator group within the workspace. Example entry: john.smith@example.com. NOTE: Do not add the deployer - they are automatically added as workspace administrator upon deployment."
+  default     = []
+  type        = list(string)
+}
+
+variable "databricks_admin_group_name" {
+  description = "The name of the databricks admin group. Users from the 'databricks_admins' list will be put under this group."
+  default     = "Default Administrator Group"
+  type        = string
+}
+
+variable "databricks_ip_whitelist" {
+   description = "List of additional ip addresses to whitelist for the databricks workspace. Note: Do not add the values of var.ip_address / var.ip_address2 as they are automatically added to the whitelisting"
+   type = list(string)
+   default = []
+}

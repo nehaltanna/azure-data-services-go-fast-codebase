@@ -59,10 +59,15 @@ namespace AdsGoFastDbUp
         [Option("SynapseSQLPoolName", Required = true, HelpText = "Parameter for the scripts.")]
         public string SynapseSQLPoolName { get; set; }
         [Option("SynapseSparkPoolName", Required = true, HelpText = "Parameter for the scripts.")]
-        public string SynapseSparkPoolName { get; set; }        
+        public string SynapseSparkPoolName { get; set; }
         [Option("PurviewAccountName", Required = true, HelpText = "Parameter for the scripts.")]
-        public string PurviewAccountName { get; set; }
-
+        public string PurviewAccountName { get; set; }           
+        [Option("DatabricksWorkspaceURL", Required = true, HelpText = "Parameter for the scripts.")]
+        public string DatabricksWorkspaceURL { get; set; }
+        [Option("DatabricksWorkspaceResourceID", Required = true, HelpText = "Parameter for the scripts.")]
+        public string DatabricksWorkspaceResourceID { get; set; }
+        [Option("DefaultInstancePoolID", Required = true, HelpText = "Parameter for the scripts.")]
+        public string DefaultInstancePoolID { get; set; }
     }
 
     class Program
@@ -192,6 +197,9 @@ namespace AdsGoFastDbUp
             builder.WithVariable("SynapseSparkPoolName", o.SynapseSparkPoolName);            
             builder.WithVariable("PurviewAccountName", o.PurviewAccountName);
             builder.WithVariable("SynapseLakeDatabaseContainerName", o.SynapseLakeDatabaseContainerName);
+            builder.WithVariable("DatabricksWorkspaceURL", o.DatabricksWorkspaceURL);
+            builder.WithVariable("DatabricksWorkspaceResourceID", o.DatabricksWorkspaceResourceID);
+            builder.WithVariable("DefaultInstancePoolID", o.DefaultInstancePoolID);
 
             return builder.Build();
         }

@@ -36,6 +36,10 @@ function GenerateAndUploadDataFactoryAndSynapseArtefacts (
         Invoke-Expression  ./UploadGeneratedPatternsToADF.ps1
     }
     Invoke-Expression  ./UploadTaskTypeMappings.ps1
+
+    if ($tout.update_execution_engine_jsons) {
+        Invoke-Expression  ./UpdateExecutionEngine.ps1
+    }
     #Below is temporary - we want to make a parent folder for the both of these directories in the future.
     #Currently there are duplicate powershell scripts. Plan is to iterate through each subfolder (datafactory / synapse) with one script
     Write-Host "Starting Synapse Parts" -ForegroundColor Yellow
@@ -45,10 +49,15 @@ function GenerateAndUploadDataFactoryAndSynapseArtefacts (
         Invoke-Expression  ./UploadGeneratedPatternsToGit.ps1
     }
     else {
-        Invoke-Expression  ./UploadGeneratedPatternsToADF.ps1
+        #upload notebooks first as we have pipelines directly dependent on them -> changing so that notebooks references are dynamic instead of direct but still uploading notebooks first.
         Invoke-Expression  ./uploadNotebooks.ps1
+        Invoke-Expression  ./UploadGeneratedPatternsToADF.ps1
     }
     Invoke-Expression  ./UploadTaskTypeMappings.ps1
+
+    if ($tout.update_execution_engine_jsons) {
+        Invoke-Expression  ./UpdateExecutionEngine.ps1
+    }
 
     Set-Location $deploymentFolderPath
     if([string]::IsNullOrEmpty($PathToReturnTo) -ne $true)

@@ -44,7 +44,7 @@ resource "azurerm_mssql_database" "web_db" {
   count     = var.deploy_sql_server && var.deploy_metadata_database ? 1 : 0
   name      = local.metadata_database_name
   server_id = azurerm_mssql_server.sqlserver[0].id
-  sku_name  = "S0"
+  sku_name  = var.db_size
   tags      = local.tags
   lifecycle {
     ignore_changes = [
@@ -56,7 +56,7 @@ resource "azurerm_mssql_database" "sample_db" {
   count       = var.deploy_sql_server ? 1 : 0
   name        = local.sample_database_name
   server_id   = azurerm_mssql_server.sqlserver[0].id
-  sku_name    = "S0"
+  sku_name    = var.db_size
   sample_name = "AdventureWorksLT"
   tags        = local.tags
   lifecycle {
@@ -70,7 +70,7 @@ resource "azurerm_mssql_database" "staging_db" {
   count     = var.deploy_sql_server ? 1 : 0
   name      = local.staging_database_name
   server_id = azurerm_mssql_server.sqlserver[0].id
-  sku_name  = "S0"
+  sku_name  = var.db_size
   tags      = local.tags
   lifecycle {
     ignore_changes = [

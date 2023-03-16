@@ -4,7 +4,7 @@ resource "azurerm_databricks_workspace" "workspace" {
   resource_group_name = var.resource_group_name
   location            = var.resource_location
   sku                 = "premium"
-
+  managed_resource_group_name = local.databricks_resource_group_name
 
   public_network_access_enabled = true
   network_security_group_rules_required = var.is_vnet_isolated ? "NoAzureDatabricksRules" : null
@@ -24,7 +24,7 @@ resource "azurerm_databricks_workspace" "workspace" {
 }
 
 
-resource "azurerm_private_endpoint" "databricks_pe" {
+resource "azurerm_private_endpoint" "databricks_workspace_pe" {
   count               = var.deploy_adls && var.deploy_databricks && var.is_vnet_isolated ? 1 : 0
   name                = "${local.databricks_workspace_name}-workspace-plink"
   location            = var.resource_location
@@ -65,13 +65,33 @@ resource "azurerm_private_endpoint" "databricks_auth_pe" {
 }
 
 resource "azurerm_role_assignment" "databricks_data_factory" {
-  count                = var.deploy_databricks && var.deploy_data_factory ? 1 : 0
+  count                = var.deploy_databricks && var.deploy_data_factory && var.deploy_rbac_roles ? 1 : 0
   scope                = azurerm_databricks_workspace.workspace[0].id
   role_definition_name = "Contributor"
   principal_id         = azurerm_data_factory.data_factory[0].identity[0].principal_id
 }
 
-/*
+resource "azurerm_role_assignment" "databricks_synapse" {
+  count                = var.deploy_databricks && var.deploy_synapse && var.deploy_rbac_roles ? 1 : 0
+  scope                = azurerm_databricks_workspace.workspace[0].id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_synapse_workspace.synapse[0].identity[0].principal_id
+}
+
+//may get issues if deployer is not contributor -> as they may need to otherwise manually auth against the workspace first to prevent deploy errors for db resources related to db api
+resource "azurerm_role_assignment" "databricks_deployment_agents" {
+  for_each = {
+    for ro in var.resource_owners : 
+    ro => ro
+    if(var.deploy_databricks == true && var.deploy_rbac_roles == true) 
+  }    
+  scope                = azurerm_databricks_workspace.workspace[0].id
+  role_definition_name = "Contributor"
+  principal_id         = each.value
+}
+
+
+/* commented out until actively using
  resource "databricks_repo" "ads_repo" {
   count      = var.deploy_databricks ? 1 : 0
   provider  = databricks.created_workspace
@@ -80,54 +100,16 @@ resource "azurerm_role_assignment" "databricks_data_factory" {
 } 
 */
 
-/*
-resource "databricks_workspace_conf" "this" {
-  count    = var.deploy_databricks ? 1 : 0
-  provider = databricks.created_workspace
-  custom_config = {
-    "enableIpAccessLists" : true
-  }
-  depends_on = [databricks_ip_access_list.allowed-list]
-}
-*/
-
-/*
-resource "databricks_ip_access_list" "allowed-list" {
-  count     = var.deploy_databricks ? 1 : 0
-  provider = databricks.created_workspace
-  label     = "allow_in"
-  list_type = "ALLOW"
-  ip_addresses = [
-    var.ip_address, 
-    var.ip_address2
-  ]
-}
-*/
-
-
-
-provider "databricks" {
-  host = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].workspace_url : ""
+//required as sometimes workspace has not completely set up auth will fail for workspace access immediately after creation
+resource "time_sleep" "databricks_post_deployment" {
+  count           = var.deploy_databricks ? 1 : 0
+  depends_on      = [
+  azurerm_databricks_workspace.workspace,
+  azurerm_private_endpoint.databricks_auth_pe,
+  azurerm_private_endpoint.databricks_workspace_pe 
+]
+  create_duration = "60s"
 }
 
-/*
-resource "databricks_instance_pool" "smallest_nodes" {
-  count              = var.deploy_databricks ? 1 : 0
-  instance_pool_name = "Job Pool One"
-  min_idle_instances = 0
-  max_capacity       = 6
-  node_type_id       = "Standard_E4ds_v5"
-  azure_attributes {
-    availability           = "ON_DEMAND_AZURE"
-  }
-  idle_instance_autotermination_minutes = 15
-  disk_spec {
-    disk_type {
-      azure_disk_volume_type  = "STANDARD_LRS"
-    }
-    disk_size  = 10
-    disk_count = 1
-  }
-  depends_on = [azurerm_databricks_workspace.workspace]
-}
-*/
+
+#ToAdd (maybe) -> Databricks notebooks upload auto via databricks  notebook resource

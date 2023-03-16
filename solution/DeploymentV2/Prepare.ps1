@@ -326,7 +326,7 @@ else
              
         $foundUser = $false
         $common_vars_values.resource_owners =  @()  
-        #$common_vars_values.synapse_administrators = @()  
+        $common_vars_values.synapse_administrators = @()  
 
         $common_vars_values.FeatureTemplateOverrides.layer0_state = $layer0_state
         $common_vars_values.deploy_state_storage_account = $deploy_state_storage_account
@@ -336,7 +336,7 @@ else
         {
             $common_vars_values.deployment_principal_layers1and3 = $assigneeobject             
             $userPrincipalName = (az ad signed-in-user show --only-show-errors | ConvertFrom-Json).userPrincipalName                  
-            $common_vars_values.synapse_administrators = @((az ad signed-in-user show --only-show-errors | ConvertFrom-Json).id)            
+            $common_vars_values.resource_owners = @((az ad signed-in-user show --only-show-errors | ConvertFrom-Json).id)            
         }
         else 
         {

@@ -94,6 +94,12 @@ variable "aad_functionapp_name" {
 # Feature Toggles
 #---------------------------------------------------------------
 
+variable "deploy_rbac_roles" {
+  description = "Feature toggle for deploying the RBAC roles that are deployed alongside resources"
+  default     = true
+  type        = bool
+}
+
 variable "deploy_data_factory" {
   description = "Feature toggle for deploying the Azure Data Factory"
   default     = true

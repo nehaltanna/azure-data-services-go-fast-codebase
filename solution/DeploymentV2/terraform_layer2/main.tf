@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "=3.20.0"
+      version = "=3.47.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -53,6 +53,9 @@ module "naming" {
 provider "databricks" {
   alias = "created_workspace"
   host = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].workspace_url : ""
+  azure_workspace_resource_id = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].id : ""
+  auth_type  = "azure-cli"
+  //azure_use_msi = true
 }
 
 resource "random_id" "rg_deployment_unique" {

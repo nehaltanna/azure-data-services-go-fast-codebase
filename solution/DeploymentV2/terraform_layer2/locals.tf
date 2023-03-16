@@ -47,7 +47,8 @@ locals {
   h2o-ai_name                  = replace(module.naming.virtual_machine.name,"-vm-ads","-vm-h2o")
   custom_vm_name               = replace(module.naming.virtual_machine.name,"-vm-ads","-vm-custom")
   databricks_workspace_name    = (var.databricks_workspace_name != "" ? var.databricks_workspace_name : "${var.prefix}${var.environment_tag}db${var.app_name}${element(split("-", module.naming.data_factory.name_unique), length(split("-", module.naming.data_factory.name_unique)) - 1)}")
-  
+  databricks_resource_group_name  = "managed-${module.naming.resource_group.name_unique}-databricks"
+  databricks_connector_name =  "${var.prefix}${var.environment_tag}dbac${var.app_name}${element(split("-", module.naming.data_factory.name_unique), length(split("-", module.naming.data_factory.name_unique)) - 1)}"
   vnet_id                      = data.terraform_remote_state.layer0.outputs.azurerm_virtual_network_vnet_id
   plink_subnet_id              = data.terraform_remote_state.layer0.outputs.plink_subnet_id 
   private_dns_zone_dfs_id      = data.terraform_remote_state.layer0.outputs.private_dns_zone_dfs_id 
@@ -136,6 +137,29 @@ locals {
       ]
     }
   ]
+
+synapse_integration_runtimes = [
+    {
+      name                 = "Azure-Integration-Runtime"
+      short_name           = "Azure"
+      is_azure             = true
+      is_managed_vnet      = true
+      valid_source_systems = ["*"]
+      valid_pipeline_patterns = [
+        {
+          Folder       = "*"
+          SourceFormat = "*"
+          SourceType   = "*"
+          TargetFormat = "*"
+          TargetType   = "*"
+          TaskTypeId   = "*"
+        }
+      ]
+    }
+]
 }
 
+
+
+  
 

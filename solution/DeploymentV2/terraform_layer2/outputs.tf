@@ -174,6 +174,10 @@ output "selfhostedsqlvm_name" {
 output "synapse_git_toggle_integration" {
   value = var.synapse_git_toggle_integration
 }
+output "update_execution_engine_jsons" {
+  value = var.update_execution_engine_jsons
+}
+
 output "synapse_git_integration_type" {
   value = var.synapse_git_toggle_integration ? var.synapse_git_integration_type : ""
 }
@@ -275,6 +279,11 @@ output "databricks_workspace_url" {
 output "databricks_workspace_id" {
   value = var.deploy_databricks ? azurerm_databricks_workspace.workspace[0].id : ""
 }
+
+output "databricks_instance_pool_id" {
+  value = var.deploy_databricks && var.deploy_databricks_resources ? databricks_instance_pool.default_node[0].id: ""
+}
+
 
 /*Variables from Previous Layer*/
 output "random_uuid_function_app_reg_role_id" {

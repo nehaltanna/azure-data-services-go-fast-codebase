@@ -1,36 +1,32 @@
 {
   "$schema": "./../common_vars_schema.json",
-  "owner_tag": "hs",
+  "owner_tag": "microsoft",
   "resource_location": "australiaeast",
   "environment_tag": "stg",
-  "domain": "insight.com",
-  "subscription_id": "d5910651-6eb4-4d9e-95db-53790631feb8",
+  "domain": "MngEnvMCAP065201.onmicrosoft.com",
+  "subscription_id": "92db59a3-a03b-4309-bf03-1883bd2a5422",
   "prefix": "ads",
-  "resource_group_name": "gofasttemprg",
-  "state_storage_account_name": "gofasttempstate",
-  "ip_address": "159.196.32.59",
-  "ip_address2": "159.196.32.59",
-  "tenant_id": "a3b93842-8e64-4b66-97f0-f926ab0c02a8",
-  "deployment_principal_layers1and3": "a701a08a-8732-4dc2-b551-617484bd3ada",
-  "resource_owners": [],
-  "synapse_administrators": [
-    "a701a08a-8732-4dc2-b551-617484bd3ada"
+  "resource_group_name": "vpnt",
+  "state_storage_account_name": "vpntstate",
+  "ip_address": "144.138.148.220",
+  "ip_address2": "144.138.148.220",
+  "tenant_id": "447034da-3a67-4b22-893d-a749d42c3b63",
+  "deployment_principal_layers1and3": "",
+  "resource_owners": [
+    "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
   ],
+  "synapse_administrators": [],
   "azure_sql_aad_administrators": {
-    "sql_aad_admin": "a701a08a-8732-4dc2-b551-617484bd3ada"
+    "sql_aad_admin": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778"
   },
-  "azure_purview_data_curators": [
-    "a701a08a-8732-4dc2-b551-617484bd3ada"
-  ],
-  "synapse_publishers": [
-    "a701a08a-8732-4dc2-b551-617484bd3ada"
-  ],
+  "azure_purview_data_curators": [],
+  "synapse_publishers": [],
   "synapse_contributors": [],
-  "WEB_APP_ADMIN_USER": "a701a08a-8732-4dc2-b551-617484bd3ada",
+  "WEB_APP_ADMIN_USER": "6d5af0b2-1241-4e55-bf0d-bc4f7f147778",
   "WEB_APP_ADMIN_SECURITY_GROUP": "#####",
-  "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadss2et",
-  "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-s2et",
-  "ARM_DATALAKE_NAME": "adsstgdlsadss2etadsl",
+  "ARM_SYNAPSE_WORKSPACE_NAME": "adsstgsynwadsg4ys",
+  "ARM_KEYVAULT_NAME": "ads-stg-kv-ads-g4ys",
+  "ARM_DATALAKE_NAME": "adsstgdlsadsg4ysadsl",
   "ARM_PAL_PARTNER_ID": "0",
   "GIT_REPOSITORY_NAME": "#####",
   "GIT_SYNAPSE_REPOSITORY_BRANCH_NAME": "#####",
@@ -45,11 +41,17 @@
   "deploy_cicd_vm": false,
   "FeatureTemplateOverrides": {
     "is_onprem_datafactory_ir_registered": false,
-    "deployment_layer3_complete": false,
+    "deployment_layer3_complete": true,
     "layer0_state": "remote",
     "delay_private_access": true,
-    "deploy_databricks": false,
-    "deploy_vpn": false,
-    "deploy_bastion": false
+    "synapse_git_toggle": false,
+    "adf_git_toggle": false,
+    "deploy_sentinel": false,
+    "synapse_git_toggle_integration": false,
+    "synapse_git_repository_owner": "#####",
+    "synapse_git_repository_name": "#####",
+    "synapse_git_repository_root_folder": "/Synapse",
+    "synapse_git_use_pat": false,
+    "deploy_selfhostedsql": true
   }
 }

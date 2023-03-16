@@ -148,6 +148,12 @@ variable "existing_aad_web_appreg_app_id" {
 # Feature Toggles
 #---------------------------------------------------------------
 
+variable "deploy_rbac_roles" {
+  description = "Feature toggle for deploying the RBAC roles that are deployed alongside resources"
+  default     = true
+  type        = bool
+}
+
 variable "is_vnet_isolated" {
   description = "Whether to deploy the resources as vnet attached / private linked"
   default     = true

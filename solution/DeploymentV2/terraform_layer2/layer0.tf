@@ -7,7 +7,7 @@
       config = {
         container_name       = "tstate"
         key                  = "terraform_layer0.tfstate"
-        resource_group_name  = "gofasttemprg"
-        storage_account_name = "gofasttempstate"
+        resource_group_name  = "osfdev0"
+        storage_account_name = "osfdev0state"
       }
     }

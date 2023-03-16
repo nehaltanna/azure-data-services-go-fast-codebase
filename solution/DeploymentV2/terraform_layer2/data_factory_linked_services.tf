@@ -334,7 +334,7 @@ resource "azurerm_data_factory_linked_custom_service" "databricks" {
   for_each = {
     for ir in local.integration_runtimes :
     ir.short_name => ir
-    if(var.deploy_data_factory == true && var.deploy_databricks == true) && ((ir.is_azure == true) || (ir.is_azure == false && var.is_onprem_datafactory_ir_registered == true))
+    if(var.deploy_data_factory == true) && ((ir.is_azure == true) || (ir.is_azure == false && var.is_onprem_datafactory_ir_registered == true))
   }
   name            = "${local.linkedservice_generic_databricks_prefix}${each.value.short_name}"
   data_factory_id = azurerm_data_factory.data_factory[0].id
@@ -346,19 +346,26 @@ resource "azurerm_data_factory_linked_custom_service" "databricks" {
   type_properties_json = <<JSON
     {
       "domain": "@linkedService().DatabricksWorkspaceURL",
+      "authentication": "MSI",
       "workspaceResourceId": "@linkedService().WorkspaceResourceID",
+      "instancePoolId": "@linkedService().InstancePool",
       "newClusterNodeType": "@linkedService().ClusterNodeType",
       "newClusterNumOfWorker": "@linkedService().Workers",
+      "newClusterSparkEnvVars": {
+          "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+      },
       "newClusterVersion": "@linkedService().ClusterVersion",
-      "authentication": "MSI"
+      "newClusterInitScripts": [],
+      "clusterOption": "Fixed"
     }
 JSON
   parameters = {
-    DatabricksWorkspaceURL = "https://${azurerm_databricks_workspace.workspace[0].workspace_url}"
-    WorkspaceResourceID = azurerm_databricks_workspace.workspace[0].id
-    ClusterVersion = "11.3.x-scala2.12"
+    DatabricksWorkspaceURL = var.deploy_databricks == true ? "https://${azurerm_databricks_workspace.workspace[0].workspace_url}" : ""
+    WorkspaceResourceID = var.deploy_databricks == true ? azurerm_databricks_workspace.workspace[0].id : ""
+    ClusterVersion = "12.2.x-scala2.12"
     Workers = 3
     ClusterNodeType = "Standard_DS3_v2"
+    InstancePool = local.databricks_instance_pool_id
   }
   depends_on = [
     azurerm_data_factory_linked_custom_service.generic_kv,

@@ -243,8 +243,7 @@ namespace FunctionApp.Helpers
             string fieldName = string.Concat(FieldName.Where(c => !char.IsWhiteSpace(c)));
 
             //Remove Special characters
-            fieldName = string.Concat(fieldName.Select(c => "*!'\",_&#^@?".Contains(c) ? "" : c.ToString()));
-
+            fieldName = string.Concat(fieldName.Select(c => "*!'\",&#^@?{}()[];+= ".Contains(c) ? "" : c.ToString()));
             return fieldName;
         }
     }
