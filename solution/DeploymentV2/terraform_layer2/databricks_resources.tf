@@ -38,10 +38,10 @@ provider "databricks" {
 
 resource "databricks_instance_pool" "default_node" {
   count              = var.deploy_databricks && var.deploy_databricks_resources ? 1 : 0
-  provider = databricks.created_workspace
-  instance_pool_name = "ADSGoFast Default Pool"
-  min_idle_instances = 0
-  max_capacity       = 6
+  provider           = databricks.created_workspace
+  instance_pool_name = var.databricks_instance_pool_name 
+  min_idle_instances = var.databricks_instance_pool_min_idle_instances
+  max_capacity       = var.databricks_instance_pool_max_capacity
   node_type_id       = var.databricks_instance_pool_size
   azure_attributes {
     availability           = "ON_DEMAND_AZURE"

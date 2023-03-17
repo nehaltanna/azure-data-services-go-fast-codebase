@@ -762,6 +762,23 @@ variable "databricks_instance_pool_size" {
   type        = string
 }
 
+variable "databricks_instance_pool_name" {
+  description = "The name of the databrick instance pool being deployed"
+  default     = "ADSGoFast Default Pool"
+  type        = string
+}
+
+variable "databricks_instance_pool_min_idle_instances" {
+  description = "The node type of the Databricks instance pool being deployed"
+  default     = 0
+  type        = number
+}
+
+variable "databricks_instance_pool_max_capacity" {
+  description = "The node type of the Databricks instance pool being deployed"
+  default     = 6
+  type        = number
+}
 
 #---------------------------------------------------------------
 # Parameters for specifying existing resources for reuse/
@@ -998,4 +1015,31 @@ variable "databricks_ip_whitelist" {
    description = "List of additional ip addresses to whitelist for the databricks workspace. Note: Do not add the values of var.ip_address / var.ip_address2 as they are automatically added to the whitelisting"
    type = list(string)
    default = []
+
+}
+#---------------------------------------------------------------
+# Terraform Toggles
+#---------------------------------------------------------------
+
+variable "remove_lock" {
+  description = "Set to true to remove the Terraform Lock."
+  default     = false
+  type        = bool
+}
+
+variable "lock_id" {
+  description = "ID of Terraform Lock should the lock need to be removed."
+  type        = string
+  default     = "#####"
+}
+
+variable "terraform_plan" {
+  description = "Specify the layer to run a Terraform plan."
+  type        = string
+  default     = "#####"
+
+  validation {
+    condition     = contains(["#####", "layer0", "layer1", "layer2", "layer3"], var.terraform_plan)
+    error_message = "Valid values for var: terraform_plan are (#####, layer0, layer1, layer2, layer3)."
+  }
 }

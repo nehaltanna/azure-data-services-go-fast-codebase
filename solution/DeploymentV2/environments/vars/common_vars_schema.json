@@ -420,6 +420,39 @@
               "category": "Deployment Lifecycle Toggles"
             }
         },
+        "remove_lock": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set to true to remove the Terraform lock. Use in conjunction with lock_id to specify the ID of the lock.",
+          "examples": [
+            true, false                  
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
+        "lock_id": {
+          "type": "string",
+          "default": "#####",
+          "description": "ID of Terraform Lock should the lock need to be removed.",
+          "examples": [
+              "#####", "00000000-0000-0000-0000-000000000000"            
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
+        "terraform_plan": {
+          "type": "string",
+          "default": "#####",
+          "description": "Specify the layer to run a Terraform plan.",
+          "examples": [
+            "#####", "layer0", "layer1", "layer2", "layer3"        
+            ],
+            "options": {
+              "category": "Deployment Lifecycle Toggles"
+            }
+        },
         "layer0_state": {
           "type": "string",
           "default": "remote",

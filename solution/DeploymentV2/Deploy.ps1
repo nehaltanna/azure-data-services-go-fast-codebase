@@ -37,22 +37,57 @@ PrepareDeployment -gitDeploy $gitDeploy -deploymentFolderPath $deploymentFolderP
 Set-Location $deploymentFolderPath 
 Set-Location ./terraform_layer0
 terragrunt init -reconfigure --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+if(($env:TF_VAR_remove_lock -eq $true) -and ($env:TF_VAR_lock_id -ne "#####"))
+{
+    terraform force-unlock -force $env:TF_VAR_lock_id
+}
 ./00-deploy.ps1
+
+if($env:TF_VAR_terraform_plan -eq "layer0")
+{
+    Exit
+}
 
 Set-Location $deploymentFolderPath 
 Set-Location ./terraform_layer1
 terragrunt init -reconfigure --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+if(($env:TF_VAR_remove_lock -eq $true) -and ($env:TF_VAR_lock_id -ne "#####"))
+{
+    terraform force-unlock -force $env:TF_VAR_lock_id
+}
 ./01-deploy.ps1
+
+if($env:TF_VAR_terraform_plan -eq "layer1")
+{
+    Exit
+}
 
 Set-Location $deploymentFolderPath
 Set-Location ./terraform_layer2
 terragrunt init -reconfigure --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+if(($env:TF_VAR_remove_lock -eq $true) -and ($env:TF_VAR_lock_id -ne "#####"))
+{
+    terraform force-unlock -force $env:TF_VAR_lock_id
+}
 ./02-deploy.ps1
+
+if($env:TF_VAR_terraform_plan -eq "layer2")
+{
+    Exit
+}
 
 Set-Location $deploymentFolderPath
 Set-Location ./terraform_layer3
 terragrunt init -reconfigure --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+if(($env:TF_VAR_remove_lock -eq $true) -and ($env:TF_VAR_lock_id -ne "#####"))
+{
+    terraform force-unlock -force $env:TF_VAR_lock_id
+}
 ./03-deploy.ps1
+if($env:TF_VAR_terraform_plan -eq "layer3")
+{
+    Exit
+}
 ./03-publish.ps1
 
 Set-Location $deploymentFolderPath
