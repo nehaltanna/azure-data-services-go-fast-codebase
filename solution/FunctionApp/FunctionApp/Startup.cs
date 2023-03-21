@@ -26,8 +26,19 @@ using Microsoft.ApplicationInsights.Extensibility;
 
 namespace FunctionApp
 {
+    /// <summary>\
+    ///     This is a C# class named "Startup" that inherits from a class called "FunctionsStartup".*/
+    ///     It sets up the application's configuration, services, and dependencies.
+    /// </summary>
     public class Startup : FunctionsStartup
     {
+        /// <summary>
+        //     This method is used to configure the services collection.
+        ///    The method starts by creating a ConfigurationBuilder object and setting the base path to the current working folder. It then adds a JSON file named "appsettings.json" to the configuration, user secrets, and environment variables.
+        ///    The method then calls another method called "ConfigureServices" which is used to configure the services collection. This method takes in the services collection and the configuration object as parameters.
+        ///    The method also adds a custom telemetry processor called "SuccessfulDependencyFilter" to the telemetry configuration.        
+        /// </summary>
+        /// <param name="builder"></param>
         public override void Configure(IFunctionsHostBuilder builder)
         {
             var config = new ConfigurationBuilder()
@@ -67,6 +78,14 @@ namespace FunctionApp
 
         }
 
+        /// <summary>
+        ///     This method is used to configure the services collection.
+        ///     The method configures Dapper, adds the application options, downstream authentication options, and the authentication provider to the services collection.
+        ///     The method also adds the TaskTypeMappingProvider, TaskMetaDataDatabase, DataFactoryClientFactory, SourceAndTargetSystemJsonSchemasProvider, AzureSynapseService, IntegrationRuntimeMappingProvider, KeyVaultService, PowerBIService, DataFactoryPipelineProvider, and SecurityAccessProvider to the services collection.
+        ///     The method also adds an Http Client to the services collection.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
         public static void ConfigureServices(IServiceCollection services, IConfigurationRoot config)
         {
             //Application Insights

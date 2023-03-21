@@ -420,4 +420,4 @@ else:
 # COMMAND ----------
 
 
-#spark.sql(f"SELECT * FROM hive_metastore.{targetDB}.{targetTable}")
+#spark.sql(f"SELECT * FROM hive_metastore.{targetDB}.{targetTable}")az

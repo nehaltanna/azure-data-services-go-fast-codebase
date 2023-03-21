@@ -82,7 +82,7 @@ else {
                         
                 "
                 
-                write-host ("Granting MSI Privileges on Database: " + $database + "to " + $user)
+                write-host ("Granting MSI Privileges on Database: " + $database + " to " + $user)
                 Invoke-Sqlcmd -ServerInstance "$($tout.sqlserver_name).database.windows.net,1433" -Database $database -AccessToken $token -query $sqlcommand    
             }
         }
@@ -105,7 +105,7 @@ else {
                         
                 "
                 
-                write-host ("Granting MSI Privileges on Database: " + $database + "to " + $user)
+                write-host ("Granting MSI Privileges on Database: " + $database + " to " + $user)
                 Invoke-Sqlcmd -ServerInstance "$($tout.sqlserver_name).database.windows.net,1433" -Database $database -AccessToken $token -query $sqlcommand    
             }
         }
@@ -171,6 +171,9 @@ else {
             Invoke-Sqlcmd -ServerInstance "$($tout.synapse_workspace_name).sql.azuresynapse.net,1433" -Database $tout.synapse_sql_pool_name -AccessToken $token -query "EXEC sp_addrolemember 'db_owner', '$($tout.datafactory_name)'"
         }
     }
+
+    # If you want to automatically pause the pool after deploy uncomment the line below
+    #az synapse sql pool pause --name $tout.synapse_sql_pool_name --workspace-name $tout.synapse_workspace_name --resource-group $tout.resource_group_name
 
 
 }

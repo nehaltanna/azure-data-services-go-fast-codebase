@@ -115,7 +115,7 @@ namespace FunctionApp.Functions
                 Select 
 	                SM.ScheduleMasterId, 
 	                SM.ScheduleCronExpression, 
-	                Coalesce(SI.MaxScheduledDateTimeOffset,cast('1900-01-01' as datetimeoffset)) as MaxScheduledDateTimeOffset
+	                Coalesce(SI.MaxScheduledDateTimeOffset,dateadd(minute, -1, sysdatetimeoffset())) as MaxScheduledDateTimeOffset
                 from
                     ScheduleMaster SM 
 	                join ( 

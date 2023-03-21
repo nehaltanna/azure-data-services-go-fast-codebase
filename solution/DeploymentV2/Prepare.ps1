@@ -25,6 +25,20 @@
 #Cool Branding :-)
 figlet Azure Data Services -t | lolcat &&  figlet Go Fast -t | lolcat
 
+#First purge any existing TFVARS
+$PurgeTFVARS = $true
+if($PurgeTFVARS)
+{
+    $envVariables = gci env:
+    foreach($var in $envVariables)
+    {
+        if($var.Name -clike 'TF_VAR*')
+        {
+            [System.Environment]::SetEnvironmentVariable($var.Name, '')
+        }
+    }
+}
+
 #by default $gitDeploy will not be true, only being set by the git environment - meaning if not using a runner it will default to a standard execution.
 $gitDeploy = ([System.Environment]::GetEnvironmentVariable('gitDeploy')  -eq 'true')
 $deploymentFolderPath = (Get-Location).Path 
@@ -190,7 +204,7 @@ else
                 $delay_private_access = $false
                 $layer0_state = "local"
                 $deploy_state_storage_account = $true
-                $deploy_cicd_vm =$ true
+                $deploy_cicd_vm = $true
                 #$storageId = az storage account create --resource-group $env:TF_VAR_resource_group_name --name $env:TF_VAR_state_storage_account_name --sku Standard_LRS --pr  --allow-blob-public-access false --public-network-access Disabled --https-only true --min-tls-version TLS1_2 --query id -o tsv --only-show-errors
                 #$DeploymentVnet =  Read-Host "Please input the name of the spoke vnet for the deployment. If you leave it blank it will default to 'ads-stg-vnet-ads'"
                 #if([string]::IsNullOrEmpty($DeploymentVnet))
@@ -312,7 +326,7 @@ else
              
         $foundUser = $false
         $common_vars_values.resource_owners =  @()  
-        $common_vars_values.synapse_administrators = @{}  
+        $common_vars_values.synapse_administrators = @()  
 
         $common_vars_values.FeatureTemplateOverrides.layer0_state = $layer0_state
         $common_vars_values.deploy_state_storage_account = $deploy_state_storage_account
@@ -322,7 +336,7 @@ else
         {
             $common_vars_values.deployment_principal_layers1and3 = $assigneeobject             
             $userPrincipalName = (az ad signed-in-user show --only-show-errors | ConvertFrom-Json).userPrincipalName                  
-            $common_vars_values.synapse_administrators.$userPrincipalName = (az ad signed-in-user show --only-show-errors | ConvertFrom-Json).id            
+            $common_vars_values.resource_owners = @((az ad signed-in-user show --only-show-errors | ConvertFrom-Json).id)            
         }
         else 
         {
@@ -338,7 +352,16 @@ else
             $userPrincipalName = "sql_aad_admin"                  
             $common_vars_values.azure_sql_aad_administrators.$userPrincipalName = $sqlAdmin          
         }
-        
+        else 
+        {
+            $common_vars_values.azure_sql_aad_administrators = @{}     
+            $userPrincipalName = "sql_aad_admin"                  
+            $common_vars_values.azure_sql_aad_administrators.$userPrincipalName = (az ad signed-in-user show | ConvertFrom-Json).id  
+        }
+
+        $common_vars_values.azure_purview_data_curators = @((az ad signed-in-user show | ConvertFrom-Json).id)     
+        #$userPrincipalName = "admin"                  
+        #$common_vars_values.azure_purview_data_curators.$userPrincipalName = (az ad signed-in-user show | ConvertFrom-Json).id         
 
         $ResetFlags = Get-SelectionFromUser -Options ('Yes','No') -Prompt "Reset flags for is_onprem_datafactory_ir_registered and deployment_layer3_complete. For brand new deployment select 'Yes'."
         if ($ResetFlags -eq "Yes")

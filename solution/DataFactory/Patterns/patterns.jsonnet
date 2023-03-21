@@ -1,3 +1,30 @@
+
+/* 
+* Copyright (c) Microsoft Corporation.
+* Licensed under the MIT license.
+
+* General Description *
+
+This Jsonnet code defines a set of local functions that are used to create templates for different types of data pipeline tasks. Each function is defined with four parameters: "SourceType", "SourceFormat", "TargetType" and "TargetFormat".
+
+The functions create an object with several properties: "Folder", "GFPIR", "SourceType", "SourceFormat", "TargetType", "TargetFormat", "TaskTypeId", and "Pipeline". The values of these properties are set based on the input parameters and some hardcoded values.
+
+The properties are:
+
+"Folder" : the name of the folder in which the pipeline is defined.
+"GFPIR" : the integration runtime on which the pipeline is running.
+"SourceType" : the type of the source data.
+"SourceFormat" : the format of the source data.
+"TargetType" : the type of the target data.
+"TargetFormat" : the format of the target data.
+"TaskTypeId" : the taskTypeId for the pipeline.
+"Pipeline" : the name of the pipeline which is constructed using the input parameters.
+The functions are named according to the type of pipeline task they define, such as "SQL_Database_to_Azure_Storage" or "Azure_Storage_to_SQL_Database". At the bottom of the code, there are also examples of how these functions might be used to create specific pipeline tasks, such as a task to export data from an Azure SQL table to Azure Blob Storage in Parquet format.
+
+These functions are useful to define the pipeline task in a defined format, which makes it easy to reuse the pipeline task with minimal changes.
+
+*/
+
 local Template_SQL_Database_to_Azure_Storage = function(SourceType, SourceFormat, TargetType, TargetFormat)
 {
         "Folder": "SQL-Database-to-Azure-Storage",
@@ -64,7 +91,19 @@ local Template_REST_API_to_Azure_Storage = function(SourceType, SourceFormat, Ta
         "TaskTypeId":-9,
         "Pipeline":"GPL_" + SourceType + "_" + SourceFormat + "_" + TargetType + "_" + TargetFormat  
 };
+local Template_Execute_Databricks_Notebook = function(SourceType, SourceFormat, TargetType, TargetFormat)
+{
+        "Folder": "Execute-Databricks-Notebook",
+        "GFPIR": "Azure",
+        "SourceType": SourceType,
+        "SourceFormat": SourceFormat,
+        "TargetType": TargetType,
+        "TargetFormat": TargetFormat,
+        "TaskTypeId":-12,
+        "Pipeline":"GPL_DatabricksNotebookExecution"
 
+
+};
 
 #SQL_Database_to_Azure_Storage
 [   
@@ -235,6 +274,90 @@ local Template_REST_API_to_Azure_Storage = function(SourceType, SourceFormat, Ta
     Template_Execute_SQL_Statement("AzureSqlTable","NA","AzureSqlTable","NA"),    
     Template_Execute_SQL_Statement("AzureSqlDWTable","NA","AzureSqlDWTable","NA")        
 ]
++ 
+#Execute Databricks Notebook 
+[
+
+    #From N/A to anything
+
+    Template_Execute_Databricks_Notebook("N/A","Notebook-Optional","AzureBlobFS","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("N/A","Notebook-Optional","AzureBlobStorage","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("N/A","Notebook-Optional","AzureSqlTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("N/A","Notebook-Optional","AzureSqlDWTable","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("N/A","Notebook-Optional","SqlServerTable","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("N/A","Notebook-Optional","N/A","Notebook-Optional"),
+    
+    #From Storage to anything
+
+    Template_Execute_Databricks_Notebook("AzureBlobStorage","Notebook-Optional","AzureBlobFS","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureBlobStorage","Notebook-Optional","AzureBlobStorage","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureBlobStorage","Notebook-Optional","AzureSqlTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("AzureBlobStorage","Notebook-Optional","AzureSqlDWTable","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureBlobStorage","Notebook-Optional","SqlServerTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("AzureBlobStorage","Notebook-Optional","N/A","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureBlobFS","Notebook-Optional","AzureBlobFS","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureBlobFS","Notebook-Optional","AzureBlobStorage","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureBlobFS","Notebook-Optional","AzureSqlTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("AzureBlobFS","Notebook-Optional","AzureSqlDWTable","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureBlobFS","Notebook-Optional","SqlServerTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("AzureBlobFS","Notebook-Optional","N/A","Notebook-Optional"),
+
+
+    #From SQL to anything
+    Template_Execute_Databricks_Notebook("AzureSqlTable","Notebook-Optional","AzureBlobFS","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureSqlTable","Notebook-Optional","AzureBlobStorage","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureSqlTable","Notebook-Optional","AzureSqlTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("AzureSqlTable","Notebook-Optional","AzureSqlDWTable","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureSqlTable","Notebook-Optional","SqlServerTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("AzureSqlTable","Notebook-Optional","N/A","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureSqlDWTable","Notebook-Optional","AzureBlobFS","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureSqlDWTable","Notebook-Optional","AzureBlobStorage","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureSqlDWTable","Notebook-Optional","AzureSqlTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("AzureSqlDWTable","Notebook-Optional","AzureSqlDWTable","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("AzureSqlDWTable","Notebook-Optional","SqlServerTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("AzureSqlDWTable","Notebook-Optional","N/A","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("SqlServerTable","Notebook-Optional","AzureBlobFS","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("SqlServerTable","Notebook-Optional","AzureBlobStorage","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("SqlServerTable","Notebook-Optional","AzureSqlTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("SqlServerTable","Notebook-Optional","AzureSqlDWTable","Notebook-Optional"),
+
+    Template_Execute_Databricks_Notebook("SqlServerTable","Notebook-Optional","SqlServerTable","Notebook-Optional"),
+    
+    Template_Execute_Databricks_Notebook("SqlServerTable","Notebook-Optional","N/A","Notebook-Optional"),
+
+
+]
 
 /*
 + 
@@ -249,7 +372,5 @@ local Template_REST_API_to_Azure_Storage = function(SourceType, SourceFormat, Ta
 #    Template_REST_API_to_Azure_Storage("Rest","ServicePrincipal","AzureBlobStorage","Json"),
 #    Template_REST_API_to_Azure_Storage("Rest","ServicePrincipal","AzureBlobFS","Json")
 #]
-
 +
-
 */

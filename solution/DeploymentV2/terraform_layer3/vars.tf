@@ -94,6 +94,12 @@ variable "aad_functionapp_name" {
 # Feature Toggles
 #---------------------------------------------------------------
 
+variable "deploy_rbac_roles" {
+  description = "Feature toggle for deploying the RBAC roles that are deployed alongside resources"
+  default     = true
+  type        = bool
+}
+
 variable "deploy_data_factory" {
   description = "Feature toggle for deploying the Azure Data Factory"
   default     = true
@@ -129,6 +135,13 @@ variable "deploy_purview" {
   type        = bool
 }
 
+variable "deploy_purview_sp" {
+  description = "Feature toggle for deploying Azure Purview SP IR"
+  default     = false
+  type        = bool
+}
+
+
 
 variable "is_vnet_isolated" {
   description = "Whether to deploy the resources as vnet attached / private linked"
@@ -150,8 +163,8 @@ variable "azure_sql_aad_administrators" {
 
 variable "azure_purview_data_curators" {
    description = "List of Azure Purview Data Curators for default root"
-   type = map(string)
-   default = {}
+   type = list(string)
+   default = []
 }
 
 variable "resource_owners" {
@@ -159,4 +172,31 @@ variable "resource_owners" {
   default = {	
   }
   type        = map(string)
+}
+
+#---------------------------------------------------------------
+# Terraform Toggles
+#---------------------------------------------------------------
+
+variable "remove_lock" {
+  description = "Set to true to remove the Terraform Lock."
+  default     = false
+  type        = bool
+}
+
+variable "lock_id" {
+  description = "ID of Terraform Lock should the lock need to be removed."
+  type        = string
+  default     = "#####"
+}
+
+variable "terraform_plan" {
+  description = "Specify the layer to run a Terraform plan."
+  type        = string
+  default     = "#####"
+
+  validation {
+    condition     = contains(["#####", "layer0", "layer1", "layer2", "layer3"], var.terraform_plan)
+    error_message = "Valid values for var: terraform_plan are (#####, layer0, layer1, layer2, layer3)."
+  }
 }

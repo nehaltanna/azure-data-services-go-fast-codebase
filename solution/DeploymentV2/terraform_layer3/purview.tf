@@ -1,5 +1,5 @@
 resource "azuread_application_password" "purview_ir" {
-  count                 = var.deploy_purview && var.is_vnet_isolated ? 1 : 0
+  count                 = var.deploy_purview && var.deploy_purview_sp && var.is_vnet_isolated ? 1 : 0
   application_object_id = data.terraform_remote_state.layer2.outputs.azuread_application_purview_ir_object_id
 }
 

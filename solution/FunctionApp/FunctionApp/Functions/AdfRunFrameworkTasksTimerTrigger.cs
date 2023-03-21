@@ -27,6 +27,12 @@ namespace FunctionApp.Functions
         
         public string HeartBeatFolder { get; set; }
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="taskMetaDataDatabase"></param>
+        /// <param name="httpClientFactory"></param>
         public AdfRunFrameworkTasksTimerTrigger(IOptions<ApplicationOptions> options, TaskMetaDataDatabase taskMetaDataDatabase, IHttpClientFactory httpClientFactory)
         {
             _options = options;
@@ -55,6 +61,16 @@ namespace FunctionApp.Functions
         //    await Core(log);        
         //}
 
+
+        /// <summary>
+        ///    This function is triggered by a Http request from the RunFrameworkTasksTimerTrigger function. This script is a C# function that runs as a scheduled task using Azure Functions. 
+        ///    The function is using the ILogger object to log information or errors.
+        ///    The script first checks if the "EnableRunFrameworkTasks" option is set to true. If it is, the script creates an HTTP client and waits for two seconds.
+        ///    It then creates a SQL connection to a database and retrieves a list of "framework task runners" that are currently idle. For each of these runners, the script creates a folder and checks if the runner's status is "Running" and if it's set to run now.
+        ///    If the runner's status is "Running" and set to run now, the script writes a "heartbeat" file to the folder it created earlier. It then sends an HTTP GET request to a specific URL, passing in the "TaskRunnerId" as a query parameter. If the request is cancelled or an exception is thrown, the script logs the error, updates the runner's status in the database, and throws the exception.
+        ///    If the runner's status is "Running" but not set to run now, the script checks the heartbeat files for that runner and compares the timestamp of the most recent file to the current time. If the difference exceeds a certain threshold, the script updates the runner's status in the database.
+        /// </summary>
+        /// <param name="log"></param>        
         public async Task Core(ILogger log)
         {            
             if (_options.Value.TimerTriggers.EnableRunFrameworkTasks)

@@ -1,15 +1,15 @@
 
 <# 
-$adsopts = (gci env:* | sort-object name | Where-Object { $_.Name -like "AdsOpts*" })
-$obj =  @{}
-foreach ($opts in $adsopts) {
-    $obj | Add-Member $opts.Name $opts.Value
-}
+* Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
 
-$SubscriptionId = $obj.AdsOpts_CD_ResourceGroup_Id.Split("/")
-$obj | Add-Member "AdsOpts_CD_Services_DataFactory_SubscriptionId" $SubscriptionId[2]
+* General Description *
+The first line of the provided script is using the Write-Host cmdlet to display the current working directory's path.
+The second line is importing a PowerShell module named "GatherOutputsFromTerraform_DataFactoryFolder.psm1" that is located in the current working directory. The -Force parameter is used to ensure the module is imported even if it is already imported.
+The third line is running the GatherOutputsFromTerraform_DataFactoryFolder command from the imported module and storing the output in a variable named $tout.
+The fourth line is converting the output stored in $tout to JSON format, with a depth of 10 and then it is writing the output to a file named "secrets.libsonnet" in "./pipeline/static/partials" directory.
 
-$obj | ConvertTo-Json | Set-Content ('./pipeline/static/partials/secrets.libsonnet')
+This script is used to gather outputs from a Terraform configuration and convert them to a JSON format that can then be used in downstream processes such as Jsonnet template generation activities.
 #>
 
 

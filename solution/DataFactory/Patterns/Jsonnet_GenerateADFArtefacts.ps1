@@ -1,3 +1,62 @@
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This script performs the following setps:
+
+* Preparation Activities* 
+    1. It gets the Terraform ouptut values using the module GatherOutputsFromTerraform_DataFactoryFolder and stores them in a variable called "$tout".
+    2. It checks if a folder called "output" exists in the current directory and if not, it creates one.
+    3. It then removes all the previous contents of the "output" folder using the "Get-ChildItem" and "Remove-item" commands.
+    4. It converts "$tout" to JSON format and saves it to a file named "tout.json" in the "output" folder.
+    5. It then copies all the files with the ".json" extension from the "./pipeline/static" folder to the "output" folder.
+    
+* Integration Runtime SQL Script Generation *   
+    1. It converts the "integration_runtimes" property of "$tout" to JSON format and saves it to a variable "$irsjson".
+    2. Then it creates a set of SQL commands which is used to merge the data from the JSON file into the IntegrationRuntime & Integration Runtime mappings tables in the Metadata database. This allows automatic updating of the the mapping between integration runtimes and valid source systems. 
+    3. It saves the generated SQL Script to a file called "MergeIRs.sql" in the current directory.
+
+
+* ADF Pipeline & Dataset Generation * 
+    1. It reads a file called "Patterns.json" and converts its contents to a JSON object called "$patterns".
+    2. It then iterates over each integration runtime in "$tout.integration_runtimes" and for each runtime, it checks whether the current runtime is an Azure runtime or a self-hosted runtime that is registered.
+    3. If the runtime is an Azure runtime or a registered self-hosted runtime, the script then iterates over each pattern in "$patterns".
+    4. For each pattern, it checks if the current pattern is valid for the current integration runtime by checking the "valid_pipeline_patterns" property of the current runtime.
+    5. If the pattern is valid, it then gets all the files with the ".libsonnet" extension in the folder specified by the pattern's "Folder" property, and then renames the files using the "CoreReplacements" function, and converts the files to json using the jsonnet command. **Jsonnet is a domain specific configuration language and command-line tool for defining and manipulating JSON data. It is similar to JSON, but offers a number of advanced features such as variables, functions, and arithmetic operators that can be used to make JSON data more expressive and easier to maintain. Jsonnet allows you to write JSON data in a more structured and readable way, making it easier to create and update complex JSON configurations. The jsonnet command-line tool can be used to evaluate Jsonnet files and output the resulting JSON data.
+    6. Finally, it saves the resulting JSON files to the "output" folder in the current directory.
+    7. If the pattern is not valid for the current runtime, it will print a message "Pattern Suppressed on (Integration runtime name)"
+
+* Schema File Generation and associated SQL Script Generation*
+    This part of the script generates the schema files used by the farmework to validate tasks during processing and uses by the web front end to dispay the data entry forms for task configuration. 
+    1. It creates an array of unique folder names used by the patterns in the "$patterns" variable.
+    2. It then iterates over each folder name and gets all the patterns in that folder, and for each pattern it:
+    3. It assigns values to the variables "SourceType", "SourceFormat", "TargetType", "TargetFormat", "TaskTypeId", and "pipeline" using the properties of the current pattern.
+    4. It then creates a new folder called "output" and "schemas" and "taskmasterjson" inside the folder specified by the current pattern's "Folder" property, if they do not exist.
+    5. It then gets all the files with the name "Main.libsonnet" in the "jsonschema" folder inside the folder specified by the current pattern's "Folder" property.
+    6. It renames the file as the value of "pipeline" and appends ".json" to it, and then uses jsonnet command to convert the libsonnet file to json and saves it to the "taskmasterjson" folder.
+    7. It also creates a SQL string that uses the JSON file in the taskmasterjson folder to update the metadata database with the schema information for the current pattern.
+
+* Copy Generated files to Terraform folders *
+    The script can deploy the generated files using Terraform, the Azure Datafactory API or using GIT to Azure Data Factory integeration. This next part of the script deals with the Terraform deployment option. If the top level variable "GenerateArm" (set at the very top of the script) is true then this part of the script willl 
+    opying the output pipeline files that were generated earlier in the script to specific locations in a folder structure for a Terraform deployment. 
+    It uses the Get-ChildItem cmdlet to filter the files in the "./output" folder by the name, which includes the string "GPL" for self-hosted pipelines, "GPL_Az" for azure-hosted pipelines and "SPL_Az" for static hosted pipelines. 
+    The script then uses the Copy-Item cmdlet to copy the selected files to their respective locations in the "../../DeploymentV2\terraform\modules" folder structure. T
+    he script also uses the Write-Verbose cmdlet to output the number of files copied to each location.
+
+* Linked Service, Data Factory, Managed Virtual Networks &  Integration Runtime Generation *
+    This part of the script is only executed if the "adf_git_toggle_integration" variable is set to true. This causes all Azure Data Factory code artefacts to be deployed using Git / ADF integration rather than via Terraform and the ADF Api. 
+    Under the Git deployment option we need to generate additional files for the linked services, data factories and integration runtimes. Under the ADF Api deployment method these entities are deployed by terraform and hence not generated by this script.
+
+
+* Related Scripts *
+1. ./UploadGeneratedPatternsToADF.ps1
+   This script is used to upload the generated patterns to Azure Data Factory using the ADF API. It is used when the "GenerateArm" variable is set to false. It is a downstream script of this script and usually called after this script has been run.
+2. ./solution/DeploymentV2/pwshmodules/GenerateAndUploadADFPipelines.psm1
+    This is the script that usually calls this script. It is the overarching script that is used to generate and upload the patterns to Azure Data Factory.
+
+#>
+
 
 
 Import-Module ./GatherOutputsFromTerraform_DataFactoryFolder.psm1 -Force
@@ -11,6 +70,10 @@ $newfolder = "./output/"
 
 $GenerateArm="false"
 
+<# 
+    This function, called "CoreReplacements", takes in six parameters: a string, "GFPIR", "SourceType", "SourceFormat", "TargetType", and "TargetFormat". 
+    The function first replaces certain patterns in the input string with the values of the parameters passed in. Then it checks the value of a variable "GenerateArm" and performs different replacements on the string based on whether "GenerateArm" is true or false. Finally, the modified string is returned. 
+#>
 function CoreReplacements ($string, $GFPIR, $SourceType, $SourceFormat, $TargetType, $TargetFormat) {
     $string = $string.Replace("@GFP{SourceType}", $SourceType).Replace("@GFP{SourceFormat}", $SourceFormat).Replace("@GFP{TargetType}", $TargetType).Replace("@GFP{TargetFormat}", $TargetFormat)
 
@@ -25,6 +88,9 @@ function CoreReplacements ($string, $GFPIR, $SourceType, $SourceFormat, $TargetT
 
     return  $string
 }
+
+
+
 
 if (!(Test-Path "./output"))
 {

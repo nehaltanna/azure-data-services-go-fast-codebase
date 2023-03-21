@@ -48,24 +48,33 @@ PrepareDeployment -gitDeploy $gitDeploy -deploymentFolderPath $deploymentFolderP
 Write-Host "Note that the first time this runs it will take around 10 minutes to complete."
 if([string]::IsNullOrEmpty($env:TF_VAR_jumphost_password) -and ($gitDeploy -eq $false -or $null -eq $gitdeploy))
 {
-    $env:TF_VAR_jumphost_password = Read-Host "Enter the Jumphost Password"
+    $TF_VAR_jumphost_password = Read-Host "Enter the Jumphost Password"
+    $env:TF_VAR_jumphost_password= $TF_VAR_jumphost_password
 }
 
 if([string]::IsNullOrEmpty($env:TF_VAR_synapse_sql_password) -and ($gitDeploy -eq $false -or $null -eq $gitdeploy))
 {
-    $env:TF_VAR_synapse_sql_password = Read-Host "Enter the Synapse SQL Admin Password"
+    $TF_VAR_synapse_sql_password = Read-Host "Enter the Synapse SQL Admin Password"
+    $env:TF_VAR_synapse_sql_password= $TF_VAR_synapse_sql_password
 }
 
 
 $output = terragrunt init --terragrunt-config vars/$env:environmentName/terragrunt.hcl -reconfigure 
 
-if($env:TF_VAR_Summarise_Terraform_Apply -eq "true")
+if($env:TF_VAR_terraform_plan -eq "layer0")
 {
+    terragrunt plan --terragrunt-config vars/$env:environmentName/terragrunt.hcl
 
-    $output = terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl -json 
-    ProcessTerraformApply -output $output -gitDeploy $gitDeploy
+    Exit
 }
-else 
-{
-    terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+else {
+    if($env:TF_VAR_Summarise_Terraform_Apply -eq "true")
+    {
+        $output = terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl -json 
+        ProcessTerraformApply -output $output -gitDeploy $gitDeploy
+    }
+    else 
+    {
+        terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+    }
 }        

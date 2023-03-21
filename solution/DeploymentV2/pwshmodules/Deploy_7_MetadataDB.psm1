@@ -1,3 +1,17 @@
+
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This script appears to deploy an Azure SQL database and populate it with metadata. 
+It first checks if the publish_metadata_database flag is true, and if so, proceeds to build and publish the database using the dotnet command. 
+It then adds the IP addresses specified in the TF_VAR_ip_address and TF_VAR_ip_address2 environment variables to the SQL firewall, and enables public network access to the SQL server. 
+It then allows Azure services and resources to access the server. 
+Finally, it runs the AdsGoFastDbUp.dll command with various parameters to populate the metadata database. The script also has some error handling and debug logs.
+
+#>
+
 function DeployMataDataDB (
     [Parameter(Mandatory = $false)]
     [bool]$publish_metadata_database = $false, 
@@ -45,7 +59,7 @@ function DeployMataDataDB (
         $lake_database_container_name = $tout.synapse_lakedatabase_container_name
 
         # This has been updated to use the Azure CLI cred
-        dotnet AdsGoFastDbUp.dll -a True -c "Data Source=tcp:$($tout.sqlserver_name).database.windows.net;Initial Catalog=$($tout.metadatadb_name);" -v True --DataFactoryName $tout.datafactory_name --ResourceGroupName $tout.resource_group_name --KeyVaultName $tout.keyvault_name --LogAnalyticsWorkspaceId $tout.loganalyticsworkspace_id --SubscriptionId $tout.subscription_id --SampleDatabaseName $tout.sampledb_name --StagingDatabaseName $tout.stagingdb_name --MetadataDatabaseName $tout.metadatadb_name --BlobStorageName $tout.blobstorage_name --AdlsStorageName $tout.adlsstorage_name --WebAppName $tout.webapp_name --FunctionAppName $tout.functionapp_name --SqlServerName $tout.sqlserver_name --SynapseWorkspaceName $tout.synapse_workspace_name --SynapseDatabaseName $tout.synapse_sql_pool_name --SynapseSQLPoolName $tout.synapse_sql_pool_name --SynapseSparkPoolName $tout.synapse_spark_pool_name --PurviewAccountName $tout.purview_name --SynapseLakeDatabaseContainerName $tout.synapse_lakedatabase_container_name
+        dotnet AdsGoFastDbUp.dll -a True -c "Data Source=tcp:$($tout.sqlserver_name).database.windows.net;Initial Catalog=$($tout.metadatadb_name);" -v True --DataFactoryName $tout.datafactory_name --ResourceGroupName $tout.resource_group_name --KeyVaultName $tout.keyvault_name --LogAnalyticsWorkspaceId $tout.loganalyticsworkspace_id --SubscriptionId $tout.subscription_id --SampleDatabaseName $tout.sampledb_name --StagingDatabaseName $tout.stagingdb_name --MetadataDatabaseName $tout.metadatadb_name --BlobStorageName $tout.blobstorage_name --AdlsStorageName $tout.adlsstorage_name --WebAppName $tout.webapp_name --FunctionAppName $tout.functionapp_name --SqlServerName $tout.sqlserver_name --SynapseWorkspaceName $tout.synapse_workspace_name --SynapseDatabaseName $tout.synapse_sql_pool_name --SynapseSQLPoolName $tout.synapse_sql_pool_name --SynapseSparkPoolName $tout.synapse_spark_pool_name --PurviewAccountName $tout.purview_name --SynapseLakeDatabaseContainerName $tout.synapse_lakedatabase_container_name --DatabricksWorkspaceURL $tout.databricks_workspace_url --DatabricksWorkspaceResourceID $tout.databricks_workspace_id --DefaultInstancePoolID $tout.databricks_instance_pool_id
     
         <# # Fix the MSI registrations on the other databases. I'd like a better way of doing this in the future
         $SqlInstalled = false

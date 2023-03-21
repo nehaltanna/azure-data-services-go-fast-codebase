@@ -1,4 +1,18 @@
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
 
+* General Description *
+This script is for preparing a deployment. It takes in four parameters: $gitDeploy, $deploymentFolderPath, $FeatureTemplate, and $PathToReturnTo. $gitDeploy is a boolean and is mandatory. $deploymentFolderPath is a string and is also mandatory. $FeatureTemplate and $PathToReturnTo are optional strings.
+The script changes the current location to $deploymentFolderPath and checks if the SqlServer PowerShell module is installed. If it's not, the script installs it. The script then checks if $gitDeploy is true or false. 
+If it's true, it sets the resource group name and synapse workspace name environment variables. 
+If it's false, it prompts the user to select a feature template if it's not already set. 
+The script then sets the environment variable TF_VAR_ip_address or TF_VAR_ip_address2 with the IP address obtained from an external website.
+The script then purges environment variables prefixed with "TF_VAR" if the variable $PurgeTFVARS is set to true.
+Finally, the script re-processes the environment configuration files by running the PreprocessEnvironment.ps1 script with the provided parameters. 
+It then changes the location back to $deploymentFolderPath or $PathToReturnTo if it's not null.
+
+#>
 
 
 function PrepareDeployment (
@@ -9,7 +23,8 @@ function PrepareDeployment (
     [Parameter(Mandatory = $false)]
     [String]$FeatureTemplate="",
     [Parameter(Mandatory = $false)]
-    [String]$PathToReturnTo = ""
+    [String]$PathToReturnTo = ""    
+    
 ) {
     Set-Location $deploymentFolderPath
 
@@ -37,13 +52,16 @@ function PrepareDeployment (
     #purge TF_VAR environment variables so we don't get issues from jumping between environments
     #this can be an issue if you have different features enabled between environments
     #as old features may persist otherwise
-    $envVariables = gci env:
-
-    foreach($var in $envVariables)
+    $PurgeTFVARS = $false #Disabled for now as causes passwords not to persist. Will add to prepare script or separate as separate script
+    if($PurgeTFVARS)
     {
-        if($var.Name -clike 'TF_VAR*')
+        $envVariables = gci env:
+        foreach($var in $envVariables)
         {
-            [System.Environment]::SetEnvironmentVariable($var.Name, '')
+            if($var.Name -clike 'TF_VAR*')
+            {
+                [System.Environment]::SetEnvironmentVariable($var.Name, '')
+            }
         }
     }
 

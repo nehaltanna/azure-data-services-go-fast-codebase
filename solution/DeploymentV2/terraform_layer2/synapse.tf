@@ -153,6 +153,27 @@ resource "time_sleep" "azurerm_synapse_firewall_rule_wait_30_seconds_cicd" {
 }
 
 # --------------------------------------------------------------------------------------------------------------------
+# Synapse Integration Runtimes
+# --------------------------------------------------------------------------------------------------------------------
+
+resource "azurerm_synapse_integration_runtime_azure" "azure" {
+    for_each = {
+    for ir in local.synapse_integration_runtimes :
+    ir.short_name => ir
+    if ir.is_azure && var.deploy_synapse == true
+  }
+  name                 = each.value.name
+  synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
+  location             = var.resource_location
+  time_to_live_min        = 10
+  depends_on = [
+    azurerm_synapse_firewall_rule.public_access,
+    time_sleep.azurerm_synapse_firewall_rule_wait_30_seconds_cicd
+  ]      
+}
+
+
+# --------------------------------------------------------------------------------------------------------------------
 # Synapse Workspace Roles and Linked Services
 # --------------------------------------------------------------------------------------------------------------------
 resource "azurerm_synapse_role_assignment" "synapse_function_app_assignment" {
@@ -169,10 +190,10 @@ resource "azurerm_synapse_role_assignment" "synapse_function_app_assignment" {
 
 
 resource "azurerm_synapse_role_assignment" "synapse_admin_assignments" {  
-  for_each = ( var.synapse_administrators)  
+  for_each = var.deploy_synapse ? toset(var.synapse_administrators) : []
   synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
   role_name            = "Synapse Administrator"
-  principal_id         = each.value
+  principal_id         = each.key
   lifecycle {
     ignore_changes = all
   }
@@ -183,10 +204,10 @@ resource "azurerm_synapse_role_assignment" "synapse_admin_assignments" {
 }
 
 resource "azurerm_synapse_role_assignment" "synapse_contributor_assignments" {  
-  for_each = ( var.synapse_contributors)  
+  for_each = var.deploy_synapse ? toset(var.synapse_contributors) : []
   synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
   role_name            = "Synapse Contributor"
-  principal_id         = each.value
+  principal_id         = each.key
   depends_on = [
     azurerm_synapse_firewall_rule.public_access,
     time_sleep.azurerm_synapse_firewall_rule_wait_30_seconds_cicd
@@ -194,10 +215,10 @@ resource "azurerm_synapse_role_assignment" "synapse_contributor_assignments" {
 }
 
 resource "azurerm_synapse_role_assignment" "synapse_publisher_assignments" {  
-  for_each = ( var.synapse_publishers)  
+  for_each = var.deploy_synapse ? toset(var.synapse_publishers) : []
   synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
   role_name            = "Synapse Artifact Publisher"
-  principal_id         = each.value
+  principal_id         = each.key
   depends_on = [
     azurerm_synapse_firewall_rule.public_access,
     time_sleep.azurerm_synapse_firewall_rule_wait_30_seconds_cicd
@@ -248,6 +269,50 @@ resource "azurerm_synapse_linked_service" "synapse_functionapp_linkedservice" {
 JSON
 }
 
+resource "azurerm_synapse_linked_service" "synapse_databricks_linkedservice" {
+  for_each = {
+    for ir in local.integration_runtimes :
+    ir.short_name => ir
+    if(var.deploy_synapse == true) && (ir.is_azure == true)
+  }
+  name            = "GLS_AzureDatabricks_${each.value.short_name}"
+  synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
+  type            = "AzureDatabricks"
+  description     = "Generic Azure Databricks Connection"
+  integration_runtime {
+    name = each.value.name
+  }
+  type_properties_json = <<JSON
+    {
+      "domain": "@linkedService().DatabricksWorkspaceURL",
+      "authentication": "MSI",
+      "workspaceResourceId": "@linkedService().WorkspaceResourceID",
+      "instancePoolId": "@linkedService().InstancePool",
+      "newClusterNodeType": "@linkedService().ClusterNodeType",
+      "newClusterNumOfWorker": "@linkedService().Workers",
+      "newClusterSparkEnvVars": {
+          "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+      },
+      "newClusterVersion": "@linkedService().ClusterVersion",
+      "newClusterInitScripts": [],
+      "clusterOption": "Fixed"
+    }
+JSON
+  parameters = {
+    DatabricksWorkspaceURL = var.deploy_databricks == true ? "https://${azurerm_databricks_workspace.workspace[0].workspace_url}" : ""
+    WorkspaceResourceID = var.deploy_databricks == true ? azurerm_databricks_workspace.workspace[0].id : ""
+    ClusterVersion = "12.2.x-scala2.12"
+    Workers = 3
+    ClusterNodeType = "Standard_DS3_v2"
+    InstancePool = local.databricks_instance_pool_id
+  }
+  depends_on = [
+    azurerm_synapse_firewall_rule.public_access,
+    time_sleep.azurerm_synapse_firewall_rule_wait_30_seconds_cicd,
+    azurerm_synapse_integration_runtime_azure.azure
+  ]
+}
+
 # --------------------------------------------------------------------------------------------------------------------
 # User Access requirements
 # --------------------------------------------------------------------------------------------------------------------
@@ -271,6 +336,20 @@ resource "azurerm_synapse_managed_private_endpoint" "adls" {
   target_resource_id   = azurerm_storage_account.adls[0].id
   subresource_name     = "dfs"
   // Because we deploy synapse in private (no public access) we only propose to create/destroy but never update
+  lifecycle {
+    ignore_changes = all
+  }
+  depends_on = [
+    time_sleep.azurerm_synapse_firewall_rule_wait_30_seconds_cicd
+  ]
+}
+
+resource "azurerm_synapse_managed_private_endpoint" "databricks" {
+  count              = var.deploy_databricks && var.is_vnet_isolated && var.deploy_synapse ? 1 : 0
+  name               = "Databricks_PrivateEndpoint"
+  synapse_workspace_id = azurerm_synapse_workspace.synapse[0].id
+  target_resource_id = azurerm_databricks_workspace.workspace[0].id
+  subresource_name   = "databricks_ui_api"
   lifecycle {
     ignore_changes = all
   }
@@ -416,7 +495,7 @@ resource "azurerm_private_endpoint" "synapse_sqlondemand" {
 # --------------------------------------------------------------------------------------------------------------------
 
 resource "azurerm_role_assignment" "synapse_function_app" {
-  count                = var.deploy_synapse && var.deploy_function_app ? 1 : 0
+  count                = var.deploy_synapse && var.deploy_function_app && var.deploy_rbac_roles ? 1 : 0
   scope                = azurerm_synapse_workspace.synapse[0].id
   role_definition_name = "Contributor"
   principal_id         = azurerm_function_app.function_app[0].identity[0].principal_id

@@ -1,3 +1,15 @@
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This is a PowerShell function that gathers outputs from Terraform and converts them into a PowerShell object. 
+It takes one input, the path to the Terraform folder, and returns the output as a PowerShell object. 
+The function first sets the current location to the Terraform folder path, then reads the outputs from Terraform in JSON format, converts them to a PowerShell object, and assigns the properties of the object to the output object. 
+It then gets the resource group id from Azure and adds it to the output object. Finally, it returns the output object and sets the location back to the original location.
+#>
+
+
 function GatherOutputsFromTerraform($TerraformFolderPath)
 {
 

@@ -1,4 +1,17 @@
 
+
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This script is for deploying private links. It takes in one parameter: $tout, which is a mandatory pscustomobject.
+It checks if the configure_networking property of $tout is set to true and is_vnet_isolated property is set to true. 
+If that's the case, it proceeds to approve private link connections for different services like keyvault, sqlserver, databricks and synapse.
+It uses the Azure CLI command az network private-endpoint-connection list to list all the private endpoint connections of the corresponding resource and resource type, converts the output to json and loops through the list to check if the status of the connection is 'Pending' and if so, it uses the az network private-endpoint-connection approve command to approve the connection.
+
+#>
+
 function DeployPrivateLinks (
     [Parameter(Mandatory = $true)]
     [pscustomobject]$tout = $false

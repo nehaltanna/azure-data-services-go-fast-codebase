@@ -48,28 +48,39 @@ PrepareDeployment -gitDeploy $gitDeploy -deploymentFolderPath $deploymentFolderP
 Write-Host "Expect this to take twenty to thirty minutes to complete the first time it is run. Subsequent, incremental builds should only take a few minutes."
 if([string]::IsNullOrEmpty($env:TF_VAR_jumphost_password) -and ($gitDeploy -eq $false -or $null -eq $gitdeploy))
 {
-    $env:TF_VAR_jumphost_password = Read-Host "Enter the Jumphost Password"
+    $TF_VAR_jumphost_password = Read-Host "Enter the Jumphost Password"
+    $env:TF_VAR_jumphost_password= $TF_VAR_jumphost_password
 }
 
 if([string]::IsNullOrEmpty($env:TF_VAR_synapse_sql_password) -and ($gitDeploy -eq $false -or $null -eq $gitdeploy))
 {
-    $env:TF_VAR_synapse_sql_password = Read-Host "Enter the Synapse SQL Admin Password"
+    $TF_VAR_synapse_sql_password = Read-Host "Enter the Synapse SQL Admin Password"
+    $env:TF_VAR_synapse_sql_password= $TF_VAR_synapse_sql_password
 }
 
 #Uncomment below if you upgrade modules
 #terraform init -upgrade
 
 $output = terragrunt init --terragrunt-config vars/$env:environmentName/terragrunt.hcl -reconfigure 
-if($env:TF_VAR_Summarise_Terraform_Apply -eq "true")
-{
 
-    $output = terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl -json 
-    ProcessTerraformApply -output $output -gitDeploy $gitDeploy
-}
-else 
+if($env:TF_VAR_terraform_plan -eq "layer2")
 {
-    terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl
-}  
+    terragrunt plan --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+
+    Exit
+}
+else {
+    if($env:TF_VAR_Summarise_Terraform_Apply -eq "true")
+    {
+
+        $output = terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl -json 
+        ProcessTerraformApply -output $output -gitDeploy $gitDeploy
+    }
+    else 
+    {
+        terragrunt apply -auto-approve --terragrunt-config vars/$env:environmentName/terragrunt.hcl
+    }  
+}
 
 
 #Update Values for variables in Environment

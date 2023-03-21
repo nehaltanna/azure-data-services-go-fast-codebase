@@ -208,7 +208,7 @@ function ConfigureAzurePurview (
   # Configure the datafactory link
   #----------------------------------------------------------------------------------------------------------------
   $uri ="/subscriptions/$subscription_id/resourceGroups/$resource_group_name/providers/Microsoft.DataFactory/factories/"+$datafactory_name+"?api-version=2018-06-01"
-  $body = '{\"tags\":{\"catalogUri\":\"https://'+$purview_name+'.purview.azure.com/catalog\"}, \"properties\":{\"purviewConfiguration\":{\"purviewResourceId\":\"/subscriptions/'+$subscription_id+'/resourceGroups/'+$resource_group_name+'/providers/Microsoft.Purview/accounts/'+$purview_name+'\"}}}'
+  $body = '{"tags":{"catalogUri":"https://'+$purview_name+'.purview.azure.com/catalog"}, "properties":{"purviewConfiguration":{"purviewResourceId":"/subscriptions/'+$subscription_id+'/resourceGroups/'+$resource_group_name+'/providers/Microsoft.Purview/accounts/'+$purview_name+'"}}}'
 
   az rest --url $uri --method patch --body $body --headers "Content-Type=application/json"
 
@@ -232,7 +232,7 @@ function ConfigureAzurePurview (
   #datafactory / function app
   $objectIds = @($datafactory_principal_id, $function_app_principal_id)
   #add each data curator from the dictionary to the list of objectIds to grant the permission
-  foreach ($obj in $data_curators.values) 
+  foreach ($obj in $data_curators) 
   {
     $objectIds += $obj
   }

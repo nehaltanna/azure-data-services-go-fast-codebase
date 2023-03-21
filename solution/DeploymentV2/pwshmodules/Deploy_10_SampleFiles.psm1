@@ -1,3 +1,16 @@
+<#
+ * Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT license.
+
+* General Description *
+This script is for deploying sample files. It uses the Azure PowerShell module to interact with Azure Storage. 
+The script takes in three parameters: $tout, $deploymentFolderPath, and $PathToReturnTo. $tout is a pscustomobject and is mandatory. 
+$deploymentFolderPath and $PathToReturnTo are strings and are also mandatory. 
+The script first checks if the publish_sample_files property of $tout is true or false. 
+If it's false, the script skips deploying sample files. If it's true, the script changes the current location to the $deploymentFolderPath, then to the ../SampleFiles/ directory. 
+It then creates containers in Azure Storage, and uploads files from the current directory to the containers. If $tout.is_vnet_isolated is true, it updates the storage account to allow access. 
+Finally, it changes the current location back to $deploymentFolderPath or $PathToReturnTo if it's not null.
+#>
 
 
 function DeploySampleFiles (    

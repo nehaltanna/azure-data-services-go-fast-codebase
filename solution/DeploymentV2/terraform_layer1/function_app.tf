@@ -2,7 +2,7 @@ resource "random_uuid" "function_app_reg_role_id" {}
 
 # This is used for auth in the Azure Function
 resource "azuread_application" "function_app_reg" {
-  count           = var.deploy_azure_ad_function_app_registration ? 1 : 0
+  count           = var.deploy_function_app && var.deploy_azure_ad_function_app_registration ? 1 : 0
   owners          = [data.azurerm_client_config.current.object_id]
   identifier_uris = ["api://${local.functionapp_name}"]
   display_name    = local.aad_functionapp_name
@@ -30,7 +30,7 @@ resource "azuread_application" "function_app_reg" {
 }
 
 resource "azuread_service_principal" "function_app" {
-  count          = var.deploy_azure_ad_function_app_registration ? 1 : 0
+  count          = var.deploy_function_app && var.deploy_azure_ad_function_app_registration ? 1 : 0
   owners         = [data.azurerm_client_config.current.object_id]
   application_id = azuread_application.function_app_reg[0].application_id
 }

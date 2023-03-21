@@ -116,11 +116,43 @@ variable "purview_ir_app_reg_name" {
   type        = string
 }
 
+variable "existing_aad_func_appreg_app_id" {
+  description = "This is the function app app registration app id. If an existing function app registration is created to be used - this is required."
+  default     = ""
+  type        = string
+}
+
+variable "existing_aad_func_sp_obj_id" {
+  description = "This is the service principal object ID attached to the function app app registration. If an existing function app registration is created to be used - this is required."
+  default     = ""
+  type        = string
+}
+
+
+variable "existing_aad_func_appreg_obj_id" {
+  description = "This is the function app app registration object id. If an existing function app registration is created to be used - this is required."
+  default     = ""
+  type        = string
+}
+
+variable "existing_aad_web_appreg_app_id" {
+  description = "This is the web app app registration app id. If an existing web app registration is created to be used - this is required."
+  default     = ""
+  type        = string
+}
+
+
 
 
 #---------------------------------------------------------------
 # Feature Toggles
 #---------------------------------------------------------------
+
+variable "deploy_rbac_roles" {
+  description = "Feature toggle for deploying the RBAC roles that are deployed alongside resources"
+  default     = true
+  type        = bool
+}
 
 variable "is_vnet_isolated" {
   description = "Whether to deploy the resources as vnet attached / private linked"
@@ -156,8 +188,43 @@ variable "deploy_purview" {
   type        = bool
 }
 
+variable "deploy_purview_sp" {
+  description = "Feature toggle for deploying Azure Purview IR SP"
+  default     = true
+  type        = bool
+}
+
+
 variable "resource_owners" {
   description = "A web app Azure security group used for admin access."
   default     = []
   type        = list(string)
 }
+
+#---------------------------------------------------------------
+# Terraform Toggles
+#---------------------------------------------------------------
+
+variable "remove_lock" {
+  description = "Set to true to remove the Terraform Lock."
+  default     = false
+  type        = bool
+}
+
+variable "lock_id" {
+  description = "ID of Terraform Lock should the lock need to be removed."
+  type        = string
+  default     = "#####"
+}
+
+variable "terraform_plan" {
+  description = "Specify the layer to run a Terraform plan."
+  type        = string
+  default     = "#####"
+
+  validation {
+    condition     = contains(["#####", "layer0", "layer1", "layer2", "layer3"], var.terraform_plan)
+    error_message = "Valid values for var: terraform_plan are (#####, layer0, layer1, layer2, layer3)."
+  }
+}
+

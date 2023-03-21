@@ -22,19 +22,19 @@ output "naming_unique_suffix" {
 
 /*Service Names*/
 output "aad_funcreg_id" {
-  value = var.deploy_function_app ? azuread_application.function_app_reg[0].application_id : ""
+  value = var.deploy_function_app && var.deploy_azure_ad_function_app_registration ? azuread_application.function_app_reg[0].application_id : var.existing_aad_func_appreg_app_id != "" ? var.existing_aad_func_appreg_app_id :  ""
 }
 
 output "azuread_service_principal_function_app_object_id" {
-  value = var.deploy_function_app ? azuread_service_principal.function_app[0].object_id : ""
+  value = var.deploy_function_app && var.deploy_azure_ad_function_app_registration ? azuread_service_principal.function_app[0].object_id : var.existing_aad_func_sp_obj_id != "" ? var.existing_aad_func_sp_obj_id :  ""
 }
 
 output "azuread_application_function_app_reg_object_id" {
-  value = var.deploy_function_app ? azuread_application.function_app_reg[0].object_id : ""
+  value = var.deploy_function_app && var.deploy_azure_ad_function_app_registration ? azuread_application.function_app_reg[0].object_id : var.existing_aad_func_appreg_obj_id != "" ? var.existing_aad_func_appreg_obj_id :  ""
 }
 
 output "aad_webreg_id" {
-  value = var.deploy_web_app ? azuread_application.web_reg[0].application_id : ""
+  value = var.deploy_web_app && var.deploy_azure_ad_web_app_registration ? azuread_application.web_reg[0].application_id : var.existing_aad_web_appreg_app_id != "" ? var.existing_aad_web_appreg_app_id :  ""
 }
 
 output "webapp_name" {
@@ -60,14 +60,14 @@ output "purview_sp_name" {
   value = local.purview_ir_app_reg_name
 }
 output "purview_sp_id" {
-  value = var.deploy_purview && var.is_vnet_isolated ? azuread_application.purview_ir[0].application_id : "0"
+  value = var.deploy_purview && var.is_vnet_isolated && var.deploy_purview_sp ? azuread_application.purview_ir[0].application_id : "0"
 }
 
 output "azuread_application_purview_ir_object_id" {
-  value = var.deploy_purview && var.is_vnet_isolated ? azuread_application.purview_ir[0].object_id : "0"
+  value = var.deploy_purview && var.is_vnet_isolated && var.deploy_purview_sp ? azuread_application.purview_ir[0].object_id : "0"
 }
 
 
 output "purview_sp_object_id" {
-  value = var.deploy_purview && var.is_vnet_isolated ? azuread_service_principal.purview_ir[0].object_id : "0"
+  value = var.deploy_purview && var.is_vnet_isolated && var.deploy_purview_sp ? azuread_service_principal.purview_ir[0].object_id : "0"
 }

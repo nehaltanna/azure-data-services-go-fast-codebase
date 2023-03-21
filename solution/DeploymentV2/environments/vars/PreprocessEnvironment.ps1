@@ -72,13 +72,30 @@ foreach($t in $envarprops)
     if($Value.GetType().Name -eq "PSCustomObject")
     {
         $Value = ($Value | ConvertTo-Json -Depth 10)
-    }  
+    }
+    if($Value.GetType().Name -eq "Object[]")
+    {
+        #$Value = @($Value)
+        $a = '['
+        foreach($v in $Value)
+        {
+            $v = '"' + $v + '",'
+            $a = $a + $v
+        }
+        if($Value.Length -eq 0) {
+            $Value = $a + ']'
+        }else {
+            $Value = $a.Substring(0,$a.Length-1) + ']'        
+        }
+    }    
     #Write-Warning "Checking Value change $Value"
     if([string]::IsNullOrEmpty($Value) -eq $false -and $Value -ne '#####')
     {          
         [Environment]::SetEnvironmentVariable($Name, $Value)
     }      
 }
+
+
 
 #Feature Template Value Overrides
 $fto_vals = ((Get-Content -Path  "./$Environment/common_vars_values.jsonc") | ConvertFrom-Json -Depth 10).FeatureTemplateOverrides
@@ -109,6 +126,22 @@ foreach($fto in $fto_keys)
         #Write-Warning $Value.GetType().Name
         $Value = ($Value | ConvertTo-Json -Depth 10)
     }  
+    if($Value.GetType().Name -eq "Object[]")
+    {
+        #$Value = @($Value)
+        $a = '['
+        foreach($v in $Value)
+        {
+            $v = '"' + $v + '",'
+            $a = $a + $v
+        }
+        if($Value.Length -eq 0) {
+            $Value = $a + ']'
+        }else {
+            $Value = $a.Substring(0,$a.Length-1) + ']'        
+        }
+
+    }    
 
     if([string]::IsNullOrEmpty($Value) -eq $false -and $Value -ne '#####')
     {       
@@ -120,7 +153,6 @@ foreach($fto in $fto_keys)
         #Write-Warning "Value Supressed"
     }
 }
-
 
 foreach($t in ($obj.ForSecretFile | Get-Member | Where-Object {$_.MemberType -eq "NoteProperty"}))
 {

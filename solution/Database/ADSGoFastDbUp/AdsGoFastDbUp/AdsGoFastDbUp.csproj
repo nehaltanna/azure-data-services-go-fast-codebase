@@ -33,6 +33,7 @@
     <None Remove="1-0-3\A-Journaled\002-InsertSIFSamples.sql" />  
     <None Remove="1-0-3\A-Journaled\003-InsertStopIdleSparkSessions.sql" />  
     <None Remove="1-0-4\A-Journaled\001-AddPowerBIDataflowRefresh.sql" />               
+    <None Remove="1-0-4\A-Journaled\002-AddDatabricksNotebookExecution.sql" />               
 
 
 
@@ -63,6 +64,8 @@
     <EmbeddedResource Include="1-0-3\A-Journaled\002-InsertSIFSamples.sql" />
     <EmbeddedResource Include="1-0-3\A-Journaled\003-InsertStopIdleSparkSessions.sql" />
     <EmbeddedResource Include="1-0-4\A-Journaled\001-AddPowerBIDataflowRefresh.sql" />
+    <EmbeddedResource Include="1-0-4\A-Journaled\002-AddDatabricksNotebookExecution.sql" />
+
   </ItemGroup>
 
   <ItemGroup>

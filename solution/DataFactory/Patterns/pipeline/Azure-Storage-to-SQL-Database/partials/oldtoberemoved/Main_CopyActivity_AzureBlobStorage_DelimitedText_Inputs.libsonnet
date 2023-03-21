@@ -28,7 +28,11 @@ local referenceName = "GDS_AzureBlobStorage_DelimitedText_",
       "FirstRowAsHeader": {
         "value": "@pipeline().parameters.TaskObject.Source.FirstRowAsHeader",
         "type": "Expression"
-      }
+      },
+      "Delimiter": {
+        "value": "@pipeline().parameters.TaskObject.Source.Delimiter",
+        "type": "Expression"
+      },
     }
   }
 ]

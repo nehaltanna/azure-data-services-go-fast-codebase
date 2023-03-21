@@ -346,19 +346,26 @@ resource "azurerm_data_factory_linked_custom_service" "databricks" {
   type_properties_json = <<JSON
     {
       "domain": "@linkedService().DatabricksWorkspaceURL",
+      "authentication": "MSI",
       "workspaceResourceId": "@linkedService().WorkspaceResourceID",
+      "instancePoolId": "@linkedService().InstancePool",
       "newClusterNodeType": "@linkedService().ClusterNodeType",
       "newClusterNumOfWorker": "@linkedService().Workers",
+      "newClusterSparkEnvVars": {
+          "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+      },
       "newClusterVersion": "@linkedService().ClusterVersion",
-      "authentication": "MSI"
+      "newClusterInitScripts": [],
+      "clusterOption": "Fixed"
     }
 JSON
   parameters = {
-    DatabricksWorkspaceURL = "https://${azurerm_databricks_workspace.workspace[0].workspace_url}"
-    WorkspaceResourceID = azurerm_databricks_workspace.workspace[0].id
-    ClusterVersion = "11.3.x-scala2.12"
+    DatabricksWorkspaceURL = var.deploy_databricks == true ? "https://${azurerm_databricks_workspace.workspace[0].workspace_url}" : ""
+    WorkspaceResourceID = var.deploy_databricks == true ? azurerm_databricks_workspace.workspace[0].id : ""
+    ClusterVersion = "12.2.x-scala2.12"
     Workers = 3
     ClusterNodeType = "Standard_DS3_v2"
+    InstancePool = local.databricks_instance_pool_id
   }
   depends_on = [
     azurerm_data_factory_linked_custom_service.generic_kv,
